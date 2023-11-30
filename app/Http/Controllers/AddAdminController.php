@@ -23,7 +23,7 @@ class AddAdminController extends Controller
          */
         public function index()
         {
-            $admins = User::where('user_type','=','admin')->get();
+            $admins = User::where('user_type','=','admin_team_member')->get();
             return view('admin.add-admin.index',compact('admins'));
         }
 
@@ -56,7 +56,7 @@ class AddAdminController extends Controller
 
             $addAdmin->name = $request->name;
             $addAdmin->email = $request->email;
-            $addAdmin->user_type = 'admin';
+            $addAdmin->user_type = 'admin_team_member';
             $addAdmin->password = bcrypt($request->password);
             $addAdmin->email_verified_at = now();
             $addAdmin->save();

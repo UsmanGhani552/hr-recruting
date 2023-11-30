@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\ClientVendor;
 use App\Models\Job;
 use App\Models\Team;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorInvitation;
 use App\Models\VendorJob;
@@ -28,14 +29,15 @@ class VendorController extends Controller
         return view('vendor.create', compact('states', 'cities'));
     }
 
-    public function show(Vendor $vendor){
+    public function show(Vendor $vendor)
+    {
         // dd($vendor);
         $jobs = $vendor->jobs()->with('clients')->get();
         $clients = $vendor->clients;
-        $candidates = Candidate::where('vendor_id',$vendor->id)->get();
-        $teams = Team::where('vendor_id',$vendor->id)->get();
+        $candidates = Candidate::where('vendor_id', $vendor->id)->get();
+        $teams = Team::where('vendor_id', $vendor->id)->get();
         // dd($candidates);
-        return view('vendor.assignment',compact('jobs','clients','candidates','teams'));
+        return view('vendor.assignment', compact('jobs', 'clients', 'candidates', 'teams'));
     }
 
     public function store(Request $request)
@@ -58,15 +60,21 @@ class VendorController extends Controller
         $vendor->company_name = $request->company_name;
         $vendor->email = $request->email;
         $vendor->phone = $request->phone;
-        $vendor->password = Hash::make($request->password);
         $vendor->home = $request->home;
         $vendor->state_id = $request->state;
         $vendor->city_id = $request->city;
 
         if ($vendor->save()) {
-            $vendorInvitation = VendorInvitation::where('email', $vendor->email)->first();
-            $vendorInvitation->status = 1;
-            $vendorInvitation->save();
+            $vendor_login = new User();
+            $vendor_login->vendor_id = $vendor->id;
+            $vendor_login->name = $vendor->first_name;
+            $vendor_login->email = $request->email;
+            $vendor_login->password =  Hash::make($request->password);
+            if ($vendor_login->save()) {
+                $vendorInvitation = VendorInvitation::where('email', $vendor_login->email)->first();
+                $vendorInvitation->status = 1;
+                $vendorInvitation->save();
+            };
         };
         return redirect()->route('vendor-dashboard')->withSuccess('Vendor Created Successfully');
     }
@@ -187,6 +195,4 @@ class VendorController extends Controller
             'message' => 'Status Updated Successfully'
         ]);
     }
-
-
 }

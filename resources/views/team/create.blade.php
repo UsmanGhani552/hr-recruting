@@ -38,7 +38,7 @@ $pageclass = "adnewcand";
 					<form method="POST" action="{{route('team.store')}}">
                         @csrf
 					    <div class="row">
-							<div class="col-md-12">
+							{{-- <div class="col-md-12">
 								<label class="form-group">
 									Company Name
 									<select class="form-controll" name="company_name">
@@ -49,9 +49,9 @@ $pageclass = "adnewcand";
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
 								</label>
-							</div>
+							</div> --}}
 
-							<div class="col-md-6">
+							{{-- <div class="col-md-6">
 								<label class="form-group">
                                     First Name
                                     <input type="text" name="first_name" class="form-controll"
@@ -68,6 +68,17 @@ $pageclass = "adnewcand";
                                     <input type="text" name="last_name" class="form-controll"
                                         placeholder="Enter Last Name">
                                         @error('last_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </label>
+							</div> --}}
+
+							<div class="col-md-12">
+								<label class="form-group">
+                                    Name
+                                    <input type="text" name="name" class="form-controll"
+                                        placeholder="Enter Name">
+                                        @error('name')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </label>

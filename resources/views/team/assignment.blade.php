@@ -97,6 +97,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -123,6 +124,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -149,6 +151,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -175,6 +178,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -201,6 +205,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -227,6 +232,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -253,6 +259,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -279,6 +286,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -305,6 +313,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -331,6 +340,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -357,6 +367,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -383,6 +394,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -479,6 +491,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -505,6 +518,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -531,6 +545,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -557,6 +572,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -584,6 +600,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -610,6 +627,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -637,6 +655,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -664,6 +683,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -690,6 +710,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -716,6 +737,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -742,6 +764,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -769,6 +792,7 @@ $pageclass = "cleintasist";
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
+                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
                                                         <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
                                                     </div>
                                                 </div>

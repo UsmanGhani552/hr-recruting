@@ -3,63 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class TeamController extends Controller
 {
-    public function index(){
-        $teams = Team::all();
-        return view('team.index',compact('teams'));
+    public function index()
+    {
+        $teams = User::where('vendor_id',Auth::user()->id)->get();
+        return view('team.index', compact('teams'));
     }
-    public function create(){
+    public function create()
+    {
         return view('team.create');
     }
 
-    public function show(){
+    public function show()
+    {
         return view('team.assignment');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company_name' => 'required',
+            // 'first_name' => 'required',
+            // 'last_name' => 'required',
+            'name' => 'required',
+            // 'company_name' => 'required',
             'email' => 'required',
             'password' => 'required | confirmed',
         ]);
-        $team = new Team();
-        $team->first_name = $request->first_name;
-        $team->last_name = $request->last_name;
-        $team->company_name = $request->company_name;
+        $team = new User();
+        $team->name = $request->name;
+        // $team->last_name = $request->last_name;
+        $team->vendor_id = Auth::user()->id;
         $team->email = $request->email;
         $team->password = Hash::make($request->password);
         $team->save();
+        // $team->syncRoles('$request->roles');
         return redirect()->route('team')->withSuccess('Team Created Successfully');
     }
 
-    public function edit(Team $team){
-        return view('team.edit',compact('team'));
+    public function edit(Team $team)
+    {
+        return view('team.edit', compact('team'));
     }
 
-    public function update(Request $request , Team $team){
+    public function update(Request $request, Team $team)
+    {
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company_name' => 'required',
+            // 'first_name' => 'required',
+            // 'last_name' => 'required',
+            // 'company_name' => 'required',
+            'name' => 'required',
             'email' => 'required',
             'password' => 'confirmed',
         ]);
         // dd('sad');
-        $team->first_name = $request->first_name;
-        $team->last_name = $request->last_name;
-        $team->company_name = $request->company_name;
+        // $team->first_name = $request->first_name;
+        // $team->last_name = $request->last_name;
+        // $team->company_name = $request->company_name;
+        $team->company_name = $request->name;
         $team->email = $request->email;
         $team->password = Hash::make($request->password);
         $team->save();
         return redirect()->route('team')->withSuccess('Team Updated Successfully');
     }
-    public function delete(Team $team){
+
+    public function delete(Team $team)
+    {
         $team->delete();
         return redirect()->route('team')->withSuccess('Team Deleted Successfully');
     }
@@ -88,5 +102,4 @@ class TeamController extends Controller
             'message' => 'Status Updated Successfully'
         ]);
     }
-
 }
