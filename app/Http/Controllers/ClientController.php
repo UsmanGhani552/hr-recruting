@@ -7,6 +7,7 @@ use App\Models\ClientVendor;
 use App\Models\Job;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -19,7 +20,13 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        if(Auth::user()->user_type == 'admin'){
+            $clients = Client::all();
+        } else if(Auth::user()->user_type == 'vendor'){
+            $clients = Auth::user()->load('vendor.clients')->vendor->clients;
+        } else if(Auth::user()->user_type == 'vendor team member'){
+            $clients = Auth::user()->load('clients')->clients;
+        }
         return view('client.index',compact('clients'));
     }
     public function search(Request $request)
@@ -142,6 +149,21 @@ class ClientController extends Controller
         $vendors = $client->vendors;
         // dd($vendors);
         return view('client.assignment',compact('client','jobs','vendors'));
+    }
+
+    public function clientJob(Client $client, Job $job){
+        // dd($vendor,$job);
+        $clients = Client::all();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        return view('client.client_jobs',compact('client','job','clients','states','cities'));
+    }
+    public function clientVendor(Client $client,Vendor $vendor){
+        // dd($vendor,$job);
+        // $clients = Client::all();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        return view('client.client_vendors',compact('client','vendor','states','cities'));
     }
 
     /**

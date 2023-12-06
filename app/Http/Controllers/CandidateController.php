@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidate;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -12,15 +14,36 @@ use Illuminate\Support\Facades\Hash;
 class CandidateController extends Controller
 {
     public function index(){
-        $candidates = Candidate::all();
-        return view('candidate.index',compact('candidates'));
+        if(Auth::user()->user_type == 'admin'){
+            $candidates = Candidate::all();
+        }
+        else if(Auth::user()->user_type == 'vendor'){
+            $vendor_id = Auth::user()->load('vendor')->vendor_id;
+            // dd($vendor_id);
+            $candidates = Candidate::where('vendor_id',$vendor_id)->get();
+
+        }else if(Auth::user()->user_type == 'vendor team member'){
+
+            $vendor = Auth::user()->vendor_id;
+            $vendor_id = User::where('id',$vendor)->first();
+            // dd($vendor_id->vendor_id);
+            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->get();
+        }
+        return view('candidate.index' , compact('candidates'));
     }
-    
+
     public function create(){
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
-        $vendors = Vendor::all();
-        return view('candidate.create',compact('states','cities','vendors'));
+        if(Auth::user()->user_type == 'vendor'){
+            $vendor = Auth::user()->vendor;
+        }else if(Auth::user()->user_type == 'vendor team member'){
+            $authenticated_user_id = Auth::user()->vendor_id;
+            $vendor_id = User::where('id',$authenticated_user_id)->first();
+            $vendor = $vendor_id->vendor;
+        }
+        // dd($vendor);
+        return view('candidate.create',compact('states','cities','vendor'));
     }
 
     public function store(Request $request){

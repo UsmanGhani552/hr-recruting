@@ -98,7 +98,6 @@ use App\Models\Team;
                                                 <div id="myDropdown" class="dropdown-content">
                                                     <a href="javascript:;"><img
                                                             src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                            src="{{ asset('assets/images/eye.png') }}">Submission</a>
                                                     <a href="javascript:;"><img
                                                             src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                 </div>
@@ -175,17 +174,17 @@ use App\Models\Team;
 
                                 <tbody>
                                     @foreach ($vendors as $vendor)
-                                        <?php $teams = Team::where('vendor_id',$vendor->id)->count() ?>
+                                        <?php $teams = Team::where('vendor_id', $vendor->id)->count(); ?>
                                         <tr>
                                             <td>
                                                 <label for="">
 
-                                                {{$vendor->id}}
+                                                    {{ $vendor->id }}
                                                 </label>
                                             </td>
-                                            <td>{{$vendor->first_name}} {{$vendor->last_name}}</td>
-                                            <td>{{$vendor->email}}</td>
-                                            <td>{{$vendor->phone}}</td>
+                                            <td>{{ $vendor->first_name }} {{ $vendor->last_name }}</td>
+                                            <td>{{ $vendor->email }}</td>
+                                            <td>{{ $vendor->phone }}</td>
                                             <td>{{ $teams }}</td>
                                             <td>
                                                 <div class="dropdown">
@@ -195,14 +194,17 @@ use App\Models\Team;
                                                         <li></li>
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
-                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">View</a>
-                                                        <a href="javascript:;"><img src="{{asset('assets/images/eye.png')}}">Submission</a>
-                                                        <a href="javascript:;"><img src="{{asset('assets/images/delete.png')}}">Delete</a>
+                                                        <a
+                                                            href="{{ route('job.vendor.details', ['job' => $job->id, 'vendor' => $vendor->id]) }}"><img
+                                                                src="{{ asset('assets/images/eye.png') }}">View</a>
+
+                                                        <a href="javascript:;"><img
+                                                                src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                    @endforeach
                                 </tbody>
                             </table>
                             <br>

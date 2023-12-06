@@ -69,7 +69,8 @@ Route::middleware('auth')->group(function () {
 
 
 
-    //vendor
+    // ---------------------------------------------------- vendor ----------------------------------------------------
+
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
     Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-create');
     Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
@@ -77,20 +78,35 @@ Route::middleware('auth')->group(function () {
     Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
     Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
     Route::view('/vendor/submission', 'vendor.submission')->name('vendor-submission');
+    Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
     Route::get('/vendor/assignment/{vendor}', [VendorController::class, 'show'])->name('vendor-assignment');
+
+    // vendor view assignments
+    Route::get('/vendor/{vendor}/job/{job}', [VendorController::class, 'vendorJob'])->name('vendor.job.details');
+    Route::get('/vendor/{vendor}/client/{client}', [VendorController::class, 'vendorclient'])->name('vendor.client.details');
+    Route::get('/vendor/{vendor}/team/{team}', [VendorController::class, 'vendorteam'])->name('vendor.team.details');
+    Route::get('/vendor/{vendor}/candidate/{candidate}', [VendorController::class, 'vendorcandidate'])->name('vendor.candidate.details');
+
     //vendor invitation
     Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
     Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
-    Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
+    // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
+
     //bulk actions
     Route::get('/vendor/search-client', [VendorController::class, 'searchClient'])->name('vendor.search-client');
     Route::get('/vendor/search-job', [VendorController::class, 'searchJob'])->name('vendor.search-job');
+    Route::get('/vendor/search-folder', [VendorController::class, 'searchFolder'])->name('vendor.search-folder');
     Route::post('/vendor/assign-client', [VendorController::class, 'assignClient'])->name('vendor.assign-client');
     Route::post('/vendor/assign-job', [VendorController::class, 'assignJob'])->name('vendor.assign-job');
+    Route::post('/vendor/assign-folder', [VendorController::class, 'assignFolder'])->name('vendor.assign-folder');
     Route::post('/vendor/active-status', [VendorController::class, 'activeStatus'])->name('vendor.active-status');
     Route::post('/vendor/inactive-status', [VendorController::class, 'inactiveStatus'])->name('vendor.inactive-status');
 
-    //team
+    // ---------------------------------------------------end vendor--------------------------------------------------
+
+
+    // -------------------------------------------------------team ----------------------------------------------
+
     Route::view('/team/add-new-candidate', 'team.add_new_candidate')->name('team-add-new-candidate');
     Route::get('/team/', [TeamController::class, 'index'])->name('team');
     Route::get('/team/create', [TeamController::class, 'create'])->name('team.create');
@@ -98,13 +114,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/team/edit/{team}', [TeamController::class, 'edit'])->name('team.edit');
     Route::post('/team/update/{team}', [TeamController::class, 'update'])->name('team.update');
     Route::get('/team/delete/{team}', [TeamController::class, 'delete'])->name('team.delete');
-    Route::get('/team/assignment', [TeamController::class, 'show'])->name('team.show');
+    Route::get('/team/assignment/{team}', [TeamController::class, 'show'])->name('team.show');
     Route::get('/team/change-status/{team}', [TeamController::class, 'changeTeamStatus'])->name('team.change-status');
+    // view assignment
+    Route::get('/team/{team}/job/{job}', [TeamController::class, 'teamJob'])->name('team.job.details');
+    Route::get('/team/{team}/client/{client}', [TeamController::class, 'teamClient'])->name('team.client.details');
     // bulk actions
     Route::post('/team/active-status', [TeamController::class, 'activeStatus'])->name('team.active-status');
     Route::post('/team/inactive-status', [TeamController::class, 'inactiveStatus'])->name('team.inactive-status');
+    Route::post('/team/assign-client', [TeamController::class, 'assignClient'])->name('team.assign-client');
+    Route::post('/team/assign-job', [TeamController::class, 'assignJob'])->name('team.assign-job');
 
-    //jobs
+    // -------------------------------------------end team------------------------------------------------------
+
+
+
+    // ---------------------------------------------------jobs ----------------------------------------------
+
     Route::get('/jobs/assignment/{job}', [JobController::class, 'show'])->name('job.show');
     Route::get('/job', [JobController::class, 'index'])->name('job');
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
@@ -114,6 +140,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/job/delete/{job}', [JobController::class, 'delete'])->name('job.delete');
     Route::view('/jobs/submission', 'jobs.submission');
     Route::get('/job/change-status/{job}', [JobController::class, 'changeJobStatus'])->name('job.change-status');
+    Route::get('/job/{job}/vendor/{vendor}', [JobController::class, 'jobvendor'])->name('job.vendor.details');
     // bulk actions
     Route::get('/job/search-vendor', [jobController::class, 'searchVendor'])->name('job.search-vendor');
     Route::post('/job/assign-vendor', [jobController::class, 'assignVendor'])->name('job.assign-vendor');
@@ -121,8 +148,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/job/inactive-status', [JobController::class, 'inactiveStatus'])->name('job.inactive-status');
     Route::post('/job/bulk-delete', [JobController::class, 'bulkDelete'])->name('job.bulk-delete');
 
+    // ---------------------------------------------end job------------------------------------------------------
 
-    // client
+
+
+   // -------------------------------------------------------client ----------------------------------------------
+
     Route::get('/client', [ClientController::class, 'index'])->name('client');
     Route::get('/client/create', [ClientController::class, 'create'])->name('client.create');
     Route::post('/client/store', [ClientController::class, 'store'])->name('client.store');
@@ -134,14 +165,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/client/assignment/{client}', [ClientController::class, 'show'])->name('client.show');
     Route::view('/client/submission-details', 'client.submission_details')->name('jobs-submission-details');
     Route::get('/client/change-status/{client}', [ClientController::class, 'changeClientStatus'])->name('client.change-status');
+    Route::get('/client/{client}/job/{job}', [ClientController::class, 'clientJob'])->name('client.job.details');
+    Route::get('/client/{client}/vendor/{vendor}', [ClientController::class, 'clientvendor'])->name('client.vendor.details');
     // bulk actions
     Route::get('/client/search-vendor', [ClientController::class, 'searchVendor'])->name('client.search-vendor');
     Route::post('/client/assign-vendor', [ClientController::class, 'assignVendor'])->name('client.assign-vendor');
     Route::post('/client/active-status', [ClientController::class, 'activeStatus'])->name('client.active-status');
     Route::post('/client/inactive-status', [ClientController::class, 'inactiveStatus'])->name('client.inactive-status');
 
-    //candidate
-    Route::view('/candidate/assignment', 'candidate.assignment')->name('candidate.assignmeent');
+    // ------------------------------------------------end client----------------------------------------------
+
+
+
+    // ------------------------------------------------candidate ----------------------------------------------
+
+    Route::view('/candidate/assignment', 'candidate.assignment')->name('candidate.assignment');
     Route::get('/candidate/', [CandidateController::class, 'index'])->name('candidate');
     Route::get('/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
     Route::post('/candidate/store', [CandidateController::class, 'store'])->name('candidate.store');
@@ -154,7 +192,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/candidate/inactive-status', [CandidateController::class, 'inactiveStatus'])->name('candidate.inactive-status');
     Route::post('/candidate/bulk-delete', [CandidateController::class, 'bulkDelete'])->name('candidate.bulk-delete');
 
-    // folder
+    // ------------------------------------------------end candidate ----------------------------------------------
+
+
+
+    // ------------------------------------------------------folder ----------------------------------------------
+
     Route::get('/folder/', [FolderController::class, 'index'])->name('folder');
     Route::get('/folder/create', [FolderController::class, 'create'])->name('folder.create');
     Route::get('/folder/search-clients', [FolderController::class, 'searchClient'])->name('folder.search');
@@ -172,6 +215,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/folder/active-status', [FolderController::class, 'activeStatus'])->name('folder.active-status');
     Route::post('/folder/inactive-status', [FolderController::class, 'inactiveStatus'])->name('folder.inactive-status');
     Route::post('/folder/bulk-delete', [FolderController::class, 'bulkDelete'])->name('folder.bulk-delete');
+
+    // ------------------------------------------------------end folder ----------------------------------------------
 });
 
 

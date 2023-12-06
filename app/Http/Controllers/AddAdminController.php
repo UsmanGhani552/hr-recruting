@@ -23,7 +23,8 @@ class AddAdminController extends Controller
          */
         public function index()
         {
-            $admins = User::where('user_type','=','admin_team_member')->get();
+            // $admins = User::where('user_type','=','admin team member')->get();
+            $admins = User::all();
             return view('admin.add-admin.index',compact('admins'));
         }
 

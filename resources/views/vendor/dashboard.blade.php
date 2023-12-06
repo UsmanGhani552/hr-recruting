@@ -124,6 +124,31 @@ $pageclass = 'vdashbord';
                         </div>
                     </div>
 
+                    {{-- folder popup --}}
+                    <div class="popup vendor_pop" id="folder-popup">
+                        <div class="overlay">
+                            <a class="close" href="javascript:;">X</a>
+                            <h5>Assign Folders</h5>
+                            <form>
+                                <ul class="tabs-menu2">
+                                    <li class="current"><a href="#tab-21">Folders</a></li>
+                                </ul>
+
+                                <div class="tab">
+                                    <div id="tab-21" class="tab-content2">
+                                        <div class="form-group">
+                                            <input type="search" id="search-folder" name=""
+                                                class="form-controll" placeholder="Search by name or email...">
+                                        </div>
+                                        <ul id="search-folder-results">
+                                        </ul>
+                                        <input class="cbtn" id="assign-folder-btn" type="button" value="Assign">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
@@ -161,6 +186,9 @@ $pageclass = 'vdashbord';
                             <th>Email</th>
                             <th>Phone Number</th>
                             <th>Team Members</th>
+                            @can('Vendor status')
+                            <th>Status</th>
+                            @endcan
                             <th>Created at</th>
                             <th>
                                 <div class="mydropdown">
@@ -189,6 +217,13 @@ $pageclass = 'vdashbord';
                                     <td>{{ $vendor->email }}</td>
                                     <td>{{ $vendor->phone }}</td>
                                     <td>12</td>
+                                    @can('Vendor status')
+                                    <td>
+                                        <input data-id="{{ $vendor->id }}" class="toggle-class" type="checkbox"
+                                            data-onstyle="success" data-offstyle="danger" data-toggle="toggle"
+                                            data-on="Active" data-off="InActive" {{ $vendor->status ? 'checked' : '' }}>
+                                    </td>
+                                    @endcan
                                     <td>{{ $vendor->created_at }}</td>
                                     <td>
                                         <div class="dropdown">
@@ -198,7 +233,7 @@ $pageclass = 'vdashbord';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="{{ route('vendor-assignment' , $vendor->id) }}"><img
+                                                <a href="{{ route('vendor-assignment', $vendor->id) }}"><img
                                                         src="{{ asset('assets/images/eye.png') }}">View</a>
                                                 @can('Vendor edit')
                                                     <a href="{{ route('vendor-edit', $vendor->id) }}"><img
@@ -249,6 +284,25 @@ $pageclass = 'vdashbord';
 
 @push('scripts')
     <script>
+        $(function() {
+            $('.toggle-class').change(function() {
+                var status = $(this).prop('checked') == true ? 1 : 0;
+                var vendor_id = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: 'vendor/change-status/' + vendor_id,
+                    data: {
+                        'status': status,
+                        'vendor_id': vendor_id
+                    },
+                    success: function(response) {
+                        console.log(response)
+                    }
+                });
+            })
+        });
         $(document).ready(function() {
 
             $('.popup .overlay .close').on('click', function() {
@@ -287,7 +341,7 @@ $pageclass = 'vdashbord';
                         }
                     });
 
-                }else if (selectedValue == 'inactive') {
+                } else if (selectedValue == 'inactive') {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
@@ -311,6 +365,8 @@ $pageclass = 'vdashbord';
                         }
                     });
 
+                } else if (selectedValue == 'folder') {
+                    $('#folder-popup').addClass('openpop');
                 }
             });
 
@@ -342,6 +398,50 @@ $pageclass = 'vdashbord';
             }
             fetchData('', true); // Load jobs data initially
             fetchData('', false); // Load clients data initially
+
+            function fetchFolder(query = '') {
+                const url = '/vendor/search-folder';
+                const resultsContainer = '#search-folder-results';
+                console.log('asd');
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    data: {
+                        query: query
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var results = '';
+                        $.each(response, function(index, folder) {
+                            let checkboxValue = JSON.stringify({
+                                'folders': folder.id,
+                                'clients': folder.folder_items.filter(item => item
+                                    .folder_id === folder.id).map(item => item
+                                    .client_id),
+                                'jobs': folder.folder_items.filter(item => item
+                                    .folder_id === folder.id).map(item => item
+                                    .job_id),
+                            });
+
+                            // Escape double quotes within the JSON string
+                            checkboxValue = checkboxValue.replace(/"/g, '&quot;');
+
+                            results += '<tr>' +
+                                '<td><label><input type="checkbox" class="folder-checkbox" name="folder[]" value="' +
+                                checkboxValue + '">' + folder.id + '</label></td>' +
+                                '<td>' + folder.title + '</td>' +
+                                '</tr>';
+                        });
+                        $(resultsContainer).html(results);
+                    }
+                })
+            }
+            fetchFolder();
+
+            $('#search-folder').on('input', function() {
+                const query = $(this).val();
+                fetchFolder(query);
+            });
 
             $('#search-job, #search-client').on('input', function() {
                 const query = $(this).val();
@@ -413,6 +513,65 @@ $pageclass = 'vdashbord';
                     }
                 });
             });
+
+            $('#assign-folder-btn').on('click', function() {
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                    }
+                });
+
+                // Extract client and job information from the selected folder checkbox
+                var folderCheckbox = $('.folder-checkbox:checked');
+                // console.log(folderCheckbox);
+                // Array to store client and job information
+                var clients = [];
+                var jobs = [];
+
+                // Loop through folderItems to collect client and job information
+                folderCheckbox.each(function() {
+                    // var folderInfoString = $(this).val();
+                    // console.log('Folder Info String:', folderInfoString);
+
+                    var folderInfo = JSON.parse($(this).val());
+
+                    // Assuming folderInfo has 'clients' and 'jobs' arrays
+                    clients = clients.concat(folderInfo.clients);
+                    jobs = jobs.concat(folderInfo.jobs);
+                });
+
+                // Now you have both clients and jobs associated with the selected folder
+                console.log(clients);
+                console.log(jobs);
+
+                let vendors = [];
+                $('.vendor-checkbox:checked').each(function() {
+                    vendors.push($(this).val());
+                });
+                7
+                console.log(vendors);
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/vendor/assign-folder',
+                    data: {
+                        vendors: vendors,
+                        jobs: jobs,
+                        clients: clients,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+
+                        sessionStorage.setItem('success_message', response.message);
+                        location.reload();
+
+                    }
+                });
+            });
+
+
             // Check if there's a success message in sessionStorage
             const successMessage = sessionStorage.getItem('success_message');
 
@@ -423,7 +582,7 @@ $pageclass = 'vdashbord';
                     $('#sucess-asigment-msg').addClass('alert');
                     $('#sucess-asigment-msg').addClass('alert-success');
                     $('#sucess-asigment-msg').text(
-                    successMessage); // Use successMessage instead of response.message
+                        successMessage); // Use successMessage instead of response.message
                 }, 500);
 
                 // Clear the message after displaying

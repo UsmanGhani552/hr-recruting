@@ -133,7 +133,9 @@ $pageclass = 'clientdash';
                             <th>Job Type</th>
                             <th>Department</th>
                             <th>Salary Range</th>
+                            @can('Job status')
                             <th>Status</th>
+                            @endcan
                             <th>
                                 <div class="mydropdown">
                                     <ul class="dropbtn icons">
@@ -160,11 +162,13 @@ $pageclass = 'clientdash';
                                     <td>{{ $job->job_type }}</td>
                                     <td>{{ $job->department }}</td>
                                     <td>{{ $job->salary_range }}</td>
+                                    @can('Job status')
                                     <td>
                                         <input data-id="{{ $job->id }}" class="toggle-class" type="checkbox"
                                             data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
                                             data-off="InActive" {{ $job->status ? 'checked' : '' }}>
                                     </td>
+                                    @endcan
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">
@@ -178,7 +182,8 @@ $pageclass = 'clientdash';
                                                     <a href="{{ route('job.edit', $job->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
                                                 @endcan
-
+                                                <a href="javascript:;"><img
+                                                    src="{{ asset('assets/images/eye.png') }}">Submission</a>
                                                 @can('Job delete')
                                                     <a href="{{ route('job.delete', $job->id) }}"><img
                                                             src="{{ asset('assets/images/delete.png') }}">Delete</a>

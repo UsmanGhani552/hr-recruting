@@ -129,7 +129,9 @@ $pageclass = 'clientdash';
                             <th>Client Name</th>
                             <th>Client Email</th>
                             <th>Phone Number</th>
+                            @can('Client status')
                             <th>Status</th>
+                            @endcan
                             <th>
                                 <div class="mydropdown">
                                     <ul class="dropbtn icons">
@@ -156,11 +158,13 @@ $pageclass = 'clientdash';
                                     <td>{{ $client->name }}</td>
                                     <td>{{ $client->email }}</td>
                                     <td>{{ $client->phone }}</td>
+                                    @can('Client status')
                                     <td>
                                         <input data-id="{{ $client->id }}" class="toggle-class" type="checkbox"
                                             data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
                                             data-off="InActive" {{ $client->status ? 'checked' : '' }}>
                                     </td>
+                                    @endcan
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">

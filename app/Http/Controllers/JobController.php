@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\Vendor;
 use App\Models\VendorJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -19,7 +20,13 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::all();
+        if(Auth::user()->user_type == 'admin'){
+            $jobs = Job::all();
+        } else if(Auth::user()->user_type == 'vendor'){
+            $jobs = Auth::user()->load('vendor.jobs.clients')->vendor->jobs;
+        } else if(Auth::user()->user_type == 'vendor team member'){
+            $jobs = Auth::user()->load('jobs.clients')->jobs;
+        }
         return view('job.index',compact('jobs'));
     }
 
@@ -107,6 +114,14 @@ class JobController extends Controller
     {
         $vendors = $job->vendors;
         return view('job.assignment',compact('job','vendors'));
+    }
+
+    public function jobVendor(Job $job,Vendor $vendor){
+        // dd($vendor,$job);
+        // $clients = Client::all();
+        // $states =  DB::table('states')->get();
+        // $cities =  DB::table('cities')->get();
+        return view('job.job_vendors',compact('job','vendor'));
     }
 
     /**

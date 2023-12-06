@@ -16,7 +16,7 @@ $pageclass = 'addclient';
             <div class="row">
                 <div class="col-lg-6 col-md-6">
                     <div class="bnr_left">
-                        <p>Dashboard / Add Candidate</p>
+                        <p>Dashboard / Edit Candidate</p>
                     </div>
                 </div>
 
@@ -29,11 +29,11 @@ $pageclass = 'addclient';
 
     <section class="vendor_invite addclient">
         <div class="container">
-            <form method="POST" action="{{route('candidate.store')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('candidate.update',$candidate->id)}}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12">
-                        <h6>Add Candidate</h6>
+                        <h6>Edit Candidate</h6>
                         <div class="outbox admorebox">
 
 
@@ -41,8 +41,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         First Name
-                                        <input type="text" name="first_name" class="form-controll"
-                                            placeholder="Enter First Name">
+                                        <input type="text" name="first_name" class="form-controll" value="{{$candidate->first_name}}"
+                                            placeholder="Enter First Name" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                         @error('first_name')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -52,8 +52,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Last Name
-                                        <input type="text" name="last_name" class="form-controll"
-                                            placeholder="Enter Last Name">
+                                        <input type="text" name="last_name" class="form-controll" value="{{$candidate->last_name}}"
+                                            placeholder="Enter Last Name" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                         @error('last_name')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -62,8 +62,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Phone Number
-                                        <input type="tel" name="phone" class="form-controll"
-                                            placeholder="000-000-000 ">
+                                        <input type="tel" name="phone" class="form-controll" value="{{$candidate->phone}}"
+                                            placeholder="000-000-000 " {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                         @error('phone')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -72,8 +72,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Email
-                                        <input type="email" name="email" class="form-controll"
-                                            placeholder="Email Address">
+                                        <input type="email" name="email" class="form-controll" value="{{$candidate->email}}"
+                                            placeholder="Email Address" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                         @error('email')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -82,9 +82,9 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Method of Communication
-                                        <select class="form-controll" name="method_of_communication">
-                                            <option>Phone</option>
-                                            <option>Computer</option>
+                                        <select class="form-controll" name="method_of_communication" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option {{$candidate->method_of_communication == 'Phone' ? 'selected' : '' }} value="Phone">Phone</option>
+                                            <option {{$candidate->method_of_communication == 'Computer' ? 'selected' : '' }} value="Computer">Computer</option>
                                         </select>
                                         @error('method_of_communication')
                                             <small class="text-danger">{{ $message }}</small>
@@ -94,9 +94,9 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Highest Education
-                                        <select class="form-controll" name="highest_education">
-                                            <option>Graduate</option>
-                                            <option>High School</option>
+                                        <select class="form-controll" name="highest_education" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option {{$candidate->highest_education == 'Graduate' ? 'selected' : '' }} value="Graduate">Graduate</option>
+                                            <option {{$candidate->highest_education == 'High School' ? 'selected' : '' }} value="High School">High School</option>
                                         </select>
                                         @error('highest_education')
                                             <small class="text-danger">{{ $message }}</small>
@@ -106,8 +106,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Years of experience
-                                        <input type="text" name="years_of_experience" class="form-controll"
-                                            placeholder="Years of experience">
+                                        <input type="text" name="years_of_experience" class="form-controll" value="{{$candidate->years_of_experience}}"
+                                            placeholder="Years of experience" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                     </label>
                                     @error('years_of_experience')
                                             <small class="text-danger">{{ $message }}</small>
@@ -116,7 +116,7 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Position
-                                        <input type="text" name="position" class="form-controll" placeholder="Position">
+                                        <input type="text" value="{{$candidate->position}}" name="position" class="form-controll" placeholder="Position" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                     </label>
                                     @error('position')
                                             <small class="text-danger">{{ $message }}</small>
@@ -125,7 +125,7 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Work Authorization*
-                                        <input type="text" name="work_authorization" class="form-controll"
+                                        <input type="text" value="{{$candidate->work_authorization}}" name="work_authorization" class="form-controll" {{Auth::user()->id == 1 ? '' : 'disabled'}}
                                             placeholder="Work Authorization">
                                     </label>
                                     @error('work_authorization')
@@ -135,7 +135,7 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Expected Pay Rate
-                                        <input type="text" name="expected_pay_rate" class="form-controll"
+                                        <input type="text" value="{{$candidate->expected_pay_rate}}" name="expected_pay_rate" class="form-controll" {{Auth::user()->id == 1 ? '' : 'disabled'}}
                                             placeholder="Expected Pay Rate">
                                     </label>
                                     @error('expected_pay_rate')
@@ -145,9 +145,9 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Availability to Start
-                                        <select class="form-controll" name="availability_to_start">
-                                            <option>January</option>
-                                            <option>March</option>
+                                        <select class="form-controll" name="availability_to_start" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option {{$candidate->availability_to_start == 'January' ? 'selected' : '' }} value="January">January</option>
+                                            <option {{$candidate->availability_to_start == 'March' ? 'selected' : '' }} value="March">March</option>
                                         </select>
                                         @error('availability_to_start')
                                             <small class="text-danger">{{ $message }}</small>
@@ -157,9 +157,9 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Availability to Interview
-                                        <select class="form-controll" name="availability_to_interview">
-                                            <option>January</option>
-                                            <option>March</option>
+                                        <select class="form-controll" name="availability_to_interview" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">January</option>
+                                            <option {{$candidate->availability_to_interview == 'March' ? 'selected' : '' }} value="March">March</option>
                                         </select>
                                         @error('availability_to_interview')
                                             <small class="text-danger">{{ $message }}</small>
@@ -169,8 +169,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Country
-                                        <select class="form-controll" name="country">
-                                            <option>United States</option>
+                                        <select class="form-controll" name="country" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option value="{{$candidate->country}}">United States</option>
                                         </select>
                                         @error('country')
                                             <small class="text-danger">{{ $message }}</small>
@@ -180,10 +180,10 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         State
-                                        <select class="form-controll select2" name="state">
+                                        <select class="form-controll select2" name="state" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                             <option></option>
                                             @foreach ($states as $state)
-                                                <option value={{ $state->id }}>{{ $state->name }}</option>
+                                                <option value={{ $state->id }} {{$candidate->state_id == $state->id ? 'selected' : '' }} >{{ $state->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('state')
@@ -194,10 +194,10 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         City
-                                        <select class="form-controll select2" name="city">
+                                        <select class="form-controll select2" name="city" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                             <option></option>
                                             @foreach ($cities as $city)
-                                                <option value={{ $city->id }}>{{ $city->name }}</option>
+                                                <option value={{ $city->id }} {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">{{ $city->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('city')
@@ -208,8 +208,8 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Postal Code
-                                        <input type="text" name="postal_code" class="form-controll"
-                                            placeholder="Postal Code">
+                                        <input type="text" name="postal_code" class="form-controll" value="{{$candidate->postal_code}}"
+                                            placeholder="Postal Code" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                     </label>
                                     @error('postal_code')
                                             <small class="text-danger">{{ $message }}</small>
@@ -219,23 +219,23 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Status
-                                        <select class="form-controll" name="status">
-                                            <option value="1">Active</option>
-                                            <option value="0">InActive</option>
+                                        <select class="form-controll" name="status" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            <option value="1" {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">Active</option>
+                                            <option value="0" {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">InActive</option>
                                         </select>
                                         @error('city')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </label>
                                 </div>
-                               
+
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Vendor
-                                        <select class="form-controll" name="vendor">
-                                            {{-- @foreach ($vendors as $vendor) --}}
-                                            <option value="{{$vendor->id}}" >{{$vendor->first_name}} {{$vendor->last_name}}</option>
-                                            {{-- @endforeach --}}
+                                        <select class="form-controll" name="vendor" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
+                                            @foreach ($vendors as $vendor)
+                                            <option value="{{$vendor->id}}" {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">{{$vendor->first_name}} {{$vendor->last_name}}</option>
+                                            @endforeach
                                         </select>
                                     </label>
                                 </div>
@@ -250,7 +250,7 @@ $pageclass = 'addclient';
                                         <label class="form-group">
                                             <div class="uploadoc">
                                                 {{-- <a href="javascript:;" id="addFile" class="add-button">Upload</a> --}}
-                                                <input type="file" name="resume">
+                                                <input type="file" name="resume" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                                 {{-- <span><img src="{{ asset('assets/images/upload.png') }}"></span> --}}
                                             </div>
                                         </label>
@@ -261,7 +261,7 @@ $pageclass = 'addclient';
                                 <div class="col-lg-12 col-md-12">
                                     <label class="form-group">
                                         Additional Notes (Optional)
-                                        <textarea class="form-controll" placeholder="Message" name="notes"></textarea>
+                                        <textarea class="form-controll"  placeholder="Message" name="notes" {{Auth::user()->id == 1 ? '' : 'disabled'}}>{{$candidate->notes}}</textarea>
                                     </label>
                                     @error('notes')
                                             <small class="text-danger">{{ $message }}</small>
@@ -273,7 +273,7 @@ $pageclass = 'addclient';
                                 </div>
                                 <div class="col-lg-4 col-md-4">
                                     <div class="form-group">
-                                        <input type="submit" name="" value="Submit">
+                                        <input type="submit" name="" value="Submit" {{Auth::user()->id == 1 ? '' : 'disabled'}}>
                                     </div>
                                 </div>
                             </div>

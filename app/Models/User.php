@@ -41,4 +41,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function vendor(){
+        return $this->belongsTo(Vendor::class,'vendor_id','id');
+    }
+
+    public function jobs()
+    {
+        return $this->belongsToMany(Job::class, 'vendor_tm_jobs','team_member_id');
+    }
+
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'vendor_tm_clients','team_member_id');
+    }
 }

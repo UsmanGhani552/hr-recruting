@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidate;
 use App\Models\Client;
 use App\Models\ClientVendor;
+use App\Models\Folder;
 use App\Models\Job;
 use App\Models\Team;
 use App\Models\User;
@@ -12,6 +13,7 @@ use App\Models\Vendor;
 use App\Models\VendorInvitation;
 use App\Models\VendorJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -35,9 +37,44 @@ class VendorController extends Controller
         $jobs = $vendor->jobs()->with('clients')->get();
         $clients = $vendor->clients;
         $candidates = Candidate::where('vendor_id', $vendor->id)->get();
-        $teams = Team::where('vendor_id', $vendor->id)->get();
-        // dd($candidates);
-        return view('vendor.assignment', compact('jobs', 'clients', 'candidates', 'teams'));
+        $teams = User::where('vendor_id', $vendor->id)->get();
+        return view('vendor.assignment', compact('vendor', 'jobs', 'clients', 'candidates', 'teams'));
+    }
+
+    public function vendorJob(Vendor $vendor, Job $job)
+    {
+        // dd($vendor,$job);
+        $clients = Client::all();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        return view('vendor.vendor_jobs', compact('job', 'clients', 'states', 'cities'));
+    }
+
+    public function vendorClient(Vendor $vendor, Client $client)
+    {
+        // dd($vendor,$job);
+        // $clients = Client::all();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        return view('vendor.vendor_clients', compact('client', 'states', 'cities'));
+    }
+
+    public function vendorCandidate(Vendor $vendor, Candidate $candidate)
+    {
+        // dd($vendor,$job);
+        $vendors = Vendor::all();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        return view('vendor.vendor_candidates', compact('vendor', 'vendors', 'candidate', 'states', 'cities'));
+    }
+
+    public function vendorTeam(Vendor $vendor, User $team)
+    {
+        // dd($vendor,$job);
+        // $clients = Client::all();
+        // $states =  DB::table('states')->get();
+        // $cities =  DB::table('cities')->get();
+        return view('vendor.vendor_teams', compact('team'));
     }
 
     public function store(Request $request)
@@ -111,6 +148,16 @@ class VendorController extends Controller
         return redirect()->route('vendor-dashboard')->withSuccess('Vendor Deleted Successfully');
     }
 
+    public function changeVendorStatus(Request $request, Vendor $vendor)
+    {
+        dd($vendor);
+        $vendor->status = $request->status;
+        $vendor->save();
+        return response()->json([
+            'message' => 'Status Chnaged Successfully'
+        ]);
+    }
+
     public function searchClient(Request $request)
     {
         $query = $request->input('query');
@@ -128,6 +175,14 @@ class VendorController extends Controller
         return response()->json($jobs);
     }
 
+    public function searchFolder(Request $request)
+    {
+        $query = $request->input('query');
+        $folders = Folder::with('folderItems')->where('title', 'LIKE', "%$query%")
+            ->get();
+        return response()->json($folders);
+    }
+
     public function assignClient(Request $request)
     {
         // dd($request->vendors,$request->clients);
@@ -141,7 +196,26 @@ class VendorController extends Controller
                     $client_vendors = new ClientVendor();
                     $client_vendors->vendor_id = $vendor;
                     $client_vendors->client_id = $client;
-                    $client_vendors->save();
+                    if ($client_vendors->save()) {
+                        // Fetch all jobs associated with the current client
+                        $jobs = Job::where('client_id', $client)->pluck('id')->toArray();
+
+                        // Insert all job records for the current vendor
+                        $job_vendor_records = [];
+                        $now = now(); // Get the current timestamp
+
+                        foreach ($jobs as $job) {
+                            $job_vendor_records[] = [
+                                'vendor_id' => $vendor,
+                                'job_id' => $job,
+                                'created_at' => $now,
+                                'updated_at' => $now,
+                            ];
+                        }
+
+                        // Use insert to insert multiple records at once
+                        VendorJob::insert($job_vendor_records);
+                    };
                 }
             }
         }
@@ -169,6 +243,60 @@ class VendorController extends Controller
         }
         return response()->json([
             'message' => 'Vendor assigned successfully'
+        ]);
+    }
+
+    public function assignFolder(Request $request)
+    {
+        // dd($request->vendors, $request->clients, $request->jobs);
+
+        if (!empty($request->clients)) {
+            foreach ($request->clients as $client) {
+                if (!is_null($client)) {
+                    foreach ($request->vendors as $vendor) {
+                        if (!is_null($vendor)) {
+                            // Check if the record already exists
+                            $existingRecord = ClientVendor::where('vendor_id', $vendor)
+                                ->where('client_id', $client)
+                                ->first();
+
+                            if (!$existingRecord) {
+                                // If the record doesn't exist, create a new one
+                                $client_vendors = new ClientVendor();
+                                $client_vendors->vendor_id = $vendor;
+                                $client_vendors->client_id = $client;
+                                $client_vendors->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($request->jobs)) {
+            foreach ($request->jobs as $job) {
+                if (!is_null($job)) {
+                    foreach ($request->vendors as $vendor) {
+                        if (!is_null($vendor)) {
+                            // Check if the record already exists
+                            $existingRecord = VendorJob::where('vendor_id', $vendor)
+                                ->where('job_id', $job)
+                                ->first();
+
+                            if (!$existingRecord) {
+                                $vendor_jobs = new VendorJob();
+                                $vendor_jobs->vendor_id = $vendor;
+                                $vendor_jobs->job_id = $job;
+                                $vendor_jobs->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'message' => 'Folder assign successfully'
         ]);
     }
 

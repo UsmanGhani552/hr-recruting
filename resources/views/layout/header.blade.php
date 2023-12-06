@@ -11,13 +11,21 @@
             <div class="col-md-7">
                 <ul class="menu">
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('vendor-dashboard') }}">Vendor</a></li>
+
+                    @canany('Vendor access', 'Vendor create', 'Vendor edit', 'Vendor delete')
+                        <li><a href="{{ route('vendor-dashboard') }}">Vendor</a></li>
+                    @endcanany
+
                     <li><a href="{{ route('client') }}">Client</a></li>
                     <li><a href="{{ route('job') }}">Job</a></li>
                     <li><a href="{{ route('candidate') }}">Candidate</a></li>
+                    @canany('Team access', 'Team create', 'Team edit', 'Team delete')
                     <li><a href="{{ route('team') }}">Team</a></li>
-                    <li><a href="{{ route('folder') }}">Folder</a></li>
-                    <li><a href="{{ route('vendor-submission') }}">Submissions</a></li> 
+                    @endcanany
+                    @canany('Folder access', 'Folder create', 'Folder edit', 'Folder delete')
+                        <li><a href="{{ route('folder') }}">Folder</a></li>
+                    @endcanany
+                    <li><a href="{{ route('vendor-submission') }}">Submissions</a></li>
 
                     @canany('Permission access', 'Permission create', 'Permission edit', 'Permission delete')
                         <li><a href="{{ route('permission.index') }}">Permission</a></li>

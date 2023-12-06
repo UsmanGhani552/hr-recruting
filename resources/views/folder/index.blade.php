@@ -125,7 +125,7 @@ $pageclass = 'clientdash';
                             </th>
                             <th>Title</th>
                             <th>Category</th>
-                            <th>Status</th>
+                            {{-- <th>Status</th> --}}
                             {{-- <th>Department</th> --}}
                             <th>
                                 <div class="mydropdown">
@@ -155,11 +155,11 @@ $pageclass = 'clientdash';
                                 </td>
                                 <td>{{ $folder->title }}</td>
                                 <td>{{ $folder->category }}</td>
-                                <td>
+                                {{-- <td>
                                     <input data-id="{{ $folder->id }}" class="toggle-class" type="checkbox"
                                         data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
                                         data-off="InActive" {{ $folder->status ? 'checked' : '' }}>
-                                </td>
+                                </td> --}}
                                 {{-- <td>{{$folder->department}}</td> --}}
                                 <td>
                                     <div class="dropdown">
@@ -214,25 +214,25 @@ $pageclass = 'clientdash';
 
 @push('scripts')
     <script>
-        $(function() {
-            $('.toggle-class').change(function() {
-                var status = $(this).prop('checked') == true ? 1 : 0;
-                var folder_id = $(this).data('id');
+        // $(function() {
+        //     $('.toggle-class').change(function() {
+        //         var status = $(this).prop('checked') == true ? 1 : 0;
+        //         var folder_id = $(this).data('id');
 
-                $.ajax({
-                    type: "GET",
-                    dataType: "json",
-                    url: 'folder/change-status/' + folder_id,
-                    data: {
-                        'status': status,
-                        'folder_id': folder_id
-                    },
-                    success: function(response) {
-                        console.log(response)
-                    }
-                });
-            })
-        });
+        //         $.ajax({
+        //             type: "GET",
+        //             dataType: "json",
+        //             url: 'folder/change-status/' + folder_id,
+        //             data: {
+        //                 'status': status,
+        //                 'folder_id': folder_id
+        //             },
+        //             success: function(response) {
+        //                 console.log(response)
+        //             }
+        //         });
+        //     })
+        // });
         $(document).ready(function() {
 
             $('.popup .overlay .close').on('click', function() {
@@ -311,6 +311,7 @@ $pageclass = 'clientdash';
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
                         }
                     });
+
                     var folderCheckbox = $('.folder-checkbox:checked');
                     var folderId = folderCheckbox.data('folder-id');
 
@@ -432,7 +433,7 @@ $pageclass = 'clientdash';
                     $('#sucess-asigment-msg').addClass('alert');
                     $('#sucess-asigment-msg').addClass('alert-success');
                     $('#sucess-asigment-msg').text(
-                    successMessage); // Use successMessage instead of response.message
+                        successMessage); // Use successMessage instead of response.message
                 }, 500);
 
                 // Clear the message after displaying

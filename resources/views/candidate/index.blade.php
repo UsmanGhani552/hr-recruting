@@ -96,7 +96,9 @@ $pageclass = 'maincadidate';
                             <th>Candidate Name</th>
                             <th>Candidate Email</th>
                             <th>Phone Number</th>
+                            @can('Candidate status')
                             <th>Status</th>
+                            @endcan
                             <th>
                                 <div class="mydropdown">
                                     <ul class="dropbtn icons">
@@ -125,11 +127,13 @@ $pageclass = 'maincadidate';
                                     <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
                                     <td>{{ $candidate->email }}</td>
                                     <td>{{ $candidate->phone }}</td>
+                                    @can('Candidate status')
                                     <td>
                                         <input data-id="{{ $candidate->id }}" class="toggle-class" type="checkbox"
                                             data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
                                             data-off="InActive" {{ $candidate->status ? 'checked' : '' }}>
                                     </td>
+                                    @endcan
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">
@@ -138,7 +142,7 @@ $pageclass = 'maincadidate';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="javascript:;"><img src="{{ asset('assets/images/eye.png') }}">View</a>
+                                                <a href="{{route('candidate.assignment')}}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
                                                 @can('Candidate edit')
                                                     <a href="{{ route('candidate.edit', $candidate->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
