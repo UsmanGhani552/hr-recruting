@@ -406,7 +406,7 @@ $(document).ready(function() {
 
 function hiddenFile(o) {
   let file = "";
-  file += '<input type="file" name="file" id="' + o.id + '"/>';
+  file += '<input multiple type="file" name="file[]" id="' + o.id + '"/>';
   return file;
 }
 

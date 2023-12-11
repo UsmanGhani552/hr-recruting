@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Client::class, 'vendor_tm_clients','team_member_id');
     }
+
+    public function candidates()
+    {
+        return $this->belongsTo(Candidate::class, 'vendor_id','vendor_id');
+    }
 }

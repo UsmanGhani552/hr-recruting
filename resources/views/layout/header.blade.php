@@ -25,7 +25,7 @@
                     @canany('Folder access', 'Folder create', 'Folder edit', 'Folder delete')
                         <li><a href="{{ route('folder') }}">Folder</a></li>
                     @endcanany
-                    <li><a href="{{ route('vendor-submission') }}">Submissions</a></li>
+                    <li><a href="{{ route('submissions') }}">Submissions</a></li>
 
                     @canany('Permission access', 'Permission create', 'Permission edit', 'Permission delete')
                         <li><a href="{{ route('permission.index') }}">Permission</a></li>

@@ -187,7 +187,7 @@ $pageclass = 'subdetail';
                             </tr>
                             <tr>
                                 <td style="border-bottom: 0; border-left: 0;">
-                                    <h5>Company Nmae:</h5>
+                                    <h5>Company Name:</h5>
                                     {{ $vendor->company_name ?? '' }}
                                 </td>
                                 <td style="border-bottom: 0;">
@@ -210,25 +210,33 @@ $pageclass = 'subdetail';
                 <br>
                 <br>
                 <h6>Candidate</h6>
-                <div class="outbox d-none">
+                <div class="outbox">
                     <table>
                         <tbody>
                             <tr>
                                 <td style="border-top: 0; border-left: 0;">
                                     <h5>First Name:</h5>
-                                    <p id="first_name"></p>
+                                    <p id="first_name">
+                                        {{ $candidate->first_name}}
+                                    </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Last name:</h5>
-                                    <p id="last_name"></p>
+                                    <p id="last_name">
+                                        {{ $candidate->last_name}}
+                                    </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Phone:</h5>
-                                    <p id="phone"></p>
+                                    <p id="phone">
+                                        {{ $candidate->phone}}
+                                    </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Email:</h5>
-                                    <p id="email"></p>
+                                    <p id="email">
+                                        {{ $candidate->email}}
+                                    </p>
                                 </td>
                                 <td style="border-top: 0; border-right: 0;">
                                     <h5>Location:</h5>
@@ -238,19 +246,27 @@ $pageclass = 'subdetail';
                             <tr>
                                 <td style="border-bottom: 0; border-left: 0;">
                                     <h5>Work Authentication:</h5>
-                                    <p id="work_authorization"></p>
+                                    <p id="work_authorization">
+                                        {{ $candidate->work_authorization}}
+                                    </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Exp Pay Rate:</h5>
-                                    <p id="expected_pay_rate"></p>
+                                    <p id="expected_pay_rate">
+                                        {{ $candidate->expected_pay_rate}}
+                                    </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Availabilty to Start:</h5>
-                                    <p id="availability_to_start"></p>
+                                    <p id="availability_to_start">
+                                        {{ $candidate->availability_to_start}}
+                                    </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Experience:</h5>
-                                    <p id="years_of_experience"></p>
+                                    <p id="years_of_experience">
+                                        {{ $candidate->years_of_experience}}
+                                    </p>
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
                                     <a href="javascript:;">VIEW DETAILS</a>
@@ -261,7 +277,7 @@ $pageclass = 'subdetail';
                 </div>
                 <br><br>
 
-                <h6>Assigned Candidates</h6>
+                {{-- <h6>Assigned Candidates</h6>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="outbox">
@@ -279,10 +295,10 @@ $pageclass = 'subdetail';
                                         data-years_of_experience="{{ $candidate->years_of_experience }}">
                                         {{ $candidate->first_name }} {{ $candidate->last_name }}</option>
                                 @endforeach
-                                {{-- <option value="1">One</option>
+                                <option value="1">One</option>
 							<option value="2">Two</option>
 							<option value="3">Three</option>
-							<option value="4">Four</option> --}}
+							<option value="4">Four</option>
                             </select>
                             <div class="file-hidden-list"></div>
 
@@ -302,6 +318,13 @@ $pageclass = 'subdetail';
                         </div>
                     </div>
 
+                </div> --}}
+                <div class="image-container">
+                    @if ($submission->additional_documents)
+                        @foreach(explode('|', $submission->additional_documents) as $filename)
+                            <img src="{{ asset('candidates/' . $filename) }}" alt="Image" width="200px" height="200px">
+                        @endforeach
+                    @endif
                 </div>
                 <br><br>
                 <div class="row">
@@ -315,6 +338,7 @@ $pageclass = 'subdetail';
                         <input type="submit" value="Save">
                     </div>
                 </div>
+                <a href="{{route('submission.send-email',$submission->id)}}">Send Email</a>
 
             </div>
         </section>
@@ -323,7 +347,7 @@ $pageclass = 'subdetail';
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Handle dropdown change event
             $('#candidateDropdown').change(function() {
@@ -343,5 +367,5 @@ $pageclass = 'subdetail';
                 $('#years_of_experience').text(selectedOption.data('years_of_experience'));
             });
         });
-    </script>
+    </script> --}}
 @endpush

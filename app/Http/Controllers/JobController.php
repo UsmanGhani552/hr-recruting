@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use App\Models\Client;
 use App\Models\Job;
+use App\Models\Submission;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorJob;
 use Illuminate\Http\Request;
@@ -115,6 +118,66 @@ class JobController extends Controller
         $vendors = $job->vendors;
         return view('job.assignment',compact('job','vendors'));
     }
+
+    public function submission(Job $job){
+        // dd($job->clients);
+        $client = $job->clients;
+        $user = Auth::user();
+        if($user->user_type == 'admin'){
+            $vendor = Auth::user();
+            $candidates = Candidate::all();
+        } else if($user->user_type == 'vendor'){
+            $vendor = $user->vendor;
+            $candidates = Candidate::where('vendor_id',$vendor->id)->get();
+        } else if($user->user_type == 'vendor team member'){
+            $user_id = $user->vendor_id;
+            $vendor_id = User::where('id',$user_id)->first();
+            $vendor = $vendor_id->vendor;
+            // dd($vendor);
+            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->get();
+
+            // dd($candidates);
+        }
+        // dd($candidates);
+        return view('job.submission' , compact('job','client','vendor','candidates'));
+    }
+
+    public function storeSubmission(Request $request){
+        // dd($request->all());
+        $request->validate([
+            'job_id' => 'required',
+            'client_id' => 'required',
+            'vendor_id' => 'required',
+            'candidate_id' => 'required',
+            'file' => 'required',
+            'file.*' => 'image|mimes:jpeg,png,jpg',
+        ]);
+
+        $additional_documents = [];
+        if ($files = $request->file('file')) {
+            foreach($files as $file){
+                $name = $file->getClientOriginalName();
+                $filename = time() . '.' . $name;
+                $file->move(public_path('candidates/') , $filename);
+                $additional_documents[] = $filename;
+            }
+        }
+        $existing_record = Submission::where('job_id',$request->job_id)->where('client_id',$request->client_id)->where('vendor_id',$request->vendor_id)->where('candidate_id',$request->candidate_id)->first();
+        if(!$existing_record){
+            $submission = new Submission();
+            $submission->job_id = $request->job_id;
+            $submission->client_id = $request->client_id;
+            $submission->vendor_id = $request->vendor_id;
+            $submission->candidate_id = $request->candidate_id;
+            $submission->additional_documents = implode('|' , $additional_documents);
+            $submission->save();
+            return redirect()->route('submissions')->with('success','Job Submitted Successfully');
+        }else{
+            return back()->with('error','This Job Has Already Been Submitted');
+        }
+    }
+
+    
 
     public function jobVendor(Job $job,Vendor $vendor){
         // dd($vendor,$job);

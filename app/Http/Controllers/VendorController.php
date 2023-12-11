@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class VendorController extends Controller
 {
@@ -90,7 +91,7 @@ class VendorController extends Controller
             'state' => 'required',
             'city' => 'required',
         ]);
-
+        // dd('asd');
         $vendor = new Vendor();
         $vendor->first_name = $request->first_name;
         $vendor->last_name = $request->last_name;
@@ -111,6 +112,18 @@ class VendorController extends Controller
                 $vendorInvitation = VendorInvitation::where('email', $vendor_login->email)->first();
                 $vendorInvitation->status = 1;
                 $vendorInvitation->save();
+
+                $vendor_email = $vendor->email;
+                $fetch_admin = User::where('id', 1)->first();
+                $admin_email = $fetch_admin->email;
+                Mail::send('mail.vendor_welcome', [], function ($message) use ($vendor_email) {
+                    $message->to($vendor_email);
+                    $message->subject('Welcome Email');
+                });
+                Mail::send('mail.admin_notify', [], function ($message) use ($admin_email) {
+                    $message->to($admin_email);
+                    $message->subject('Vendor Registered');
+                });
             };
         };
         return redirect()->route('vendor-dashboard')->withSuccess('Vendor Created Successfully');

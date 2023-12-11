@@ -7,6 +7,8 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Submission;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VendorInvitationController;
@@ -26,14 +28,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 
 //auth
 // Route::view('/login','login');
 Route::view('/registerr', 'register');
-
+Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-create');
+Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
 
 Route::middleware('auth')->group(function () {
 
@@ -67,13 +70,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/destroy/{addAdmin}', 'destroy')->name('destroy');
     });
 
+    // --------------------------------------------------- Submission -------------------------------------------------
 
+    Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
+    Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
+    Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
+    Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
 
     // ---------------------------------------------------- vendor ----------------------------------------------------
 
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
-    Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-create');
-    Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
+
     Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
     Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
     Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
@@ -138,7 +145,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/job/edit/{job}', [JobController::class, 'edit'])->name('job.edit');
     Route::post('/job/update/{job}', [JobController::class, 'update'])->name('job.update');
     Route::get('/job/delete/{job}', [JobController::class, 'delete'])->name('job.delete');
-    Route::view('/jobs/submission', 'jobs.submission');
+    Route::get('/jobs/submission/{job}',[JobController::class, 'submission'])->name('job.submission');
+    Route::post('/jobs/store-submission',[JobController::class, 'storeSubmission'])->name('job.store-submission');
     Route::get('/job/change-status/{job}', [JobController::class, 'changeJobStatus'])->name('job.change-status');
     Route::get('/job/{job}/vendor/{vendor}', [JobController::class, 'jobvendor'])->name('job.vendor.details');
     // bulk actions
@@ -148,7 +156,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/job/inactive-status', [JobController::class, 'inactiveStatus'])->name('job.inactive-status');
     Route::post('/job/bulk-delete', [JobController::class, 'bulkDelete'])->name('job.bulk-delete');
 
-    // ---------------------------------------------end job------------------------------------------------------
+    // ---------------------------------------------------end job------------------------------------------------------
 
 
 

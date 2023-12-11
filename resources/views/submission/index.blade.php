@@ -1,8 +1,8 @@
 <?php
-$title = 'Client Dashboard';
+$title = 'Candidate Main';
 $keywords = '';
 $desc = '';
-$pageclass = 'clientdash';
+$pageclass = 'maincadidate';
 ?>
 
 @extends('layout.master')
@@ -17,7 +17,7 @@ $pageclass = 'clientdash';
             <div class="row">
                 <div class="col-md-6">
                     <div class="bnr_left">
-                        <p>Dashboard / Jobs</p>
+                        <p>Dashboard / Submission</p>
                     </div>
                 </div>
 
@@ -50,12 +50,6 @@ $pageclass = 'clientdash';
                                 </span>
                             </li>
                             <li>
-                                <span class="dropdown-item" data-value="client">
-                                    <img class="" src="{{ asset('assets/images/bulk4.png') }}" alt="btc" />
-                                    Assign Vendors
-                                </span>
-                            </li>
-                            <li>
                                 <span class="dropdown-item" data-value="job">
                                     <img class="" src="{{ asset('assets/images/delete.png') }}" alt="btc" />
                                     Delete
@@ -66,32 +60,6 @@ $pageclass = 'clientdash';
                     <button type="submit" class="cbtn" id="assign-btn">
                         Apply
                     </button>
-                    {{-- vendor popup --}}
-                    <div class="popup vendor_pop" id="vendor-popup">
-                        <div class="overlay">
-                            <a class="close" href="javascript:;">X</a>
-                            <h5>Assign Vendors</h5>
-                            <form>
-                                <ul class="tabs-menu2">
-                                    <li class="current"><a href="#tab-21">Vendors</a></li>
-                                </ul>
-
-                                <div class="tab">
-                                    <div id="tab-21" class="tab-content2">
-                                        <div class="form-group">
-                                            <input type="search" id="search-vendor" name="" class="form-controll"
-                                                placeholder="Search by name or email...">
-                                        </div>
-                                        <ul id="search-vendor-results">
-                                        </ul>
-                                        <input class="cbtn" id="assign-vendor-btn" type="button" value="Assign">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-
                 </div>
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
@@ -99,16 +67,6 @@ $pageclass = 'clientdash';
                             <a class="cbtn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
-                        <li>
-                            <a class="cbtn searchjob_folder" href="javascript:;"><img
-                                    src="{{ asset('assets/images/folder.png') }}">Add Folder</a>
-                        </li>
-                        @can('Job create')
-                            <li>
-                                <a class="cbtn addjob_pop" href="{{ route('job.create') }}"><img
-                                        src="{{ asset('assets/images/invite.png') }}">ADD JOB</a>
-                            </li>
-                        @endcan
                     </ul>
                 </div>
             </div>
@@ -118,6 +76,7 @@ $pageclass = 'clientdash';
                     {{ session('success') }}
                 </div>
             @endif
+
             <div id="sucess-asigment-msg"> </div>
             <div class="outbox outbox2">
                 <table>
@@ -126,49 +85,47 @@ $pageclass = 'clientdash';
                             <th>
                                 <label for="orderid">
                                     <input type="checkbox" name="" id="orderid">
-                                    ID
+                                    Order ID
                                 </label>
                             </th>
-                            <th>Title</th>
-                            <th>Job Type</th>
-                            <th>Department</th>
-                            <th>Salary Range</th>
-                            @can('Job status')
-                            <th>Status</th>
-                            @endcan
+                            <th>Job Title</th>
+                            <th>Client Name</th>
+                            <th>Vendor Name</th>
+                            <th>Candidate Name</th>
+
                             <th>
                                 <div class="mydropdown">
                                     <ul class="dropbtn icons">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
+                                        {{-- <li></li>
+									<li></li>
+									<li></li> --}}
+                                        Actions
                                     </ul>
+
                                 </div>
                             </th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @can('Job access')
-                            @foreach ($jobs as $job)
+                        @can('Submission access')
+                            @foreach ($submissions as $submission)
                                 <tr>
                                     <td>
                                         <label for="">
-                                            <input type="checkbox" name="" class="job-checkbox" value="{{ $job->id }}">
-                                            {{ $job->id }}
+                                            <input type="checkbox" name="" value="{{ $submission->id }}"
+                                                class="submission-checkbox">
+                                            {{ $submission->id }}
                                         </label>
                                     </td>
-                                    <td>{{ $job->title }}</td>
-                                    <td>{{ $job->job_type }}</td>
-                                    <td>{{ $job->department }}</td>
-                                    <td>{{ $job->salary_range }}</td>
-                                    @can('Job status')
-                                    <td>
-                                        <input data-id="{{ $job->id }}" class="toggle-class" type="checkbox"
-                                            data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
-                                            data-off="InActive" {{ $job->status ? 'checked' : '' }}>
-                                    </td>
-                                    @endcan
+                                    <td>{{ $submission->job->title }}</td>
+                                    <td>{{ $submission->client->name }}</td>
+                                    @if ($submission->vendor_id == 1)
+                                        <td>{{ $submission->user->name }}</td>
+                                    @else
+                                        <td>{{ $submission->vendor->first_name }} {{ $submission->vendor->last_name }}</td>
+                                    @endif
+                                    <td>{{ $submission->candidate->first_name }} {{ $submission->candidate->last_name }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">
@@ -177,15 +134,12 @@ $pageclass = 'clientdash';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="{{ route('job.show', $job->id) }}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                @can('Job edit')
-                                                    <a href="{{ route('job.edit', $job->id) }}"><img
-                                                            src="{{ asset('assets/images/edit.png') }}">Edit</a>
-                                                @endcan
-                                                <a href="{{ route('job.submission', $job->id) }}"><img
-                                                    src="{{ asset('assets/images/eye.png') }}">Submission</a>
-                                                @can('Job delete')
-                                                    <a href="{{ route('job.delete', $job->id) }}"><img
+                                                {{-- @can('Submission edit') --}}
+                                                    <a href="{{ route('submission.show', $submission->id) }}"><img
+                                                            src="{{ asset('assets/images/edit.png') }}">view</a>
+                                                {{-- @endcan --}}
+                                                @can('Submission delete')
+                                                    <a href="{{ route('submission.delete', $submission->id) }}"><img
                                                             src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                 @endcan
                                             </div>
@@ -224,58 +178,54 @@ $pageclass = 'clientdash';
 
         </div>
     </section>
+
     @include('layout.footer')
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         $(function() {
             $('.toggle-class').change(function() {
                 var status = $(this).prop('checked') == true ? 1 : 0;
-                var job_id = $(this).data('id');
+                var candidate_id = $(this).data('id');
 
                 $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: 'job/change-status/' + job_id,
+                    url: 'candidate/change-status/' + candidate_id,
                     data: {
                         'status': status,
-                        'job_id': job_id
+                        'candidate_id': candidate_id
                     },
                     success: function(response) {
                         console.log(response)
                     }
                 });
-            })
-        })
-        $(document).ready(function() {
-
-            $('.popup .overlay .close').on('click', function() {
-                $('.vendor_pop').removeClass('openpop');
             });
+        });
+
+        $(document).ready(function() {
 
             $('#assign-btn').on('click', function() {
                 // Get the value of the hidden input field
                 var selectedValue = $('#assignment_id').val();
                 console.log(selectedValue);
-                if (selectedValue == 'client') {
-                    $('#vendor-popup').addClass('openpop');
-                } else if (selectedValue == 'active') {
+                if (selectedValue == 'active') {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
                         }
                     });
-                    let jobs = [];
-                    $('.job-checkbox:checked').each(function() {
-                        jobs.push($(this).val());
+                    let candidates = [];
+                    $('.candidate-checkbox:checked').each(function() {
+                        candidates.push($(this).val());
                     });
-                    console.log(jobs);
+                    console.log(candidates);
                     $.ajax({
                         method: 'POST',
-                        url: '/job/active-status',
+                        url: '/candidate/active-status',
                         data: {
-                            jobs: jobs,
+                            candidates: candidates,
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(response) {
@@ -290,16 +240,16 @@ $pageclass = 'clientdash';
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
                         }
                     });
-                    let jobs = [];
-                    $('.job-checkbox:checked').each(function() {
-                        jobs.push($(this).val());
+                    let candidates = [];
+                    $('.candidate-checkbox:checked').each(function() {
+                        candidates.push($(this).val());
                     });
 
                     $.ajax({
                         method: 'POST',
-                        url: '/job/inactive-status',
+                        url: '/candidate/inactive-status',
                         data: {
-                            jobs: jobs,
+                            candidates: candidates,
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(response) {
@@ -308,22 +258,22 @@ $pageclass = 'clientdash';
                         }
                     });
 
-                }else if (selectedValue == 'job') {
+                } else if (selectedValue == 'job') {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
                         }
                     });
-                    let jobs = [];
-                    $('.job-checkbox:checked').each(function() {
-                        jobs.push($(this).val());
+                    let candidates = [];
+                    $('.candidate-checkbox:checked').each(function() {
+                        candidates.push($(this).val());
                     });
 
                     $.ajax({
                         method: 'POST',
-                        url: '/job/bulk-delete',
+                        url: '/candidate/bulk-delete',
                         data: {
-                            jobs: jobs,
+                            candidates: candidates,
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(response) {
@@ -333,70 +283,6 @@ $pageclass = 'clientdash';
                     });
 
                 }
-            });
-
-            function fetchData(query = '') {
-                const url = '/job/search-vendor';
-                const resultsContainer = '#search-vendor-results';
-                console.log(resultsContainer)
-                $.ajax({
-                    method: 'GET',
-                    url: url,
-                    data: {
-                        query: query
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        var results = '';
-                        $.each(response, function(index, vendor) {
-                            results += '<tr>' +
-                                '<td><label><input type="checkbox" class="vendor-checkbox" name="vendor[]" value="' +
-                                vendor.id + '">' + vendor.id + '<label></td>' +
-                                '<td>' + vendor.first_name + ' ' + vendor.last_name + '</td>' +
-                                '</tr>'
-                        });
-                        $(resultsContainer).html(results);
-                    }
-                })
-            }
-            fetchData(); // Load jobs data initially
-
-            $('#search-vendor').on('input', function() {
-                const query = $(this).val();
-                fetchData(query);
-            });
-
-
-            $('#assign-vendor-btn').on('click', function() {
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                    }
-                });
-
-                let vendors = [];
-                $('.vendor-checkbox:checked').each(function() {
-                    vendors.push($(this).val());
-                })
-                let jobs = [];
-                $('.job-checkbox:checked').each(function() {
-                    jobs.push($(this).val());
-                })
-
-                $.ajax({
-                    method: 'POST',
-                    url: '/job/assign-vendor',
-                    data: {
-                        vendors: vendors,
-                        jobs: jobs,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        sessionStorage.setItem('success_message', response.message);
-                        location.reload();
-                    }
-                });
             });
 
             // Check if there's a success message in sessionStorage
@@ -420,7 +306,6 @@ $pageclass = 'clientdash';
                     sessionStorage.removeItem('success_message');
                 }, 5000); // Adjust the delay (in milliseconds) as needed
             }
-
         });
     </script>
-@endpush
+@endpush --}}

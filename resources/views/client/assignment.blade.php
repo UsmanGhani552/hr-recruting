@@ -101,7 +101,7 @@ use App\Models\Team;
                                                         <a
                                                             href="{{ route('client.job.details', ['client' => $client->id, 'job' => $job->id]) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('job.submission',$job->id)}}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">Submission</a>
                                                         <a href="javascript:;"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
