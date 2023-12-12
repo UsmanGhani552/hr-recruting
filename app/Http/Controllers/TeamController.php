@@ -17,7 +17,7 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $teams = User::where('vendor_id' , Auth::user()->id)->get();
+        $teams = User::where('vendor_id' , Auth::user()->id)->paginate(6);
         // dd($teams[0]['vendor']['first_name']);
         return view('team.index', compact('teams'));
     }

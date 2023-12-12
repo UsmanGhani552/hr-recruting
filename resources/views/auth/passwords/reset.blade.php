@@ -108,7 +108,7 @@ $pageclass = "home-page";
                                   </label>
 
                                   <label class="form-group" for="pasword">
-                                        Condirm Password
+                                        Confirm Password
                                         <input id="password-confirm" type="password" class="form-controll" name="password_confirmation" required autocomplete="new-password">
                                   </label>
 

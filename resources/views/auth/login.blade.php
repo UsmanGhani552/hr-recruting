@@ -103,7 +103,6 @@ $pageclass = 'home-page';
                             @csrf
                             <label class="form-group" for="email">
                                 Email
-                                {{-- <input type="email" name="" class="form-controll" id="email" placeholder="Enter Email"> --}}
                                 <input id="email" type="email"
                                     class="form-controll @error('email') is-invalid @enderror" name="email"
                                     value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -116,7 +115,6 @@ $pageclass = 'home-page';
                             </label>
                             <label class="form-group" for="pasword">
                                 Password
-                                {{-- <input type="email" name="" class="form-controll" id="password" placeholder="********************"> --}}
                                 <input id="password" type="password"
                                     class="form-controll @error('password') is-invalid @enderror" name="password" required
                                     autocomplete="current-password">
@@ -147,7 +145,6 @@ $pageclass = 'home-page';
                             <div class="form-group">
                                 <input class="btn" type="submit" name="" value="Login">
                             </div>
-                            <p>Don’t have an account? <a href="{{ route('register') }}">Sign up now</a></p>
                         </form>
                     </div>
                 </div>

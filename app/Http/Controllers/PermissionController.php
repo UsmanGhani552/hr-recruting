@@ -21,8 +21,8 @@ class PermissionController extends Controller
     }
     public function index()
     {
-        $permissions = Permission::all();
-        return view('admin.permission.index',compact('permissions'));
+        $permissions = Permission::paginate(6);
+        return view('settings.permission.index',compact('permissions'));
     }
 
     /**
@@ -32,7 +32,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('admin.permission.create');
+        return view('settings.permission.create');
     }
 
     /**
@@ -71,7 +71,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('admin.permission.edit',compact('permission'));
+        return view('settings.permission.edit',compact('permission'));
     }
 
     /**

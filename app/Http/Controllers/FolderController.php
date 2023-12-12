@@ -19,7 +19,7 @@ class FolderController extends Controller
      */
     public function index()
     {
-        $folders = Folder::with('folderItems')->get();
+        $folders = Folder::with('folderItems')->paginate(6);
         // dd($folders->toArray());
         // return response()->json([
         //     'clients' => $folders[1]->folderItems->where('folder_id', $folders[1]->id)->pluck('client_id'),

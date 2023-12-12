@@ -82,22 +82,26 @@ $pageclass = "vinvitepg";
 							<h6>Reset Password</h6>
 							<br>
 
-							<div class="col-md-6">
-								<label class="form-group">
-									Password
-									<input type="password" name="" class="form-controll" placeholder="Password">
-								</label>
-							</div>
-
-							<div class="col-md-6">
-								<label class="form-group">
-									Confirm Password
-									<input type="password" name="" class="form-controll" placeholder="Confirm Password">
-								</label>
-							</div>
+                            <div class="col-md-6">
+                                <label class="form-group">
+                                    Password
+                                    <input type="password" name="password" class="form-controll"
+                                        placeholder="000-000-000 ">
+                                        @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-group">
+                                    Confirm Password
+                                    <input type="password" name="password_confirmation" class="form-controll"
+                                        placeholder="000-000-000 ">
+                                </label>
+                            </div>
 
 						<div class="form-group">
-							<input type="submit" name="" value="Submit">
+							<input type="submit" value="Submit">
 						</div>
 					</div>
 				  </form>

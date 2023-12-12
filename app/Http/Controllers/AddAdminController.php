@@ -24,8 +24,8 @@ class AddAdminController extends Controller
         public function index()
         {
             // $admins = User::where('user_type','=','admin team member')->get();
-            $admins = User::all();
-            return view('admin.add-admin.index',compact('admins'));
+            $admins = User::paginate(6);
+            return view('settings.add-admin.index',compact('admins'));
         }
 
         /**
@@ -36,7 +36,7 @@ class AddAdminController extends Controller
         public function create()
         {
             $roles = Role::all();
-            return view('admin.add-admin.create',compact('roles'));
+            return view('settings.add-admin.create',compact('roles'));
         }
 
         /**
@@ -75,7 +75,7 @@ class AddAdminController extends Controller
         public function edit(User $addAdmin)
         {
             $roles = Role::all();
-            return view('admin.add-admin.edit',compact('addAdmin','roles'));
+            return view('settings.add-admin.edit',compact('addAdmin','roles'));
         }
 
         /**

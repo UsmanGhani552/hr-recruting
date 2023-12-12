@@ -24,8 +24,8 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles = Role::all();
-        return view('admin.role.index',compact('roles'));
+        $roles = Role::paginate(6);
+        return view('settings.role.index',compact('roles'));
     }
 
     /**
@@ -36,7 +36,7 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::all();
-        return view('admin.role.create',compact('permissions'));
+        return view('settings.role.create',compact('permissions'));
     }
 
     /**
@@ -70,7 +70,7 @@ class RoleController extends Controller
         //     $count =  in_array($permission->id, $role->permissions->pluck('pivot.permission_id')->toArray());
         //     dd($count);
         // }
-        return view('admin.role.edit',compact('permissions','role'));
+        return view('settings.role.edit',compact('permissions','role'));
     }
 
     /**

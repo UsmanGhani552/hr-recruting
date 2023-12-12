@@ -27,7 +27,7 @@
                     @endcanany
                     <li><a href="{{ route('submissions') }}">Submissions</a></li>
 
-                    @canany('Permission access', 'Permission create', 'Permission edit', 'Permission delete')
+                    {{-- @canany('Permission access', 'Permission create', 'Permission edit', 'Permission delete')
                         <li><a href="{{ route('permission.index') }}">Permission</a></li>
                     @endcanany
 
@@ -37,7 +37,7 @@
 
                     @canany('User access', 'User add', 'User edit', 'User delete')
                         <li><a href="{{ route('add-admin.index') }}">Users</a></li>
-                    @endcanany
+                    @endcanany --}}
                 </ul>
             </div>
 
@@ -48,7 +48,7 @@
 
                     <li><a href="{{ route('dashboard') }}"><img
                                 src="{{ asset('assets/images/notification.png') }}"></a></li>
-                    <li><a href="{{ route('dashboard') }}"><img src="{{ asset('assets/images/Setting_4.png') }}"></a>
+                    <li><a href="{{ route('permission.index') }}"><img src="{{ asset('assets/images/Setting_4.png') }}"></a>
                     </li>
 
                     <li><a href="{{ route('dashboard') }}">

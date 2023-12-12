@@ -13,18 +13,18 @@ class SubmissionController extends Controller
 {
     public function index(){
         if(Auth::user()->user_type == 'admin'){
-            $submissions = Submission::with('vendor', 'client', 'job', 'candidate','user')->get();
+            $submissions = Submission::with('vendor', 'client', 'job', 'candidate','user')->paginate(6);
             // dd($submissions[4]);
         }
         else if(Auth::user()->user_type == 'vendor'){
             $vendor_id = Auth::user()->vendor_id;
-            $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor_id)->get();
+            $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor_id)->paginate(6);
         }
         else if(Auth::user()->user_type == 'vendor team member'){
             $user_id = Auth::user()->vendor_id;
             $vendor = User::where('id', $user_id)->first();
             $vendor_id = $vendor->vendor_id;
-            $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor_id)->get();
+            $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor_id)->paginate(6);
         }
         return view('submission.index',compact('submissions'));
     }

@@ -18,7 +18,7 @@ $pageclass = "vender_dashboar";
 			<div class="col-md-6">
 				<div class="bnr_left">
 				<p>Dashboard</p>
-				<h3>Welcome Back, Jonathan</h3>
+				<h3>Welcome Back, {{Auth::user()->name}}</h3>
 				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
 				</div>
 			</div>

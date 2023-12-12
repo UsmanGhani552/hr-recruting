@@ -20,32 +20,35 @@ class ClientController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->user_type == 'admin'){
-            $clients = Client::all();
-        } else if(Auth::user()->user_type == 'vendor'){
-            $clients = Auth::user()->load('vendor.clients')->vendor->clients;
-        } else if(Auth::user()->user_type == 'vendor team member'){
-            $clients = Auth::user()->load('clients')->clients;
+        $user = Auth::user();
+        if (Auth::user()->user_type == 'admin') {
+            $clients = Client::paginate(6);
+        } else if (Auth::user()->user_type == 'vendor') {
+            $vendor = $user->vendor;
+            // Paginate the clients relationship directly
+            $clients = $vendor->clients()->paginate(6);
+        } else if (Auth::user()->user_type == 'vendor team member') {
+            $clients = $user->clients()->paginate(6);
         }
-        return view('client.index',compact('clients'));
+        return view('client.index', compact('clients'));
     }
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $vendors = Vendor::where('first_name','LIKE', "%$query%")
-        ->orWhere('last_name','LIKE', "%$query%")
-        ->get();
+        $vendors = Vendor::where('first_name', 'LIKE', "%$query%")
+            ->orWhere('last_name', 'LIKE', "%$query%")
+            ->get();
         return response()->json($vendors);
     }
 
-    public function searchSelected(Request $request , Client $client)
+    public function searchSelected(Request $request, Client $client)
     {
         $query = $request->input('query');
-        $vendors = Vendor::where('first_name','LIKE', "%$query%")
-        ->orWhere('last_name','LIKE', "%$query%")
-        ->get();
-        $selected_vendors = ClientVendor::where('client_id' , $client->id)->get();
-        return response()->json([$vendors,$selected_vendors]);
+        $vendors = Vendor::where('first_name', 'LIKE', "%$query%")
+            ->orWhere('last_name', 'LIKE', "%$query%")
+            ->get();
+        $selected_vendors = ClientVendor::where('client_id', $client->id)->get();
+        return response()->json([$vendors, $selected_vendors]);
     }
 
     /**
@@ -58,7 +61,7 @@ class ClientController extends Controller
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         $vendors = Vendor::all();
-        return view('client.create',compact('states','cities','vendors'));
+        return view('client.create', compact('states', 'cities', 'vendors'));
     }
 
     /**
@@ -67,7 +70,8 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'website' => 'required',
@@ -90,20 +94,20 @@ class ClientController extends Controller
 
         $vendor_images = [];
         if ($files = $request->file('vendor_documents')) {
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('clients/') , $filename);
+                $file->move(public_path('clients/'), $filename);
                 $vendor_images[] = $filename;
             }
         }
 
         $admin_images = [];
         if ($files = $request->file('admin_documents')) {
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('clients/') , $filename);
+                $file->move(public_path('clients/'), $filename);
                 $admin_images[] = $filename;
             }
         }
@@ -123,11 +127,11 @@ class ClientController extends Controller
         $client->company_size = $request->company_size;
         $client->industry = $request->industry;
         $client->year_founded = $request->year_founded;
-        $client->vendor_documents = implode('|' , $vendor_images);
-        $client->admin_documents = implode('|' , $admin_images);
+        $client->vendor_documents = implode('|', $vendor_images);
+        $client->admin_documents = implode('|', $admin_images);
         $save_data = $client->save();
-        if($save_data){
-            foreach($request->vendor as $vendor_id){
+        if ($save_data) {
+            foreach ($request->vendor as $vendor_id) {
                 $client_vendor = new ClientVendor();
                 $client_vendor->client_id = $client->id;
                 $client_vendor->vendor_id = $vendor_id;
@@ -145,25 +149,27 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        $jobs = Job::where('client_id',$client->id)->get();
+        $jobs = Job::where('client_id', $client->id)->get();
         $vendors = $client->vendors;
         // dd($vendors);
-        return view('client.assignment',compact('client','jobs','vendors'));
+        return view('client.assignment', compact('client', 'jobs', 'vendors'));
     }
 
-    public function clientJob(Client $client, Job $job){
+    public function clientJob(Client $client, Job $job)
+    {
         // dd($vendor,$job);
         $clients = Client::all();
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
-        return view('client.client_jobs',compact('client','job','clients','states','cities'));
+        return view('client.client_jobs', compact('client', 'job', 'clients', 'states', 'cities'));
     }
-    public function clientVendor(Client $client,Vendor $vendor){
+    public function clientVendor(Client $client, Vendor $vendor)
+    {
         // dd($vendor,$job);
         // $clients = Client::all();
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
-        return view('client.client_vendors',compact('client','vendor','states','cities'));
+        return view('client.client_vendors', compact('client', 'vendor', 'states', 'cities'));
     }
 
     /**
@@ -177,7 +183,7 @@ class ClientController extends Controller
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         $vendors = Vendor::all();
-        return view('client.edit',compact('states','cities','vendors','client'));
+        return view('client.edit', compact('states', 'cities', 'vendors', 'client'));
     }
 
     /**
@@ -216,10 +222,10 @@ class ClientController extends Controller
             if (File::exists($destination)) {
                 File::delete($destination);
             }
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('clients/') , $filename);
+                $file->move(public_path('clients/'), $filename);
                 $vendor_images[] = $filename;
             }
         }
@@ -232,10 +238,10 @@ class ClientController extends Controller
                 File::delete($destination);
             }
 
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('clients/') , $filename);
+                $file->move(public_path('clients/'), $filename);
                 $admin_images[] = $filename;
             }
         }
@@ -254,12 +260,12 @@ class ClientController extends Controller
         $client->company_size = $request->company_size;
         $client->industry = $request->industry;
         $client->year_founded = $request->year_founded;
-        $client->vendor_documents = implode('|' , $vendor_images);
-        $client->admin_documents = implode('|' , $admin_images);
+        $client->vendor_documents = implode('|', $vendor_images);
+        $client->admin_documents = implode('|', $admin_images);
         $save_data = $client->save();
-        if($save_data){
-            ClientVendor::where('client_id' , $client->id)->delete();
-            foreach($request->vendor as $vendor_id){
+        if ($save_data) {
+            ClientVendor::where('client_id', $client->id)->delete();
+            foreach ($request->vendor as $vendor_id) {
                 $client_vendor = new ClientVendor();
                 $client_vendor->client_id = $client->id;
                 $client_vendor->vendor_id = $vendor_id;
@@ -281,7 +287,7 @@ class ClientController extends Controller
         return redirect()->route('client')->withSuccess('Client Deleted Successfully');
     }
 
-    public function changeClientStatus(Request $request , Client $client)
+    public function changeClientStatus(Request $request, Client $client)
     {
         $client->status = $request->status;
         $client->save();
@@ -293,16 +299,17 @@ class ClientController extends Controller
     public function searchVendor(Request $request)
     {
         $query = $request->input('query');
-        $vendors = Vendor::where('first_name','LIKE', "%$query%")
-        ->orWhere('last_name','LIKE', "%$query%")
-        ->get();
+        $vendors = Vendor::where('first_name', 'LIKE', "%$query%")
+            ->orWhere('last_name', 'LIKE', "%$query%")
+            ->get();
         return response()->json($vendors);
     }
 
-    public function assignVendor(Request $request){
+    public function assignVendor(Request $request)
+    {
         // dd($request->vendors,$request->clients);
-        foreach($request->clients as $client){
-            foreach($request->vendors as $vendor){
+        foreach ($request->clients as $client) {
+            foreach ($request->vendors as $vendor) {
                 // Check if the record already exists
                 $existingRecord = ClientVendor::where('vendor_id', $vendor)
                     ->where('client_id', $client)
@@ -322,9 +329,10 @@ class ClientController extends Controller
         ]);
     }
 
-    public function activeStatus(Request $request){
-        foreach($request->clients as $client_id){
-            $client = Client::where('id',$client_id)->first();
+    public function activeStatus(Request $request)
+    {
+        foreach ($request->clients as $client_id) {
+            $client = Client::where('id', $client_id)->first();
             $client->status = 1;
             $client->save();
         }
@@ -333,9 +341,10 @@ class ClientController extends Controller
         ]);
     }
 
-    public function inactiveStatus(Request $request){
-        foreach($request->clients as $client_id){
-            $client = Client::where('id',$client_id)->first();
+    public function inactiveStatus(Request $request)
+    {
+        foreach ($request->clients as $client_id) {
+            $client = Client::where('id', $client_id)->first();
             $client->status = 0;
             $client->save();
         }

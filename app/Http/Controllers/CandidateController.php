@@ -15,19 +15,19 @@ class CandidateController extends Controller
 {
     public function index(){
         if(Auth::user()->user_type == 'admin'){
-            $candidates = Candidate::all();
+            $candidates = Candidate::paginate(6);
         }
         else if(Auth::user()->user_type == 'vendor'){
             $vendor_id = Auth::user()->load('vendor')->vendor_id;
             // dd($vendor_id);
-            $candidates = Candidate::where('vendor_id',$vendor_id)->get();
+            $candidates = Candidate::where('vendor_id',$vendor_id)->paginate(6);
 
         }else if(Auth::user()->user_type == 'vendor team member'){
 
             $vendor = Auth::user()->vendor_id;
             $vendor_id = User::where('id',$vendor)->first();
             // dd($vendor_id->vendor_id);
-            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->get();
+            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->paginate(6);
         }
         return view('candidate.index' , compact('candidates'));
     }

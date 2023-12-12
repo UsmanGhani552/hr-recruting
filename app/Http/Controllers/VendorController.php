@@ -34,7 +34,6 @@ class VendorController extends Controller
 
     public function show(Vendor $vendor)
     {
-        // dd($vendor);
         $jobs = $vendor->jobs()->with('clients')->get();
         $clients = $vendor->clients;
         $candidates = Candidate::where('vendor_id', $vendor->id)->get();
@@ -44,7 +43,6 @@ class VendorController extends Controller
 
     public function vendorJob(Vendor $vendor, Job $job)
     {
-        // dd($vendor,$job);
         $clients = Client::all();
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
@@ -53,8 +51,6 @@ class VendorController extends Controller
 
     public function vendorClient(Vendor $vendor, Client $client)
     {
-        // dd($vendor,$job);
-        // $clients = Client::all();
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         return view('vendor.vendor_clients', compact('client', 'states', 'cities'));
@@ -62,7 +58,6 @@ class VendorController extends Controller
 
     public function vendorCandidate(Vendor $vendor, Candidate $candidate)
     {
-        // dd($vendor,$job);
         $vendors = Vendor::all();
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
@@ -71,10 +66,6 @@ class VendorController extends Controller
 
     public function vendorTeam(Vendor $vendor, User $team)
     {
-        // dd($vendor,$job);
-        // $clients = Client::all();
-        // $states =  DB::table('states')->get();
-        // $cities =  DB::table('cities')->get();
         return view('vendor.vendor_teams', compact('team'));
     }
 
@@ -150,8 +141,14 @@ class VendorController extends Controller
         $vendor->email = $request->email;
         $vendor->phone = $request->phone;
         $vendor->home = $request->home;
-        $vendor->password = Hash::make($request->password);
-        $vendor->save();
+        // $vendor->password = Hash::make($request->password);
+        if ($vendor->save()) {
+            $vendor_login = User::where('vendor_id',$vendor->id)->first();
+            $vendor_login->name = $vendor->first_name;
+            $vendor_login->email = $request->email;
+            $vendor_login->password = Hash::make($request->password);
+            $vendor_login->save();
+        }
         return redirect()->route('vendor-dashboard')->withSuccess('Vendor Updated Successfully');
     }
 

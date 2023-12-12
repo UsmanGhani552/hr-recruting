@@ -23,12 +23,13 @@ class JobController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         if(Auth::user()->user_type == 'admin'){
-            $jobs = Job::all();
+            $jobs = Job::paginate(6);
         } else if(Auth::user()->user_type == 'vendor'){
-            $jobs = Auth::user()->load('vendor.jobs.clients')->vendor->jobs;
+            $jobs = $user->vendor->jobs()->with('clients')->paginate(6);
         } else if(Auth::user()->user_type == 'vendor team member'){
-            $jobs = Auth::user()->load('jobs.clients')->jobs;
+            $jobs = $user->load('jobs.clients')->jobs()->paginate(6);
         }
         return view('job.index',compact('jobs'));
     }
@@ -177,7 +178,7 @@ class JobController extends Controller
         }
     }
 
-    
+
 
     public function jobVendor(Job $job,Vendor $vendor){
         // dd($vendor,$job);

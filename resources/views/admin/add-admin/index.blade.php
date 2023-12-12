@@ -92,22 +92,11 @@ $pageclass = 'mainteam';
                 <table>
                     <thead>
                         <tr>
-                            {{-- <th>
-						<label for="orderid">
-						<input type="checkbox" name="" id="orderid">
-						ID
-						</label>
-						</th> --}}
                             <th>Name</th>
                             <th>Email</th>
                             <th>Roles</th>
                             <th class="text-end">
                                 <div class="mydropdown">
-                                    {{-- <ul class="dropbtn icons">
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul> --}}
                                     Action
                                 </div>
                             </th>
