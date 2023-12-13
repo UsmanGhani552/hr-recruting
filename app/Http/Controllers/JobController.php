@@ -116,7 +116,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        $vendors = $job->vendors;
+        $vendors = $job->vendors()->paginate(6);
         return view('job.assignment',compact('job','vendors'));
     }
 
@@ -180,13 +180,13 @@ class JobController extends Controller
 
 
 
-    public function jobVendor(Job $job,Vendor $vendor){
-        // dd($vendor,$job);
-        // $clients = Client::all();
-        // $states =  DB::table('states')->get();
-        // $cities =  DB::table('cities')->get();
-        return view('job.job_vendors',compact('job','vendor'));
-    }
+    // public function jobVendor(Job $job,Vendor $vendor){
+    //     // dd($vendor,$job);
+    //     // $clients = Client::all();
+    //     // $states =  DB::table('states')->get();
+    //     // $cities =  DB::table('cities')->get();
+    //     return view('job.job_vendors',compact('job','vendor'));
+    // }
 
     /**
      * Show the form for editing the specified resource.

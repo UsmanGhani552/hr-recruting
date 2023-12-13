@@ -22,7 +22,8 @@ class VendorController extends Controller
 {
     public function index()
     {
-        $vendors = Vendor::all();
+        // dd('asd');
+        $vendors = Vendor::paginate(6);
         return view('vendor.dashboard', compact('vendors'));
     }
     public function create()
@@ -34,40 +35,40 @@ class VendorController extends Controller
 
     public function show(Vendor $vendor)
     {
-        $jobs = $vendor->jobs()->with('clients')->get();
-        $clients = $vendor->clients;
-        $candidates = Candidate::where('vendor_id', $vendor->id)->get();
-        $teams = User::where('vendor_id', $vendor->id)->get();
+        $jobs = $vendor->jobs()->with('clients')->paginate(6);
+        $clients = $vendor->clients()->paginate(6);
+        $candidates = Candidate::where('vendor_id', $vendor->id)->paginate(6);
+        $teams = User::where('vendor_id', $vendor->id)->paginate(6);
         return view('vendor.assignment', compact('vendor', 'jobs', 'clients', 'candidates', 'teams'));
     }
 
-    public function vendorJob(Vendor $vendor, Job $job)
-    {
-        $clients = Client::all();
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('vendor.vendor_jobs', compact('job', 'clients', 'states', 'cities'));
-    }
+    // public function vendorJob(Vendor $vendor, Job $job)
+    // {
+    //     $clients = Client::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('vendor.vendor_jobs', compact('job', 'clients', 'states', 'cities'));
+    // }
 
-    public function vendorClient(Vendor $vendor, Client $client)
-    {
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('vendor.vendor_clients', compact('client', 'states', 'cities'));
-    }
+    // public function vendorClient(Vendor $vendor, Client $client)
+    // {
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('vendor.vendor_clients', compact('client', 'states', 'cities'));
+    // }
 
-    public function vendorCandidate(Vendor $vendor, Candidate $candidate)
-    {
-        $vendors = Vendor::all();
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('vendor.vendor_candidates', compact('vendor', 'vendors', 'candidate', 'states', 'cities'));
-    }
+    // public function vendorCandidate(Vendor $vendor, Candidate $candidate)
+    // {
+    //     $vendors = Vendor::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('vendor.vendor_candidates', compact('vendor', 'vendors', 'candidate', 'states', 'cities'));
+    // }
 
-    public function vendorTeam(Vendor $vendor, User $team)
-    {
-        return view('vendor.vendor_teams', compact('team'));
-    }
+    // public function vendorTeam(Vendor $vendor, User $team)
+    // {
+    //     return view('vendor.vendor_teams', compact('team'));
+    // }
 
     public function store(Request $request)
     {
@@ -148,6 +149,7 @@ class VendorController extends Controller
             $vendor_login->email = $request->email;
             $vendor_login->password = Hash::make($request->password);
             $vendor_login->save();
+            $vendor_login->assignRole('vendor');
         }
         return redirect()->route('vendor-dashboard')->withSuccess('Vendor Updated Successfully');
     }

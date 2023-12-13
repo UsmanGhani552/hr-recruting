@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
+use App\Models\Client;
+use App\Models\Job;
 use App\Models\Submission;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 
@@ -62,4 +67,6 @@ class SubmissionController extends Controller
         $submission->delete();
         return redirect()->route('submissions')->with('success','Submission Deleted Successfully');
     }
+
+
 }

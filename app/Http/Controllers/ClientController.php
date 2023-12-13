@@ -149,28 +149,28 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        $jobs = Job::where('client_id', $client->id)->get();
-        $vendors = $client->vendors;
+        $jobs = Job::where('client_id', $client->id)->paginate(6);
+        $vendors = $client->vendors()->paginate(6);
         // dd($vendors);
         return view('client.assignment', compact('client', 'jobs', 'vendors'));
     }
 
-    public function clientJob(Client $client, Job $job)
-    {
-        // dd($vendor,$job);
-        $clients = Client::all();
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('client.client_jobs', compact('client', 'job', 'clients', 'states', 'cities'));
-    }
-    public function clientVendor(Client $client, Vendor $vendor)
-    {
-        // dd($vendor,$job);
-        // $clients = Client::all();
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('client.client_vendors', compact('client', 'vendor', 'states', 'cities'));
-    }
+    // public function clientJob(Client $client, Job $job)
+    // {
+    //     // dd($vendor,$job);
+    //     $clients = Client::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('client.client_jobs', compact('client', 'job', 'clients', 'states', 'cities'));
+    // }
+    // public function clientVendor(Client $client, Vendor $vendor)
+    // {
+    //     // dd($vendor,$job);
+    //     // $clients = Client::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('client.client_vendors', compact('client', 'vendor', 'states', 'cities'));
+    // }
 
     /**
      * Show the form for editing the specified resource.

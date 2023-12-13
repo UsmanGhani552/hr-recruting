@@ -99,7 +99,7 @@ use App\Models\Team;
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a
-                                                            href="{{ route('client.job.details', ['client' => $client->id, 'job' => $job->id]) }}"><img
+                                                            href="{{ route('job.details', $job->id) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
                                                         <a href="{{route('job.submission',$job->id)}}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">Submission</a>
@@ -124,16 +124,7 @@ use App\Models\Team;
                                         </select>
                                     </label>
                                 </div>
-                                <div class="col-md-6">
-                                    <ul class="pagination">
-                                        <li><a href="javascript:;"><i class="fa fa-angle-left"></i></a></li>
-                                        <li><a href="javascript:;">1</a></li>
-                                        <li><a href="javascript:;">2</a></li>
-                                        <li><a href="javascript:;">3</a></li>
-                                        <li><a href="javascript:;">4</a></li>
-                                        <li><a href="javascript:;"><i class="fa fa-angle-right"></i></a></li>
-                                    </ul>
-                                </div>
+                                @include('layout.pagination', ['paginator' => $jobs])
                             </div>
 
                         </div>
@@ -200,7 +191,7 @@ use App\Models\Team;
                                                         <li></li>
                                                     </ul>
                                                     <div id="myDropdown" class="dropdown-content">
-                                                        <a href="{{ route('client.vendor.details', ['client' => $client->id, 'vendor' => $vendor->id]) }}"><img
+                                                        <a href="{{ route('vendor.details', $vendor->id) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
                                                         <a href="javascript:;"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
@@ -223,16 +214,7 @@ use App\Models\Team;
                                         </select>
                                     </label>
                                 </div>
-                                <div class="col-md-6">
-                                    <ul class="pagination">
-                                        <li><a href="javascript:;"><i class="fa fa-angle-left"></i></a></li>
-                                        <li><a href="javascript:;">1</a></li>
-                                        <li><a href="javascript:;">2</a></li>
-                                        <li><a href="javascript:;">3</a></li>
-                                        <li><a href="javascript:;">4</a></li>
-                                        <li><a href="javascript:;"><i class="fa fa-angle-right"></i></a></li>
-                                    </ul>
-                                </div>
+                                @include('layout.pagination', ['paginator' => $vendors])
                             </div>
 
                         </div>

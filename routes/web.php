@@ -12,6 +12,7 @@ use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VendorInvitationController;
+use App\Http\Controllers\ViewDetailsController;
 use App\Models\Candidate;
 use App\Models\Client;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +40,9 @@ Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-
 Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
 
 Route::middleware('auth')->group(function () {
-
     //dashboard
     Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+
 
     Route::controller(PermissionController::class)->prefix('/permission')->name('permission.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -70,46 +71,57 @@ Route::middleware('auth')->group(function () {
         Route::get('/destroy/{addAdmin}', 'destroy')->name('destroy');
     });
 
-    // --------------------------------------------------- Submission -------------------------------------------------
+     // ---------------------------------------------------- vendor ----------------------------------------------------
 
-    Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
-    Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
-    Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
-    Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
+     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
+     Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
+     Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
+     Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
+     Route::view('/vendor/submission', 'vendor.submission')->name('vendor-submission');
+     Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
+     Route::get('/vendor/assignment/{vendor}', [VendorController::class, 'show'])->name('vendor-assignment');
 
-    // ---------------------------------------------------- vendor ----------------------------------------------------
+     // vendor view assignments
+     Route::get('/vendor/{vendor}/job/{job}', [VendorController::class, 'vendorJob'])->name('vendor.job.details');
+     Route::get('/vendor/{vendor}/client/{client}', [VendorController::class, 'vendorclient'])->name('vendor.client.details');
+     Route::get('/vendor/{vendor}/team/{team}', [VendorController::class, 'vendorteam'])->name('vendor.team.details');
+     Route::get('/vendor/{vendor}/candidate/{candidate}', [VendorController::class, 'vendorcandidate'])->name('vendor.candidate.details');
 
-    Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
+     //vendor invitation
+     Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
+     Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
+     // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
 
-    Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
-    Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
-    Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
-    Route::view('/vendor/submission', 'vendor.submission')->name('vendor-submission');
-    Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
-    Route::get('/vendor/assignment/{vendor}', [VendorController::class, 'show'])->name('vendor-assignment');
+     //bulk actions
+     Route::get('/vendor/search-client', [VendorController::class, 'searchClient'])->name('vendor.search-client');
+     Route::get('/vendor/search-job', [VendorController::class, 'searchJob'])->name('vendor.search-job');
+     Route::get('/vendor/search-folder', [VendorController::class, 'searchFolder'])->name('vendor.search-folder');
+     Route::post('/vendor/assign-client', [VendorController::class, 'assignClient'])->name('vendor.assign-client');
+     Route::post('/vendor/assign-job', [VendorController::class, 'assignJob'])->name('vendor.assign-job');
+     Route::post('/vendor/assign-folder', [VendorController::class, 'assignFolder'])->name('vendor.assign-folder');
+     Route::post('/vendor/active-status', [VendorController::class, 'activeStatus'])->name('vendor.active-status');
+     Route::post('/vendor/inactive-status', [VendorController::class, 'inactiveStatus'])->name('vendor.inactive-status');
 
-    // vendor view assignments
-    Route::get('/vendor/{vendor}/job/{job}', [VendorController::class, 'vendorJob'])->name('vendor.job.details');
-    Route::get('/vendor/{vendor}/client/{client}', [VendorController::class, 'vendorclient'])->name('vendor.client.details');
-    Route::get('/vendor/{vendor}/team/{team}', [VendorController::class, 'vendorteam'])->name('vendor.team.details');
-    Route::get('/vendor/{vendor}/candidate/{candidate}', [VendorController::class, 'vendorcandidate'])->name('vendor.candidate.details');
+     // ---------------------------------------------------end vendor--------------------------------------------------
 
-    //vendor invitation
-    Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
-    Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
-    // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
 
-    //bulk actions
-    Route::get('/vendor/search-client', [VendorController::class, 'searchClient'])->name('vendor.search-client');
-    Route::get('/vendor/search-job', [VendorController::class, 'searchJob'])->name('vendor.search-job');
-    Route::get('/vendor/search-folder', [VendorController::class, 'searchFolder'])->name('vendor.search-folder');
-    Route::post('/vendor/assign-client', [VendorController::class, 'assignClient'])->name('vendor.assign-client');
-    Route::post('/vendor/assign-job', [VendorController::class, 'assignJob'])->name('vendor.assign-job');
-    Route::post('/vendor/assign-folder', [VendorController::class, 'assignFolder'])->name('vendor.assign-folder');
-    Route::post('/vendor/active-status', [VendorController::class, 'activeStatus'])->name('vendor.active-status');
-    Route::post('/vendor/inactive-status', [VendorController::class, 'inactiveStatus'])->name('vendor.inactive-status');
+     // ------------------------------------------------------candidate ----------------------------------------------
 
-    // ---------------------------------------------------end vendor--------------------------------------------------
+    Route::view('/candidate/assignment', 'candidate.assignment')->name('candidate.assignment');
+    Route::get('/candidate/', [CandidateController::class, 'index'])->name('candidate');
+    Route::get('/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
+    Route::post('/candidate/store', [CandidateController::class, 'store'])->name('candidate.store');
+    Route::get('/candidate/edit/{candidate}', [CandidateController::class, 'edit'])->name('candidate.edit');
+    Route::post('/candidate/update/{candidate}', [CandidateController::class, 'update'])->name('candidate.update');
+    Route::get('/candidate/delete/{candidate}', [CandidateController::class, 'delete'])->name('candidate.delete');
+    Route::get('/candidate/change-status/{candidate}', [CandidateController::class, 'changeCandidateStatus'])->name('candidate.change-status');
+    // bulk actions
+    Route::post('/candidate/active-status', [CandidateController::class, 'activeStatus'])->name('candidate.active-status');
+    Route::post('/candidate/inactive-status', [CandidateController::class, 'inactiveStatus'])->name('candidate.inactive-status');
+    Route::post('/candidate/bulk-delete', [CandidateController::class, 'bulkDelete'])->name('candidate.bulk-delete');
+
+    // -------------------------------------------------------end candidate ----------------------------------------------
+
 
 
     // -------------------------------------------------------team ----------------------------------------------
@@ -132,7 +144,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/team/assign-client', [TeamController::class, 'assignClient'])->name('team.assign-client');
     Route::post('/team/assign-job', [TeamController::class, 'assignJob'])->name('team.assign-job');
 
-    // -------------------------------------------end team------------------------------------------------------
+    // ---------------------------------------------------end team------------------------------------------------------
 
 
 
@@ -156,7 +168,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/job/inactive-status', [JobController::class, 'inactiveStatus'])->name('job.inactive-status');
     Route::post('/job/bulk-delete', [JobController::class, 'bulkDelete'])->name('job.bulk-delete');
 
-    // ---------------------------------------------------end job------------------------------------------------------
+    // ------------------------------------------------------end job------------------------------------------------------
 
 
 
@@ -181,30 +193,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/client/active-status', [ClientController::class, 'activeStatus'])->name('client.active-status');
     Route::post('/client/inactive-status', [ClientController::class, 'inactiveStatus'])->name('client.inactive-status');
 
-    // ------------------------------------------------end client----------------------------------------------
+    // -----------------------------------------------------end client----------------------------------------------
 
 
 
-    // ------------------------------------------------candidate ----------------------------------------------
-
-    Route::view('/candidate/assignment', 'candidate.assignment')->name('candidate.assignment');
-    Route::get('/candidate/', [CandidateController::class, 'index'])->name('candidate');
-    Route::get('/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
-    Route::post('/candidate/store', [CandidateController::class, 'store'])->name('candidate.store');
-    Route::get('/candidate/edit/{candidate}', [CandidateController::class, 'edit'])->name('candidate.edit');
-    Route::post('/candidate/update/{candidate}', [CandidateController::class, 'update'])->name('candidate.update');
-    Route::get('/candidate/delete/{candidate}', [CandidateController::class, 'delete'])->name('candidate.delete');
-    Route::get('/candidate/change-status/{candidate}', [CandidateController::class, 'changeCandidateStatus'])->name('candidate.change-status');
-    // bulk actions
-    Route::post('/candidate/active-status', [CandidateController::class, 'activeStatus'])->name('candidate.active-status');
-    Route::post('/candidate/inactive-status', [CandidateController::class, 'inactiveStatus'])->name('candidate.inactive-status');
-    Route::post('/candidate/bulk-delete', [CandidateController::class, 'bulkDelete'])->name('candidate.bulk-delete');
-
-    // ------------------------------------------------end candidate ----------------------------------------------
-
-
-
-    // ------------------------------------------------------folder ----------------------------------------------
+    // --------------------------------------------------------folder ------------------------------------------------
 
     Route::get('/folder/', [FolderController::class, 'index'])->name('folder');
     Route::get('/folder/create', [FolderController::class, 'create'])->name('folder.create');
@@ -224,7 +217,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/folder/inactive-status', [FolderController::class, 'inactiveStatus'])->name('folder.inactive-status');
     Route::post('/folder/bulk-delete', [FolderController::class, 'bulkDelete'])->name('folder.bulk-delete');
 
-    // ------------------------------------------------------end folder ----------------------------------------------
+    // -----------------------------------------------------------end folder ----------------------------------------------
+
+       // ------------------------------------------------------ Submission ----------------------------------------------------
+
+       Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
+       Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
+       Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
+       Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
+
+       // -------------------------------------------------- view details -------------------------------------------------------
+
+       Route::get('/job/{job}', [ViewDetailsController::class, 'jobDetails'])->name('job.details');
+       Route::get('/client/{client}', [ViewDetailsController::class, 'clientDetails'])->name('client.details');
+       Route::get('/candidate/{candidate}', [ViewDetailsController::class, 'candidateDetails'])->name('candidate.details');
+       Route::get('/vendor/{vendor}', [ViewDetailsController::class, 'vendorDetails'])->name('vendor.details');
+       Route::get('/team/{team}', [ViewDetailsController::class, 'teamDetails'])->name('team.details');
 });
 
 

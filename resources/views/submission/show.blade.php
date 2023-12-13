@@ -100,7 +100,7 @@ $pageclass = 'subdetail';
                                     {{ $job->status }}
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('job.details',$job->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -151,7 +151,7 @@ $pageclass = 'subdetail';
 
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('client.details',$client->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -201,7 +201,7 @@ $pageclass = 'subdetail';
 
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('vendor.details',$vendor->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -269,7 +269,7 @@ $pageclass = 'subdetail';
                                     </p>
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('candidate.details',$candidate->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>

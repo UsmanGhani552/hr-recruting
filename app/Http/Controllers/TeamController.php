@@ -34,21 +34,21 @@ class TeamController extends Controller
         return view('team.assignment',compact('team','jobs','clients'));
     }
 
-    public function teamJob(User $team, Job $job)
-    {
-        // dd($vendor,$job);
-        $clients = Client::all();
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('team.team_jobs', compact('job', 'clients', 'states', 'cities'));
-    }
+    // public function teamJob(User $team, Job $job)
+    // {
+    //     // dd($vendor,$job);
+    //     $clients = Client::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('team.team_jobs', compact('job', 'clients', 'states', 'cities'));
+    // }
 
-    public function teamClient(User $team, Client $client)
-    {
-        $states =  DB::table('states')->get();
-        $cities =  DB::table('cities')->get();
-        return view('team.team_clients', compact('client', 'states', 'cities'));
-    }
+    // public function teamClient(User $team, Client $client)
+    // {
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     return view('team.team_clients', compact('client', 'states', 'cities'));
+    // }
 
     public function store(Request $request)
     {
@@ -67,6 +67,7 @@ class TeamController extends Controller
         $team->email = $request->email;
         $team->password = Hash::make($request->password);
         $team->save();
+        $team->assignRole('vendor team member');
         // $team->syncRoles('$request->roles');
         return redirect()->route('team')->withSuccess('Team Created Successfully');
     }

@@ -100,7 +100,7 @@ $pageclass = 'subdetail';
                                     {{ $job->status }}
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('job.details',$job->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -151,7 +151,7 @@ $pageclass = 'subdetail';
 
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('client.details',$client->id)}}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -200,9 +200,11 @@ $pageclass = 'subdetail';
                                 <td style="border-bottom: 0;">
 
                                 </td>
+                                @if(Auth::user()->id != 1 )
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="{{route('vendor.details',$vendor->id)}}">VIEW DETAILS</a>
                                 </td>
+                                @endif
                             </tr>
                         </tbody>
                     </table>
@@ -253,7 +255,7 @@ $pageclass = 'subdetail';
                                     <p id="years_of_experience"></p>
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="javascript:;">VIEW DETAILS</a>
+                                    <a href="">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
