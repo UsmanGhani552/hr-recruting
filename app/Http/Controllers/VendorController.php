@@ -33,6 +33,7 @@ class VendorController extends Controller
         return view('vendor.create', compact('states', 'cities'));
     }
 
+    // JKASHDKAJ
     public function show(Vendor $vendor)
     {
         $jobs = $vendor->jobs()->with('clients')->paginate(6);
