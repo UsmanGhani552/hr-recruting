@@ -198,7 +198,7 @@ use App\Models\Team;
                                                             href="{{ route('vendor.details',$vendor->id) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
 
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('vendor.delete-assigned-job', ['job' => $job->id, 'vendor' => $vendor->id])}}"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>

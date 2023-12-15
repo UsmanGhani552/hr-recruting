@@ -182,8 +182,10 @@ $pageclass = 'clientdash';
                                                     <a href="{{ route('job.edit', $job->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
                                                 @endcan
+                                                @if($job->deleted_at != null)
                                                 <a href="{{ route('job.submission', $job->id) }}"><img
                                                     src="{{ asset('assets/images/eye.png') }}">Submission</a>
+                                                @endif
                                                 @can('Job delete')
                                                     <a href="{{ route('job.delete', $job->id) }}"><img
                                                             src="{{ asset('assets/images/delete.png') }}">Delete</a>

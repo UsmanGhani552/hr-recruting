@@ -30,6 +30,11 @@ use App\Models\Team;
 
     <section class="vender-assignment">
         <div class="container">
+            @if (Session::has('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div id="tabs-container">
                 <ul class="tabs-menu">
                     <li class="current"><a href="#tab-1">Jobs</a></li>
@@ -103,7 +108,7 @@ use App\Models\Team;
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
                                                         <a href="{{route('job.submission',$job->id)}}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">Submission</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('client.delete-assigned-job', ['client' => $client->id, 'job' => $job->id])}}"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>
@@ -193,7 +198,7 @@ use App\Models\Team;
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="{{ route('vendor.details', $vendor->id) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('vendor.delete-assigned-client', ['client' => $client->id, 'vendor' => $vendor->id])}}"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>
@@ -244,9 +249,9 @@ use App\Models\Team;
                                             </label>
                                         </th>
                                         <th>Job Title</th>
-                                        <th>Email</th>
-                                        <th>Phone Number</th>
-                                        <th>Team Members</th>
+                                        <th>Client</th>
+                                        <th>Vendor</th>
+                                        <th>Candidate</th>
                                         <th>
                                             <div class="mydropdown">
                                                 <ul class="dropbtn icons">
@@ -259,35 +264,46 @@ use App\Models\Team;
                                     </tr>
                                 </thead>
 
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="">
-
-                                                SKN1200
-                                            </label>
-                                        </td>
-                                        <td>Designer</td>
-                                        <td>robert@gmail.com</td>
-                                        <td>000-000-000 </td>
-                                        <td>12 </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <ul class="dropbtn icons">
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
-                                                </ul>
-                                                <div id="myDropdown" class="dropdown-content">
-                                                    <a href="javascript:;"><img
-                                                            src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                    <a href="javascript:;"><img
-                                                            src="{{ asset('assets/images/delete.png') }}">Delete</a>
+                                @foreach ($submissions as $submission)
+                                        <tr>
+                                            <td>
+                                                <label for="">
+                                                    <input type="checkbox" name="" value="{{ $submission->id }}"
+                                                        class="submission-checkbox">
+                                                    {{ $submission->id }}
+                                                </label>
+                                            </td>
+                                            <td>{{ $submission->job->title }}</td>
+                                            <td>{{ $submission->client->name }}</td>
+                                            @if ($submission->vendor_id == 1)
+                                                <td>{{ $submission->user->name }}</td>
+                                            @else
+                                                <td>{{ $submission->vendor->first_name }}
+                                                    {{ $submission->vendor->last_name }}</td>
+                                            @endif
+                                            <td>{{ $submission->candidate->first_name }}
+                                                {{ $submission->candidate->last_name }}</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <ul class="dropbtn icons">
+                                                        <li></li>
+                                                        <li></li>
+                                                        <li></li>
+                                                    </ul>
+                                                    <div id="myDropdown" class="dropdown-content">
+                                                        {{-- @can('Submission edit') --}}
+                                                        <a href="{{ route('submission.show', $submission->id) }}"><img
+                                                                src="{{ asset('assets/images/edit.png') }}">view</a>
+                                                        {{-- @endcan --}}
+                                                        @can('Submission delete')
+                                                            <a href="{{ route('submission.delete', $submission->id) }}"><img
+                                                                    src="{{ asset('assets/images/delete.png') }}">Delete</a>
+                                                        @endcan
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                             </table>
                             <br>
                             <div class="row">
@@ -301,16 +317,7 @@ use App\Models\Team;
                                         </select>
                                     </label>
                                 </div>
-                                <div class="col-md-6">
-                                    <ul class="pagination">
-                                        <li><a href="javascript:;"><i class="fa fa-angle-left"></i></a></li>
-                                        <li><a href="javascript:;">1</a></li>
-                                        <li><a href="javascript:;">2</a></li>
-                                        <li><a href="javascript:;">3</a></li>
-                                        <li><a href="javascript:;">4</a></li>
-                                        <li><a href="javascript:;"><i class="fa fa-angle-right"></i></a></li>
-                                    </ul>
-                                </div>
+                                @include('layout.pagination', ['paginator' => $submissions])
                             </div>
 
                         </div>

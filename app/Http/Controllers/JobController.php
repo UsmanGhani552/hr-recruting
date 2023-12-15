@@ -27,7 +27,7 @@ class JobController extends Controller
         if(Auth::user()->user_type == 'admin'){
             $jobs = Job::paginate(6);
         } else if(Auth::user()->user_type == 'vendor'){
-            $jobs = $user->vendor->jobs()->with('clients')->paginate(6);
+            $jobs = $user->vendor->jobs()->with('clients')->paginate(6);   
         } else if(Auth::user()->user_type == 'vendor team member'){
             $jobs = $user->load('jobs.clients')->jobs()->paginate(6);
         }

@@ -36,6 +36,7 @@ $pageclass = 'subdetail';
                     {{ session('error') }}
                 </div>
             @endif
+            <div class="alert alert-success d-none" id="success"></div>
                 <div class="submision_stat">
                     <div class="row">
                         <div class="col-md-6">
@@ -45,11 +46,10 @@ $pageclass = 'subdetail';
                         <div class="col-md-6 text-end">
                             <label>
                                 Status
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Active</option>
-                                    <option value="1">Pending</option>
-                                    <option value="2">Inprocess</option>
-                                    <option value="3">Decline</option>
+                                <select class="form-select" id="status" aria-label="Default select example">
+                                    <option {{$submission->status == 1 ? 'selected' : '' }} value="1">Approved</option>
+                                    <option {{$submission->status == 2 ? 'selected' : '' }} value="2">Pending</option>
+                                    <option {{$submission->status == 3 ? 'selected' : '' }} value="3">Reject</option>
                                 </select>
                             </label>
                         </div>
@@ -331,6 +331,7 @@ $pageclass = 'subdetail';
                     <div class="col-md-10">
                     </div>
                     <div class="col-md-2 text-end">
+                        <input type="hidden" name="submission_id" id="submission_id" value="{{ $submission->id }}">
                         <input type="hidden" name="job_id" value="{{ $job->id }}">
                         <input type="hidden" name="client_id" value="{{ $client->id }}">
                         <input type="hidden" name="vendor_id" value="{{ $vendor->id }}">
@@ -347,25 +348,38 @@ $pageclass = 'subdetail';
 @endsection
 
 @push('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Handle dropdown change event
-            $('#candidateDropdown').change(function() {
-                $('.outbox').removeClass('d-none');
+            $('#status').change(function() {
                 // Get the selected option
-                var selectedOption = $(this).find('option:selected');
+                var selectedOption = $(this).find('option:selected').val();
+                var submission_id = $('#submission_id').val();
 
-                // Update table content based on the selected option's data attributes
-                $('.candidate_id').val(selectedOption.data('candidate_id'));
-                $('#first_name').text(selectedOption.data('first_name'));
-                $('#last_name').text(selectedOption.data('last_name'));
-                $('#phone').text(selectedOption.data('phone'));
-                $('#email').text(selectedOption.data('email'));
-                $('#work_authorization').text(selectedOption.data('work_authorization'));
-                $('#expected_pay_rate').text(selectedOption.data('expected_pay_rate'));
-                $('#availability_to_start').text(selectedOption.data('availability_to_start'));
-                $('#years_of_experience').text(selectedOption.data('years_of_experience'));
+                console.log(selectedOption);
+
+                $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                        }
+                    });
+
+                    $.ajax({
+                        method: 'POST',
+                        url: '/submission/status/' + submission_id,
+                        data: {
+                            status: selectedOption,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            // sessionStorage.setItem('success_message', response.message);
+                            // location.reload();
+                            $('#success').removeClass('d-none');
+                            $('#success').text(response.message);
+
+                        }
+                    });
             });
         });
-    </script> --}}
+    </script>
 @endpush

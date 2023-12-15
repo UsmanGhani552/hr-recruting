@@ -33,7 +33,7 @@ $pageclass = "vender_dashboar";
 				<div class="box">
 					<h3>
 						<small>Total Vendors</small>
-						250
+						{{count($vendors)}}
 					</h3>
 				</div>
 			</li>
@@ -41,7 +41,7 @@ $pageclass = "vender_dashboar";
 				<div class="box">
 					<h3>
 						<small>Total Client</small>
-						310
+						{{count($clients)}}
 					</h3>
 				</div>
 			</li>
@@ -49,7 +49,7 @@ $pageclass = "vender_dashboar";
 				<div class="box">
 					<h3>
 						<small>Total Staff</small>
-						500
+						{{count($candidates)}}
 					</h3>
 				</div>
 			</li>
@@ -57,7 +57,7 @@ $pageclass = "vender_dashboar";
 				<div class="box">
 					<h3>
 						<small>Total Jobs</small>
-						650
+						{{count($jobs)}}
 					</h3>
 				</div>
 			</li>
@@ -118,20 +118,34 @@ $pageclass = "vender_dashboar";
 				<table>
 					<thead>
 						<tr>
-							<th>Client Name:</th>
 							<th>Job Title:</th>
+							<th>Client Name:</th>
+							<th>Vendor Name:</th>
 							<th>Candidate Name:</th>
 							<th>Status :</th>
 						</tr>
 					</thead>
 					<tbody>
+                        @foreach ($submissions as $submission)
 						<tr>
+							{{-- <td>Jane Cooper</td>
 							<td>Jane Cooper</td>
 							<td>Jane Cooper</td>
-							<td>Jane Cooper</td>
-							<td style="color: #FF9B25;">Inprocess</td>
+							<td style="color: #FF9B25;">Inprocess</td> --}}
+                            <td>{{ $submission->job->title }}</td>
+                            <td>{{ $submission->client->name }}</td>
+                            @if ($submission->vendor_id == 1)
+                                <td>{{ $submission->user->name }}</td>
+                            @else
+                                <td>{{ $submission->vendor->first_name }}
+                                    {{ $submission->vendor->last_name }}</td>
+                            @endif
+                            <td>{{ $submission->candidate->first_name }}
+                                {{ $submission->candidate->last_name }}</td>
+                                <td>{{ $submission->status == 1 ? 'Approved' : ($submission->status == 2 ? 'Pending' : 'Rejected') }}</td>
 						</tr>
-						<tr>
+                        @endforeach
+						{{-- <tr>
 							<td>Wade Warren</td>
 							<td>Wade Warren</td>
 							<td>Wade Warren</td>
@@ -154,7 +168,7 @@ $pageclass = "vender_dashboar";
 							<td>Brooklyn Simmons</td>
 							<td>Brooklyn Simmons</td>
 							<td style="color: #24D164;">Approved</td>
-						</tr>
+						</tr> --}}
 					</tbody>
 				</table>
 				</div>

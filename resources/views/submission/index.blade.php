@@ -92,6 +92,7 @@ $pageclass = 'maincadidate';
                             <th>Client Name</th>
                             <th>Vendor Name</th>
                             <th>Candidate Name</th>
+                            <th>Status</th>
 
                             <th>
                                 <div class="mydropdown">
@@ -126,6 +127,7 @@ $pageclass = 'maincadidate';
                                         <td>{{ $submission->vendor->first_name }} {{ $submission->vendor->last_name }}</td>
                                     @endif
                                     <td>{{ $submission->candidate->first_name }} {{ $submission->candidate->last_name }}</td>
+                                    <td>{{ $submission->status == 1 ? 'Approved' : ($submission->status == 2 ? 'Pending' : 'Rejected') }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">

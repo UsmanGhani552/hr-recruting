@@ -108,7 +108,7 @@ use App\Models\Job;
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="{{route('team.client.details',['team' => $team->id, 'client' => $client->id])}}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('team.delete-assigned-client', ['client' => $client->id, 'team' => $team->id])}}"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>
@@ -209,9 +209,9 @@ use App\Models\Job;
                                                     <div id="myDropdown" class="dropdown-content">
                                                         <a href="{{route('team.job.details',['team' => $team->id, 'job' => $job->id])}}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">View</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{ route('job.submission', $job->id) }}"><img
                                                                 src="{{ asset('assets/images/eye.png') }}">Submission</a>
-                                                        <a href="javascript:;"><img
+                                                        <a href="{{route('team.delete-assigned-job', ['job' => $job->id, 'team' => $team->id])}}"><img
                                                                 src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                     </div>
                                                 </div>

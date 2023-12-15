@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidate;
+use App\Models\Submission;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -44,6 +45,13 @@ class CandidateController extends Controller
         }
         // dd($vendor);
         return view('candidate.create',compact('states','cities','vendor'));
+    }
+
+    public function show(Candidate $candidate)
+    {
+        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('candidate_id',$candidate->id)->paginate(6);
+        // dd($vendors);
+        return view('candidate.assignment', compact('candidate','submissions'));
     }
 
     public function store(Request $request){

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\ClientVendor;
 use App\Models\Job;
+use App\Models\Submission;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -151,8 +152,15 @@ class ClientController extends Controller
     {
         $jobs = Job::where('client_id', $client->id)->paginate(6);
         $vendors = $client->vendors()->paginate(6);
+        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('client_id',$client->id)->paginate(6);
         // dd($vendors);
-        return view('client.assignment', compact('client', 'jobs', 'vendors'));
+        return view('client.assignment', compact('client', 'jobs', 'vendors','submissions'));
+    }
+
+    public function deleteAssignedJob(Client $client, Job $job){
+        $delete_assigment = Job::where('client_id', $client->id)->where('id',$job->id)->first();
+        $delete_assigment->delete();
+        return back()->withSuccess('Assigned Job Removed Successfully');
     }
 
     // public function clientJob(Client $client, Job $job)

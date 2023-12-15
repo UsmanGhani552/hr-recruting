@@ -34,6 +34,20 @@ class TeamController extends Controller
         return view('team.assignment',compact('team','jobs','clients'));
     }
 
+    public function deleteAssignedJob(User $team , Job $job){
+        $delete_assigment = VendorTmJob::where('team_member_id',$team->id)->where('job_id',$job->id)->first();
+        dd($delete_assigment);
+        $delete_assigment->delete();
+        return back()->withSuccess('Assigned Job Removed Successfully');
+    }
+
+    public function deleteAssignedClient(User $team, Client $client){
+        $delete_assigment = VendorTmClient::where('team_member_id',$team->id)->where('client_id',$client->id)->first();
+        dd($delete_assigment);
+        $delete_assigment->delete();
+        return back()->withSuccess('Assigned Client Removed Successfully');
+    }
+
     // public function teamJob(User $team, Job $job)
     // {
     //     // dd($vendor,$job);

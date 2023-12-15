@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\ClientVendor;
 use App\Models\Folder;
 use App\Models\Job;
+use App\Models\Submission;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Vendor;
@@ -33,15 +34,49 @@ class VendorController extends Controller
         return view('vendor.create', compact('states', 'cities'));
     }
 
-    // JKASHDKAJ
     public function show(Vendor $vendor)
     {
         $jobs = $vendor->jobs()->with('clients')->paginate(6);
         $clients = $vendor->clients()->paginate(6);
         $candidates = Candidate::where('vendor_id', $vendor->id)->paginate(6);
-        $teams = User::where('vendor_id', $vendor->id)->paginate(6);
-        return view('vendor.assignment', compact('vendor', 'jobs', 'clients', 'candidates', 'teams'));
+        $user = User::where('vendor_id', $vendor->id)->first();
+        $teams = User::where('vendor_id',$user->id)->paginate(6);
+        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor->id)->paginate(6);
+        // dd($submissions);
+        return view('vendor.assignment', compact('vendor', 'jobs', 'clients', 'candidates', 'teams','submissions'));
     }
+
+    public function deleteAssignedJob(Vendor $vendor, Job $job){
+        $delete_assigment = VendorJob::where('vendor_id',$vendor->id)->where('job_id',$job->id)->first();
+        $delete_assigment->delete();
+        return back()->withSuccess('Assigned Job Removed Successfully');
+    }
+
+    public function deleteAssignedClient(Vendor $vendor, Client $client){
+        $delete_assigment = ClientVendor::where('vendor_id',$vendor->id)->where('client_id',$client->id)->first();
+        $delete_assigment->delete();
+        return back()->withSuccess('Assigned Client Removed Successfully');
+    }
+
+    public function deleteTeamMember(Vendor $vendor , User $team){
+        $user = User::where('vendor_id', $vendor->id)->first();
+        $delete_team_member = User::where('vendor_id',$user->id)->where('id',$team->id)->first();
+        // dd($delete_team_member);
+        $delete_team_member->delete();
+        return back()->withSuccess('Team Member Removed Successfully');
+    }
+
+    public function deleteCandidate(Vendor $vendor , Candidate $candidate){
+        $delete_assigment = Candidate::where('vendor_id',$vendor->id)->where('id',$candidate->id)->first();
+        // dd($delete_assigment);
+        $delete_assigment->delete();
+        return back()->withSuccess('Candidate Removed Successfully');
+    }
+
+    // public function submission(Vendor $vendor){
+
+    //     dd($submissions);
+    // }
 
     // public function vendorJob(Vendor $vendor, Job $job)
     // {

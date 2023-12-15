@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddAdminController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\PermissionController;
@@ -41,7 +42,8 @@ Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-s
 
 Route::middleware('auth')->group(function () {
     //dashboard
-    Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+    // Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
     Route::controller(PermissionController::class)->prefix('/permission')->name('permission.')->group(function () {
@@ -71,46 +73,53 @@ Route::middleware('auth')->group(function () {
         Route::get('/destroy/{addAdmin}', 'destroy')->name('destroy');
     });
 
-     // ---------------------------------------------------- vendor ----------------------------------------------------
+    // ---------------------------------------------------- vendor ----------------------------------------------------
 
-     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
-     Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
-     Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
-     Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
-     Route::view('/vendor/submission', 'vendor.submission')->name('vendor-submission');
-     Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
-     Route::get('/vendor/assignment/{vendor}', [VendorController::class, 'show'])->name('vendor-assignment');
+    Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
+    Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
+    Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
+    Route::get('/vendor/delete/{vendor}', [VendorController::class, 'delete'])->name('vendor-delete');
+    Route::view('/vendor/submission', 'vendor.submission')->name('vendor-submission');
+    Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
+    Route::get('/vendor/assignment/{vendor}', [VendorController::class, 'show'])->name('vendor-assignment');
 
-     // vendor view assignments
-     Route::get('/vendor/{vendor}/job/{job}', [VendorController::class, 'vendorJob'])->name('vendor.job.details');
-     Route::get('/vendor/{vendor}/client/{client}', [VendorController::class, 'vendorclient'])->name('vendor.client.details');
-     Route::get('/vendor/{vendor}/team/{team}', [VendorController::class, 'vendorteam'])->name('vendor.team.details');
-     Route::get('/vendor/{vendor}/candidate/{candidate}', [VendorController::class, 'vendorcandidate'])->name('vendor.candidate.details');
+    // vendor view assignments
+    //  Route::get('/vendor/{vendor}/job/{job}', [VendorController::class, 'vendorJob'])->name('vendor.job.details');
+    //  Route::get('/vendor/{vendor}/client/{client}', [VendorController::class, 'vendorclient'])->name('vendor.client.details');
+    //  Route::get('/vendor/{vendor}/team/{team}', [VendorController::class, 'vendorteam'])->name('vendor.team.details');
+    //  Route::get('/vendor/{vendor}/candidate/{candidate}', [VendorController::class, 'vendorcandidate'])->name('vendor.candidate.details');
 
-     //vendor invitation
-     Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
-     Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
-     // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
+    //vendor invitation
+    Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
+    Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
+    // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
 
-     //bulk actions
-     Route::get('/vendor/search-client', [VendorController::class, 'searchClient'])->name('vendor.search-client');
-     Route::get('/vendor/search-job', [VendorController::class, 'searchJob'])->name('vendor.search-job');
-     Route::get('/vendor/search-folder', [VendorController::class, 'searchFolder'])->name('vendor.search-folder');
-     Route::post('/vendor/assign-client', [VendorController::class, 'assignClient'])->name('vendor.assign-client');
-     Route::post('/vendor/assign-job', [VendorController::class, 'assignJob'])->name('vendor.assign-job');
-     Route::post('/vendor/assign-folder', [VendorController::class, 'assignFolder'])->name('vendor.assign-folder');
-     Route::post('/vendor/active-status', [VendorController::class, 'activeStatus'])->name('vendor.active-status');
-     Route::post('/vendor/inactive-status', [VendorController::class, 'inactiveStatus'])->name('vendor.inactive-status');
+    //bulk actions
+    Route::get('/vendor/search-client', [VendorController::class, 'searchClient'])->name('vendor.search-client');
+    Route::get('/vendor/search-job', [VendorController::class, 'searchJob'])->name('vendor.search-job');
+    Route::get('/vendor/search-folder', [VendorController::class, 'searchFolder'])->name('vendor.search-folder');
+    Route::post('/vendor/assign-client', [VendorController::class, 'assignClient'])->name('vendor.assign-client');
+    Route::post('/vendor/assign-job', [VendorController::class, 'assignJob'])->name('vendor.assign-job');
+    Route::post('/vendor/assign-folder', [VendorController::class, 'assignFolder'])->name('vendor.assign-folder');
+    Route::post('/vendor/active-status', [VendorController::class, 'activeStatus'])->name('vendor.active-status');
+    Route::post('/vendor/inactive-status', [VendorController::class, 'inactiveStatus'])->name('vendor.inactive-status');
 
-     // ---------------------------------------------------end vendor--------------------------------------------------
+    //delete assignments
+    Route::get('/vendor/{vendor}/delete-assigned-job/{job}', [VendorController::class, 'deleteAssignedJob'])->name('vendor.delete-assigned-job');
+    Route::get('/vendor/{vendor}/delete-assigned-client/{client}', [VendorController::class, 'deleteAssignedClient'])->name('vendor.delete-assigned-client');
+    Route::get('/vendor/{vendor}/delete-team-member/{team}', [VendorController::class, 'deleteTeamMember'])->name('vendor.delete-team-member');
+    Route::get('/vendor/{vendor}/delete-candidate/{candidate}', [VendorController::class, 'deleteCandidate'])->name('vendor.delete-candidate');
 
 
-     // ------------------------------------------------------candidate ----------------------------------------------
+    // ---------------------------------------------------end vendor--------------------------------------------------
 
-    Route::view('/candidate/assignment', 'candidate.assignment')->name('candidate.assignment');
+
+    // ------------------------------------------------------candidate ----------------------------------------------
+
     Route::get('/candidate/', [CandidateController::class, 'index'])->name('candidate');
     Route::get('/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
     Route::post('/candidate/store', [CandidateController::class, 'store'])->name('candidate.store');
+    Route::get('/candidate/assignment/{candidate}', [CandidateController::class, 'show'])->name('candidate.assignment');
     Route::get('/candidate/edit/{candidate}', [CandidateController::class, 'edit'])->name('candidate.edit');
     Route::post('/candidate/update/{candidate}', [CandidateController::class, 'update'])->name('candidate.update');
     Route::get('/candidate/delete/{candidate}', [CandidateController::class, 'delete'])->name('candidate.delete');
@@ -143,6 +152,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/team/inactive-status', [TeamController::class, 'inactiveStatus'])->name('team.inactive-status');
     Route::post('/team/assign-client', [TeamController::class, 'assignClient'])->name('team.assign-client');
     Route::post('/team/assign-job', [TeamController::class, 'assignJob'])->name('team.assign-job');
+    //delete assignments
+    Route::get('/team/{team}/delete-assigned-job/{job}', [TeamController::class, 'deleteAssignedJob'])->name('team.delete-assigned-job');
+    Route::get('/team/{team}/delete-assigned-client/{client}', [TeamController::class, 'deleteAssignedClient'])->name('team.delete-assigned-client');
 
     // ---------------------------------------------------end team------------------------------------------------------
 
@@ -157,8 +169,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/job/edit/{job}', [JobController::class, 'edit'])->name('job.edit');
     Route::post('/job/update/{job}', [JobController::class, 'update'])->name('job.update');
     Route::get('/job/delete/{job}', [JobController::class, 'delete'])->name('job.delete');
-    Route::get('/jobs/submission/{job}',[JobController::class, 'submission'])->name('job.submission');
-    Route::post('/jobs/store-submission',[JobController::class, 'storeSubmission'])->name('job.store-submission');
+    Route::get('/jobs/submission/{job}', [JobController::class, 'submission'])->name('job.submission');
+    Route::post('/jobs/store-submission', [JobController::class, 'storeSubmission'])->name('job.store-submission');
     Route::get('/job/change-status/{job}', [JobController::class, 'changeJobStatus'])->name('job.change-status');
     Route::get('/job/{job}/vendor/{vendor}', [JobController::class, 'jobvendor'])->name('job.vendor.details');
     // bulk actions
@@ -172,7 +184,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-   // -------------------------------------------------------client ----------------------------------------------
+    // -------------------------------------------------------client ----------------------------------------------
 
     Route::get('/client', [ClientController::class, 'index'])->name('client');
     Route::get('/client/create', [ClientController::class, 'create'])->name('client.create');
@@ -192,6 +204,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/client/assign-vendor', [ClientController::class, 'assignVendor'])->name('client.assign-vendor');
     Route::post('/client/active-status', [ClientController::class, 'activeStatus'])->name('client.active-status');
     Route::post('/client/inactive-status', [ClientController::class, 'inactiveStatus'])->name('client.inactive-status');
+    //delete assignments
+    Route::get('/client/{client}/delete-assigned-job/{job}', [ClientController::class, 'deleteAssignedJob'])->name('client.delete-assigned-job');
+
 
     // -----------------------------------------------------end client----------------------------------------------
 
@@ -219,20 +234,21 @@ Route::middleware('auth')->group(function () {
 
     // -----------------------------------------------------------end folder ----------------------------------------------
 
-       // ------------------------------------------------------ Submission ----------------------------------------------------
+    // ------------------------------------------------------ Submission ----------------------------------------------------
 
-       Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
-       Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
-       Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
-       Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
+    Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
+    Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
+    Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
+    Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
+    Route::post('/submission/status/{submission}', [SubmissionController::class, 'status'])->name('submission.status');
 
-       // -------------------------------------------------- view details -------------------------------------------------------
+    // -------------------------------------------------- view details -------------------------------------------------------
 
-       Route::get('/job/{job}', [ViewDetailsController::class, 'jobDetails'])->name('job.details');
-       Route::get('/client/{client}', [ViewDetailsController::class, 'clientDetails'])->name('client.details');
-       Route::get('/candidate/{candidate}', [ViewDetailsController::class, 'candidateDetails'])->name('candidate.details');
-       Route::get('/vendor/{vendor}', [ViewDetailsController::class, 'vendorDetails'])->name('vendor.details');
-       Route::get('/team/{team}', [ViewDetailsController::class, 'teamDetails'])->name('team.details');
+    Route::get('/job/{job}', [ViewDetailsController::class, 'jobDetails'])->name('job.details');
+    Route::get('/client/{client}', [ViewDetailsController::class, 'clientDetails'])->name('client.details');
+    Route::get('/candidate/{candidate}', [ViewDetailsController::class, 'candidateDetails'])->name('candidate.details');
+    Route::get('/vendor/{vendor}', [ViewDetailsController::class, 'vendorDetails'])->name('vendor.details');
+    Route::get('/team/{team}', [ViewDetailsController::class, 'teamDetails'])->name('team.details');
 });
 
 

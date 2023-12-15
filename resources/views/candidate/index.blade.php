@@ -142,7 +142,7 @@ $pageclass = 'maincadidate';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="{{route('candidate.assignment')}}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
+                                                <a href="{{route('candidate.assignment',$candidate->id)}}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
                                                 @can('Candidate edit')
                                                     <a href="{{ route('candidate.edit', $candidate->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
