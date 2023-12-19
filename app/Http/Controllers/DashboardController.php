@@ -17,6 +17,8 @@ class DashboardController extends Controller
         $vendors = Vendor::all();
         $clients = Client::all();
         $jobs = Job::all();
+        $approved_jobs = Job::onlyTrashed()->get();
+        // dd($approved_jobs);
         $candidates = Candidate::all();
         $submissions = Submission::with([
             'vendor' => function ($query) {
@@ -47,6 +49,6 @@ class DashboardController extends Controller
         })
         ->withTrashed()
         ->paginate(6);
-        return view('dashboard.index',compact('vendors','clients','jobs','candidates','submissions'));
+        return view('dashboard.index',compact('vendors','clients','jobs','approved_jobs','candidates','submissions'));
     }
 }

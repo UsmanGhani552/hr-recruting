@@ -25,11 +25,11 @@ class JobController extends Controller
     {
         $user = Auth::user();
         if(Auth::user()->user_type == 'admin'){
-            $jobs = Job::paginate(6);
+            $jobs = Job::withTrashed()->paginate(6);
         } else if(Auth::user()->user_type == 'vendor'){
-            $jobs = $user->vendor->jobs()->with('clients')->paginate(6);   
+            $jobs = $user->vendor->jobs()->with('clients')->withTrashed()->paginate(6);
         } else if(Auth::user()->user_type == 'vendor team member'){
-            $jobs = $user->load('jobs.clients')->jobs()->paginate(6);
+            $jobs = $user->load('jobs.clients')->jobs()->withTrashed()->paginate(6);
         }
         return view('job.index',compact('jobs'));
     }
