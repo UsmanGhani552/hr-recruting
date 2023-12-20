@@ -235,6 +235,53 @@ $pageclass = 'addclient';
                                     <div class="file-hidden-list"></div>
                                 </div>
 
+                                <hr>
+
+                                <div class="col-md-6">
+                                    <label class="form-group">
+                                        Peercentage or Amount
+                                        <select class="form-controll" name="percentage">
+                                            <option disabled selected>Select</option>
+                                            <option value="Percentage">Percentage</option>
+                                            <option value="Amount">Amount</option>
+                                        </select>
+                                        @error('job_type')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-group">
+                                        Actual Salary
+                                        <input type="number" name="actual_salary" class="form-controll" disabled
+                                            placeholder="Enter Actual Salary">
+                                        @error('actual_salary')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-group">
+                                        Vendor*
+                                        <input type="number" name="vendor_percentage" class="form-controll"
+                                            placeholder="Enter Vendor Percentage">
+                                        @error('vendor_percentage')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-group">
+                                        Admin*
+                                        <input type="number" name="admin_percentage" class="form-controll"
+                                            placeholder="Enter Admin Percentage">
+                                        @error('admin_percentage')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </label>
+                                </div>
+
+
 
                                 <div class="form-group">
                                     <input type="submit" name="" value="Submit">

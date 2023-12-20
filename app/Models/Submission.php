@@ -25,4 +25,8 @@ class Submission extends Model
     public function user(){
         return $this->belongsTo(User::class,'vendor_id','id');
     }
+    public function teamMember(){
+        return $this->belongsTo(User::class,'team_member_id','id');
+    }
+
 }

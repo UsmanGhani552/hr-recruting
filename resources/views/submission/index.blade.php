@@ -32,7 +32,7 @@ $pageclass = 'maincadidate';
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="sik-dropdown" id="sik-select">
+                    {{-- <div class="sik-dropdown" id="sik-select">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             ...
                         </button>
@@ -59,7 +59,7 @@ $pageclass = 'maincadidate';
                     </div>
                     <button type="submit" class="cbtn" id="assign-btn">
                         Apply
-                    </button>
+                    </button> --}}
                 </div>
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
@@ -91,7 +91,14 @@ $pageclass = 'maincadidate';
                             <th>Job Title</th>
                             <th>Client Name</th>
                             <th>Vendor Name</th>
+                            <th>Team Member</th>
                             <th>Candidate Name</th>
+                            <th>Vendor Commision</th>
+                            @if (Auth::user()->id == 1)
+                                <th>Admin Commision</th>
+                            @endif
+                            <th>Created At</th>
+                            <th>Completed At</th>
                             <th>Status</th>
 
                             <th>
@@ -126,8 +133,22 @@ $pageclass = 'maincadidate';
                                     @else
                                         <td>{{ $submission->vendor->first_name }} {{ $submission->vendor->last_name }}</td>
                                     @endif
+                                    <td>{{ $submission->teamMember->name ?? '-'}}</td>
                                     <td>{{ $submission->candidate->first_name }} {{ $submission->candidate->last_name }}</td>
-                                    <td>{{ $submission->status == 1 ? 'Approved' : ($submission->status == 2 ? 'Pending' : 'Rejected') }}</td>
+                                    <td>{{ $submission->job->vendor_amount ?? '-' }}</td>
+                                    @if (Auth::user()->id == 1)
+                                        <td>{{ $submission->job->admin_amount ?? '-' }}</td>
+                                    @endif
+                                    <td>{{ $submission->job->created_at }}</td>
+                                    <td>{{ $submission->job->completed_at ?? '-' }}</td>
+                                    <td>
+                                        @if ($submission->status == 1)
+                                            <div class="badge bg-success">Approved</div>
+                                        @elseif($submission->status == 2)
+                                            <div class="badge bg-warning">Pending</div>
+                                        @else
+                                            <div class="badge bg-danger">Rejected</div>
+                                        @endif
                                     <td>
                                         <div class="dropdown">
                                             <ul class="dropbtn icons">
@@ -137,8 +158,8 @@ $pageclass = 'maincadidate';
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
                                                 {{-- @can('Submission edit') --}}
-                                                    <a href="{{ route('submission.show', $submission->id) }}"><img
-                                                            src="{{ asset('assets/images/edit.png') }}">view</a>
+                                                <a href="{{ route('submission.show', $submission->id) }}"><img
+                                                        src="{{ asset('assets/images/edit.png') }}">view</a>
                                                 {{-- @endcan --}}
                                                 @can('Submission delete')
                                                     <a href="{{ route('submission.delete', $submission->id) }}"><img

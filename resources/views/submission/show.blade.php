@@ -11,7 +11,7 @@ $pageclass = 'subdetail';
 @endsection
 
 @section('main_content')
-    <form action="{{route('job.store-submission')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('job.store-submission') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <section class="banner">
             <div class="container">
@@ -32,11 +32,11 @@ $pageclass = 'subdetail';
         <section class="csection submison_cont">
             <div class="container">
                 @if (Session::has('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
-            <div class="alert alert-success d-none" id="success"></div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <div class="alert alert-success d-none" id="success"></div>
                 <div class="submision_stat">
                     <div class="row">
                         <div class="col-md-6">
@@ -47,9 +47,10 @@ $pageclass = 'subdetail';
                             <label>
                                 Status
                                 <select class="form-select" id="status" aria-label="Default select example">
-                                    <option {{$submission->status == 1 ? 'selected' : '' }} value="1">Approved</option>
-                                    <option {{$submission->status == 2 ? 'selected' : '' }} value="2">Pending</option>
-                                    <option {{$submission->status == 3 ? 'selected' : '' }} value="3">Reject</option>
+                                    <option {{ $submission->status == 1 ? 'selected' : '' }} value="1">Approved
+                                    </option>
+                                    <option {{ $submission->status == 2 ? 'selected' : '' }} value="2">Pending</option>
+                                    <option {{ $submission->status == 3 ? 'selected' : '' }} value="3">Reject</option>
                                 </select>
                             </label>
                         </div>
@@ -100,7 +101,7 @@ $pageclass = 'subdetail';
                                     {{ $job->status }}
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="{{route('job.details',$job->id)}}">VIEW DETAILS</a>
+                                    <a href="{{ route('job.details', $job->id) }}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -151,7 +152,7 @@ $pageclass = 'subdetail';
 
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="{{route('client.details',$client->id)}}">VIEW DETAILS</a>
+                                    <a href="{{ route('client.details', $client->id) }}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -201,7 +202,7 @@ $pageclass = 'subdetail';
 
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="{{route('vendor.details',$vendor->id)}}">VIEW DETAILS</a>
+                                    <a href="{{ route('vendor.details', $vendor->id) }}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -217,25 +218,25 @@ $pageclass = 'subdetail';
                                 <td style="border-top: 0; border-left: 0;">
                                     <h5>First Name:</h5>
                                     <p id="first_name">
-                                        {{ $candidate->first_name}}
+                                        {{ $candidate->first_name }}
                                     </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Last name:</h5>
                                     <p id="last_name">
-                                        {{ $candidate->last_name}}
+                                        {{ $candidate->last_name }}
                                     </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Phone:</h5>
                                     <p id="phone">
-                                        {{ $candidate->phone}}
+                                        {{ $candidate->phone }}
                                     </p>
                                 </td>
                                 <td style="border-top: 0;">
                                     <h5>Email:</h5>
                                     <p id="email">
-                                        {{ $candidate->email}}
+                                        {{ $candidate->email }}
                                     </p>
                                 </td>
                                 <td style="border-top: 0; border-right: 0;">
@@ -247,29 +248,29 @@ $pageclass = 'subdetail';
                                 <td style="border-bottom: 0; border-left: 0;">
                                     <h5>Work Authentication:</h5>
                                     <p id="work_authorization">
-                                        {{ $candidate->work_authorization}}
+                                        {{ $candidate->work_authorization }}
                                     </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Exp Pay Rate:</h5>
                                     <p id="expected_pay_rate">
-                                        {{ $candidate->expected_pay_rate}}
+                                        {{ $candidate->expected_pay_rate }}
                                     </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Availabilty to Start:</h5>
                                     <p id="availability_to_start">
-                                        {{ $candidate->availability_to_start}}
+                                        {{ $candidate->availability_to_start }}
                                     </p>
                                 </td>
                                 <td style="border-bottom: 0;">
                                     <h5>Experience:</h5>
                                     <p id="years_of_experience">
-                                        {{ $candidate->years_of_experience}}
+                                        {{ $candidate->years_of_experience }}
                                     </p>
                                 </td>
                                 <td style="border-bottom: 0; border-right: 0;">
-                                    <a href="{{route('candidate.details',$candidate->id)}}">VIEW DETAILS</a>
+                                    <a href="{{ route('candidate.details', $candidate->id) }}">VIEW DETAILS</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -277,6 +278,46 @@ $pageclass = 'subdetail';
                 </div>
                 <br><br>
 
+                {{-- salary popup --}}
+                <div class="popup pop" id="salary-popup">
+                    <div class="overlay">
+                        <a class="close" href="javascript:;">X</a>
+                        <h5>Enter Actual Salary</h5>
+                        <form>
+                            {{-- <ul class="tabs-menu2">
+                                <li class="current"><a href="#tab-21">Vendors</a></li>
+                            </ul> --}}
+
+                            <div class="tab">
+                                <div id="tab-21" class="tab-content2">
+                                    <div class="form-group">
+                                        <input type="number" id="actual_salary" name="actual_salary" class="form-controll"
+                                            placeholder="Enter Actual Salary">
+                                    </div>
+                                    {{-- <ul id="search-vendor-results">
+                                    </ul> --}}
+                                    <input class="cbtn" id="assign-salary-btn" type="button" value="Enter">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {{-- salary popup --}}
+                <div class="popup pop" id="proceed-popup">
+                    <div class="overlay">
+                        <a class="close" href="javascript:;">X</a>
+                        <h5>Dp You want To Proceed</h5>
+                        <form>
+                            <div class="tab">
+                                <div id="tab-21" class="tab-content2">
+                                    <div class="form-group">
+                                    </div>
+                                    <input class="cbtn" id="proceed-btn" type="button" value="Enter">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 {{-- <h6>Assigned Candidates</h6>
                 <div class="row">
                     <div class="col-md-4">
@@ -321,8 +362,9 @@ $pageclass = 'subdetail';
                 </div> --}}
                 <div class="image-container">
                     @if ($submission->additional_documents)
-                        @foreach(explode('|', $submission->additional_documents) as $filename)
-                            <img src="{{ asset('candidates/' . $filename) }}" alt="Image" width="200px" height="200px">
+                        @foreach (explode('|', $submission->additional_documents) as $filename)
+                            <img src="{{ asset('candidates/' . $filename) }}" alt="Image" width="200px"
+                                height="200px">
                         @endforeach
                     @endif
                 </div>
@@ -339,7 +381,7 @@ $pageclass = 'subdetail';
                         <input type="submit" value="Save">
                     </div>
                 </div>
-                <a href="{{route('submission.send-email',$submission->id)}}">Send Email</a>
+                <a href="{{ route('submission.send-email', $submission->id) }}">Send Email</a>
 
             </div>
         </section>
@@ -350,15 +392,27 @@ $pageclass = 'subdetail';
 @push('scripts')
     <script>
         $(document).ready(function() {
-            // Handle dropdown change event
+            $('.popup .overlay .close').on('click', function() {
+                $('.pop').removeClass('openpop');
+            });
+
             $('#status').change(function() {
                 // Get the selected option
                 var selectedOption = $(this).find('option:selected').val();
+                // Get the submission id
                 var submission_id = $('#submission_id').val();
 
-                console.log(selectedOption);
 
-                $.ajaxSetup({
+                if (selectedOption == '1') {
+                    $('#salary-popup').addClass('openpop');
+                } else {
+                    $('#proceed-popup').addClass('openpop');
+                }
+
+                $('#assign-salary-btn').on('click', function() {
+                    // Get the salary value
+                    var salaryValue = $('#actual_salary').val();
+                    $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
                         }
@@ -369,17 +423,43 @@ $pageclass = 'subdetail';
                         url: '/submission/status/' + submission_id,
                         data: {
                             status: selectedOption,
-                            _token: "{{ csrf_token() }}"
+                            _token: "{{ csrf_token() }}",
+                            actual_salary: salaryValue
                         },
                         success: function(response) {
-                            // sessionStorage.setItem('success_message', response.message);
-                            // location.reload();
+                            $('#salary-popup').removeClass('openpop');
                             $('#success').removeClass('d-none');
                             $('#success').text(response.message);
 
                         }
                     });
+                });
+
+                $('#proceed-btn').on('click', function() {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                        }
+                    });
+
+                    $.ajax({
+                        method: 'POST',
+                        url: '/submission/status/' + submission_id,
+                        data: {
+                            status: selectedOption,
+                            _token: "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            $('#proceed-popup').removeClass('openpop');
+                            $('#success').removeClass('d-none');
+                            $('#success').text(response.message);
+                        }
+                    });
+                })
+
             });
+
+
         });
     </script>
 @endpush

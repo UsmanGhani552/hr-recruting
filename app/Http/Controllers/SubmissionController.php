@@ -71,11 +71,14 @@ class SubmissionController extends Controller
             },
             'user' => function ($query) {
                 $query->withTrashed();
+            },
+            'teamMember' => function ($query) {
+                $query->withTrashed();
             }
         ])
-            ->when(Auth::user()->user_type == 'vendor', function ($query) {
-                $vendor_id = Auth::user()->vendor_id;
-                $query->where('vendor_id', $vendor_id);
+        ->when(Auth::user()->user_type == 'vendor', function ($query) {
+            $vendor_id = Auth::user()->vendor_id;
+            $query->where('vendor_id', $vendor_id);
             })
             ->when(Auth::user()->user_type == 'vendor team member', function ($query) {
                 $user_id = Auth::user()->vendor_id;
@@ -85,6 +88,7 @@ class SubmissionController extends Controller
             })
             ->withTrashed()
             ->paginate(6);
+            // dd($submissions);
         return view('submission.index', compact('submissions'));
     }
 
@@ -120,36 +124,21 @@ class SubmissionController extends Controller
         return redirect()->route('submissions')->with('success', 'Email sent successfully');
     }
 
-    // public function status(Request $request , Submission $submission){
-    //     if($request->status == 1){
-    //         $job = Job::where('id',$submission->job->id)->first();
-    //         if($job){
-    //             $job->delete();
-    //         }
-    //         $all_submissions = Submission::where('job_id',$submission->job->id)->get();
-    //         foreach($all_submissions as $sub){
-    //             if($sub->candidate_id == $submission->candidate_id && $sub->job_id == $submission->job_id){
-    //                 $sub->status = 1;
-    //                 $sub->save();
-    //             }else{
-    //                 $sub->status = 3;
-    //                 $sub->save();
-    //             }
-    //         }
-    //     }
-    //     return response()->json([
-    //         'message' => 'Status Changed Successfully',
-    //     ]);
-    // }
-
     public function status(Request $request, Submission $submission)
     {
         if ($request->status == 1 && $submission->job) {
-
-            // completed job time
-            $job_duration = Job::where('id', $submission->job_id)->first();
-            $job_duration->completed_at = Carbon::now();
-            $job_duration->save();
+            //  job table update
+            $job = Job::where('id', $submission->job_id)->first();
+            $job->actual_salary = $request->actual_salary;
+            if($job->percentage == 'Percentage'){
+                $job->vendor_amount = $request->actual_salary * ($job->vendor_percentage / 100);
+                $job->admin_amount = $request->actual_salary * ($job->admin_percentage / 100);
+            }else{
+                $job->vendor_amount = $job->vendor_percentage;
+                $job->admin_amount = $job->admin_percentage;
+            }
+            $job->completed_at = Carbon::now();
+            $job->save();
 
             // Soft delete the job
             $submission->job->delete();
@@ -183,7 +172,10 @@ class SubmissionController extends Controller
             if ($submission->job()->onlyTrashed()) {
                 $submission->job()->onlyTrashed()->restore();
                 $submission->job()->update([
-                    'completed_at' => null
+                    'completed_at' => null,
+                    'actual_salary' => null,
+                    'vendor_amount' => null,
+                    'admin_amount' => null,
                 ]);
             }
 

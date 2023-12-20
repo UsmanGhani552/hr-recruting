@@ -74,6 +74,10 @@ class JobController extends Controller
             'notes' => 'required',
             'images' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'percentage' => 'required',
+            // 'actual_salary' => 'required',
+            'vendor_percentage' => 'required',
+            'admin_percentage' => 'required',
         ]);
         // dd('asdas');
         $images = [];
@@ -104,6 +108,12 @@ class JobController extends Controller
         $job->description = 'lorem xyz';
         $job->notes = $request->notes;
         $job->images = implode('|' , $images);
+        $job->percentage = $request->percentage;
+        // $job->actual_salary = $request->actual_salary;
+        $job->vendor_percentage = $request->vendor_percentage;
+        $job->admin_percentage = $request->admin_percentage;
+        // $job->vendor_amount = $request->actual_salary * ($request->vendor_percentage / 100);
+        // $job->admin_amount = $request->actual_salary * ($request->admin_percentage / 100);
         $job->save();
         return redirect()->route('job')->withSuccess('Job Created Successfully');
     }
@@ -170,6 +180,9 @@ class JobController extends Controller
             $submission->client_id = $request->client_id;
             $submission->vendor_id = $request->vendor_id;
             $submission->candidate_id = $request->candidate_id;
+            if(Auth::user()->user_type == 'vendor team member'){
+                $submission->team_member_id = Auth::user()->id;
+            }
             $submission->additional_documents = implode('|' , $additional_documents);
             $submission->save();
             return redirect()->route('submissions')->with('success','Job Submitted Successfully');

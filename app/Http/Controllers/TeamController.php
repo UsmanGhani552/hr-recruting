@@ -28,7 +28,7 @@ class TeamController extends Controller
 
     public function show(User $team)
     {
-        $jobs = $team->jobs()->with('clients')->get();
+        $jobs = $team->jobs()->with('clients')->withTrashed()->get();
         // dd($jobs->toArray());
         $clients = $team->clients;
         return view('team.assignment',compact('team','jobs','clients'));

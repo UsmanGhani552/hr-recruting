@@ -31,6 +31,7 @@ $pageclass = 'clientdash';
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
+                    @if(Auth::user()->id == 1)
                     <div class="sik-dropdown" id="sik-select">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             ...
@@ -65,6 +66,7 @@ $pageclass = 'clientdash';
                     <button type="submit" id="assign-btn" class="cbtn">
                         Apply
                     </button>
+                    @endif
                     {{-- client popup --}}
                     <div class="popup vendor_pop" id="vendor-popup">
                         <div class="overlay">

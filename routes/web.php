@@ -234,14 +234,6 @@ Route::middleware('auth')->group(function () {
 
     // -----------------------------------------------------------end folder ----------------------------------------------
 
-    // ------------------------------------------------------ Submission ----------------------------------------------------
-
-    Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
-    Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
-    Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
-    Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
-    Route::post('/submission/status/{submission}', [SubmissionController::class, 'status'])->name('submission.status');
-
     // -------------------------------------------------- view details -------------------------------------------------------
 
     Route::get('/job/{job}', [ViewDetailsController::class, 'jobDetails'])->name('job.details');
@@ -249,6 +241,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/candidate/{candidate}', [ViewDetailsController::class, 'candidateDetails'])->name('candidate.details');
     Route::get('/vendor/{vendor}', [ViewDetailsController::class, 'vendorDetails'])->name('vendor.details');
     Route::get('/team/{team}', [ViewDetailsController::class, 'teamDetails'])->name('team.details');
+
+     // ------------------------------------------------------ Submission ----------------------------------------------------
+
+     Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
+     Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
+     Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
+     Route::get('/submission/send-email/{submission}', [SubmissionController::class, 'sendEmail'])->name('submission.send-email');
+     Route::post('/submission/status/{submission}', [SubmissionController::class, 'status'])->name('submission.status');
 });
 
 
