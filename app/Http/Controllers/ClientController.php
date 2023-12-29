@@ -19,18 +19,58 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        if (Auth::user()->user_type == 'admin') {
-            $clients = Client::paginate(6);
-        } else if (Auth::user()->user_type == 'vendor') {
-            $vendor = $user->vendor;
-            // Paginate the clients relationship directly
-            $clients = $vendor->clients()->paginate(6);
-        } else if (Auth::user()->user_type == 'vendor team member') {
-            $clients = $user->clients()->paginate(6);
+        $query = ($user->user_type == 'admin' || $user->user_type == 'vendor') ? Client::query() : $user->clients();
+
+        // Apply filters if provided in the request
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
         }
+        // Filter by Phone Number
+        if ($request->has('phone')) {
+            $query->where('phone', 'like', '%' . $request->input('phone') . '%');
+        }
+
+        // Filter by Address
+        if ($request->has('address')) {
+            $query->where('address', 'like', '%' . $request->input('address') . '%');
+        }
+
+        // Filter by Email
+        if ($request->has('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        // Filter by Inudstry
+        if ($request->has('industry')) {
+            $query->where('industry', 'like', '%' . $request->input('industry') . '%');
+        }
+
+        if ($user->user_type == 'admin') {
+            // $clients = Client::paginate(6);
+            $clients = $query->paginate(6);
+        } else
+            // if (Auth::user()->user_type == 'vendor') {
+            //     $vendor = $user->vendor;
+            //     // Paginate the clients relationship directly
+            //     $clients = $vendor->clients()->paginate(6);
+            // } else if (Auth::user()->user_type == 'vendor team member') {
+            //     $clients = $user->clients()->paginate(6);
+            // }
+            if ($user->user_type == 'vendor') {
+                $vendor = $user->vendor;
+                $query->whereHas('vendors', function ($q) use ($vendor) {
+                    $q->where('vendor_id', $vendor->id);
+                });
+            } elseif ($user->user_type == 'vendor team member') {
+                // $vendorTeamMember = $user->vendorTeamMember;
+                $query->whereHas('teamMembers', function ($q) use ($user) {
+                    $q->where('team_member_id', $user->id);
+                });
+            }
+        $clients = $query->paginate(6);
         return view('client.index', compact('clients'));
     }
     public function search(Request $request)
@@ -152,13 +192,14 @@ class ClientController extends Controller
     {
         $jobs = Job::where('client_id', $client->id)->paginate(6);
         $vendors = $client->vendors()->paginate(6);
-        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('client_id',$client->id)->paginate(6);
+        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('client_id', $client->id)->paginate(6);
         // dd($vendors);
-        return view('client.assignment', compact('client', 'jobs', 'vendors','submissions'));
+        return view('client.assignment', compact('client', 'jobs', 'vendors', 'submissions'));
     }
 
-    public function deleteAssignedJob(Client $client, Job $job){
-        $delete_assigment = Job::where('client_id', $client->id)->where('id',$job->id)->first();
+    public function deleteAssignedJob(Client $client, Job $job)
+    {
+        $delete_assigment = Job::where('client_id', $client->id)->where('id', $job->id)->first();
         $delete_assigment->delete();
         return back()->withSuccess('Assigned Job Removed Successfully');
     }

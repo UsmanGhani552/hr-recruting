@@ -17,14 +17,14 @@ class FolderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $folders = Folder::with('folderItems')->paginate(6);
-        // dd($folders->toArray());
-        // return response()->json([
-        //     'clients' => $folders[1]->folderItems->where('folder_id', $folders[1]->id)->pluck('client_id'),
-        //     'jobs' => $folders[1]->folderItems->where('folder_id', $folders[1]->id)->pluck('job_id'),
-        // ]);
+        $query = Folder::with('folderItems');
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+
+        $folders = $query->paginate(6);
         return view('folder.index', compact('folders'));
     }
 

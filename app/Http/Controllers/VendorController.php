@@ -21,11 +21,50 @@ use Illuminate\Support\Facades\Mail;
 
 class VendorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // dd('asd');
-        $vendors = Vendor::paginate(6);
-        return view('vendor.dashboard', compact('vendors'));
+        $query = Vendor::query();
+        $states =  DB::table('states')->get();
+        $cities =  DB::table('cities')->get();
+        if ($request->filled('state')) {
+            $query->where('state_id', $request->input('state'));
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city_id', $request->input('city'));
+        }
+
+        if ($request->filled('name')) {
+            $query->where('first_name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->input('phone') . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        if ($request->filled('company_name')) {
+            $query->where('company_name', 'like', '%' . $request->input('company_name') . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('created_at_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_at_from'));
+        }
+
+        if ($request->filled('created_at_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_at_to'));
+        }
+
+        $vendors = $query->paginate(6);
+        return view('vendor.dashboard', compact('vendors','states', 'cities'));
     }
     public function create()
     {

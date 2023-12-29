@@ -15,10 +15,23 @@ use Illuminate\Support\Facades\Hash;
 
 class TeamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $teams = User::where('vendor_id' , Auth::user()->id)->paginate(6);
-        // dd($teams[0]['vendor']['first_name']);
+        $query = User::where('vendor_id' , Auth::user()->id);
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        $teams = $query->paginate(6);
         return view('team.index', compact('teams'));
     }
     public function create()

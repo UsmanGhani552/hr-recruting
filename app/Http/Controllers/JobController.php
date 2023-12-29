@@ -21,17 +21,71 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
+    //     $user = Auth::user();
+    //     if (Auth::user()->user_type == 'admin') {
+    //         $jobs = Job::withTrashed()->paginate(6);
+    //     } else if (Auth::user()->user_type == 'vendor') {
+    //         $jobs = $user->vendor->jobs()->with('clients')->withTrashed()->paginate(6);
+    //     } else if (Auth::user()->user_type == 'vendor team member') {
+    //         $jobs = $user->load('jobs.clients')->jobs()->withTrashed()->paginate(6);
+    //     }
+    //     return view('job.index', compact('states', 'cities', 'jobs'));
+    // }
+
+    public function index(Request $request)
     {
+        $states = DB::table('states')->get();
+        $cities = DB::table('cities')->get();
+        $clients = Client::all();
         $user = Auth::user();
-        if(Auth::user()->user_type == 'admin'){
-            $jobs = Job::withTrashed()->paginate(6);
-        } else if(Auth::user()->user_type == 'vendor'){
-            $jobs = $user->vendor->jobs()->with('clients')->withTrashed()->paginate(6);
-        } else if(Auth::user()->user_type == 'vendor team member'){
-            $jobs = $user->load('jobs.clients')->jobs()->withTrashed()->paginate(6);
+
+        $query = Job::withTrashed();
+
+        if ($user->user_type == 'vendor') {
+            $vendor = $user->vendor;
+            $query->whereHas('vendors', function ($q) use ($vendor) {
+                $q->where('vendor_id', $vendor->id);
+            });
+        } elseif ($user->user_type == 'vendor team member') {
+            // $vendorTeamMember = $user->vendorTeamMember;
+            $query->whereHas('teamMembers', function ($q) use ($user) {
+                $q->where('team_member_id', $user->id);
+            });
         }
-        return view('job.index',compact('jobs'));
+        // Apply additional filters based on request parameters
+        if ($request->filled('state')) {
+            $query->where('state_id', $request->input('state'));
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city_id', $request->input('city'));
+        }
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+        if ($request->filled('client')) {
+            $query->where('client_id', $request->input('client'));
+        }
+        if ($request->filled('department')) {
+            $query->where('department', $request->input('department'));
+        }
+        if ($request->filled('employment_type')) {
+            $query->where('employment_type', $request->input('employment_type'));
+        }
+        if ($request->filled('job_type')) {
+            $query->where('job_type', $request->input('job_type'));
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        $jobs = $query->paginate(6);
+
+        return view('job.index', compact('states', 'cities', 'jobs','clients'));
     }
 
     /**
@@ -44,7 +98,7 @@ class JobController extends Controller
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         $clients = Client::all();
-        return view('job.create',compact('states','cities','clients'));
+        return view('job.create', compact('states', 'cities', 'clients'));
     }
 
 
@@ -54,7 +108,8 @@ class JobController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'title' => 'required',
             'client' => 'required',
@@ -82,10 +137,10 @@ class JobController extends Controller
         // dd('asdas');
         $images = [];
         if ($files = $request->file('images')) {
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('jobs/') , $filename);
+                $file->move(public_path('jobs/'), $filename);
                 $images[] = $filename;
             }
         }
@@ -107,7 +162,7 @@ class JobController extends Controller
         $job->postal_code = $request->postal_code;
         $job->description = 'lorem xyz';
         $job->notes = $request->notes;
-        $job->images = implode('|' , $images);
+        $job->images = implode('|', $images);
         $job->percentage = $request->percentage;
         // $job->actual_salary = $request->actual_salary;
         $job->vendor_percentage = $request->vendor_percentage;
@@ -127,33 +182,35 @@ class JobController extends Controller
     public function show(Job $job)
     {
         $vendors = $job->vendors()->paginate(6);
-        return view('job.assignment',compact('job','vendors'));
+        return view('job.assignment', compact('job', 'vendors'));
     }
 
-    public function submission(Job $job){
+    public function submission(Job $job)
+    {
         // dd($job->clients);
         $client = $job->clients;
         $user = Auth::user();
-        if($user->user_type == 'admin'){
+        if ($user->user_type == 'admin') {
             $vendor = Auth::user();
             $candidates = Candidate::all();
-        } else if($user->user_type == 'vendor'){
+        } else if ($user->user_type == 'vendor') {
             $vendor = $user->vendor;
-            $candidates = Candidate::where('vendor_id',$vendor->id)->get();
-        } else if($user->user_type == 'vendor team member'){
+            $candidates = Candidate::where('vendor_id', $vendor->id)->get();
+        } else if ($user->user_type == 'vendor team member') {
             $user_id = $user->vendor_id;
-            $vendor_id = User::where('id',$user_id)->first();
+            $vendor_id = User::where('id', $user_id)->first();
             $vendor = $vendor_id->vendor;
             // dd($vendor);
-            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->get();
+            $candidates = Candidate::where('vendor_id', $vendor_id->vendor_id)->get();
 
             // dd($candidates);
         }
         // dd($candidates);
-        return view('job.submission' , compact('job','client','vendor','candidates'));
+        return view('job.submission', compact('job', 'client', 'vendor', 'candidates'));
     }
 
-    public function storeSubmission(Request $request){
+    public function storeSubmission(Request $request)
+    {
         // dd($request->all());
         $request->validate([
             'job_id' => 'required',
@@ -166,28 +223,28 @@ class JobController extends Controller
 
         $additional_documents = [];
         if ($files = $request->file('file')) {
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('candidates/') , $filename);
+                $file->move(public_path('candidates/'), $filename);
                 $additional_documents[] = $filename;
             }
         }
-        $existing_record = Submission::where('job_id',$request->job_id)->where('client_id',$request->client_id)->where('vendor_id',$request->vendor_id)->where('candidate_id',$request->candidate_id)->first();
-        if(!$existing_record){
+        $existing_record = Submission::where('job_id', $request->job_id)->where('client_id', $request->client_id)->where('vendor_id', $request->vendor_id)->where('candidate_id', $request->candidate_id)->first();
+        if (!$existing_record) {
             $submission = new Submission();
             $submission->job_id = $request->job_id;
             $submission->client_id = $request->client_id;
             $submission->vendor_id = $request->vendor_id;
             $submission->candidate_id = $request->candidate_id;
-            if(Auth::user()->user_type == 'vendor team member'){
+            if (Auth::user()->user_type == 'vendor team member') {
                 $submission->team_member_id = Auth::user()->id;
             }
-            $submission->additional_documents = implode('|' , $additional_documents);
+            $submission->additional_documents = implode('|', $additional_documents);
             $submission->save();
-            return redirect()->route('submissions')->with('success','Job Submitted Successfully');
-        }else{
-            return back()->with('error','This Job Has Already Been Submitted');
+            return redirect()->route('submissions')->with('success', 'Job Submitted Successfully');
+        } else {
+            return back()->with('error', 'This Job Has Already Been Submitted');
         }
     }
 
@@ -212,7 +269,7 @@ class JobController extends Controller
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         $clients = Client::all();
-        return view('job.edit',compact('states','cities','clients','job'));
+        return view('job.edit', compact('states', 'cities', 'clients', 'job'));
     }
 
     /**
@@ -248,13 +305,13 @@ class JobController extends Controller
         $images = [];
         if ($files = $request->file('images')) {
             $destiantion = public_path($job->images);
-            if(File::exists($destiantion)){
+            if (File::exists($destiantion)) {
                 File::delete($destiantion);
             }
-            foreach($files as $file){
+            foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
                 $filename = time() . '.' . $name;
-                $file->move(public_path('jobs/') , $filename);
+                $file->move(public_path('jobs/'), $filename);
                 $images[] = $filename;
             }
         }
@@ -275,7 +332,7 @@ class JobController extends Controller
         $job->postal_code = $request->postal_code;
         $job->description = 'lorem abc';
         $job->notes = $request->notes;
-        $job->images = implode('|' , $images);
+        $job->images = implode('|', $images);
         $job->save();
         return redirect()->route('job')->withSuccess('Job Updated Successfully');
     }
@@ -292,7 +349,7 @@ class JobController extends Controller
         return redirect()->route('job')->withSuccess('Job Deleted Successfully');
     }
 
-    public function changeJobStatus(Request $request , Job $job)
+    public function changeJobStatus(Request $request, Job $job)
     {
         $job->status = $request->status;
         $job->save();
@@ -304,26 +361,27 @@ class JobController extends Controller
     public function searchVendor(Request $request)
     {
         $query = $request->input('query');
-        $vendors = Vendor::where('first_name','LIKE', "%$query%")
-        ->orWhere('last_name','LIKE', "%$query%")
-        ->get();
+        $vendors = Vendor::where('first_name', 'LIKE', "%$query%")
+            ->orWhere('last_name', 'LIKE', "%$query%")
+            ->get();
         return response()->json($vendors);
     }
 
-    public function assignVendor(Request $request){
+    public function assignVendor(Request $request)
+    {
         // dd($request->vendors,$request->clients);
-        foreach($request->jobs as $job){
-            foreach($request->vendors as $vendor){
-                 // Check if the record already exists
-                 $existingRecord = VendorJob::where('vendor_id', $vendor)
-                 ->where('job_id', $job)
-                 ->first();
-                 if(!$existingRecord){
-                     $vendor_jobs = new VendorJob();
-                     $vendor_jobs->vendor_id = $vendor;
-                     $vendor_jobs->job_id = $job;
-                     $vendor_jobs->save();
-                 }
+        foreach ($request->jobs as $job) {
+            foreach ($request->vendors as $vendor) {
+                // Check if the record already exists
+                $existingRecord = VendorJob::where('vendor_id', $vendor)
+                    ->where('job_id', $job)
+                    ->first();
+                if (!$existingRecord) {
+                    $vendor_jobs = new VendorJob();
+                    $vendor_jobs->vendor_id = $vendor;
+                    $vendor_jobs->job_id = $job;
+                    $vendor_jobs->save();
+                }
             }
         }
         return response()->json([
@@ -331,9 +389,10 @@ class JobController extends Controller
         ]);
     }
 
-    public function activeStatus(Request $request){
-        foreach($request->jobs as $job_id){
-            $job = Job::where('id',$job_id)->first();
+    public function activeStatus(Request $request)
+    {
+        foreach ($request->jobs as $job_id) {
+            $job = Job::where('id', $job_id)->first();
             $job->status = 1;
             $job->save();
         }
@@ -342,9 +401,10 @@ class JobController extends Controller
         ]);
     }
 
-    public function inactiveStatus(Request $request){
-        foreach($request->jobs as $job_id){
-            $job = Job::where('id',$job_id)->first();
+    public function inactiveStatus(Request $request)
+    {
+        foreach ($request->jobs as $job_id) {
+            $job = Job::where('id', $job_id)->first();
             $job->status = 0;
             $job->save();
         }
@@ -353,9 +413,10 @@ class JobController extends Controller
         ]);
     }
 
-    public function bulkDelete(Request $request){
-        foreach($request->jobs as $job_id){
-            $job = Job::where('id',$job_id)->first();
+    public function bulkDelete(Request $request)
+    {
+        foreach ($request->jobs as $job_id) {
+            $job = Job::where('id', $job_id)->first();
             $job->delete();
         }
         return response()->json([

@@ -35,6 +35,11 @@ $('.client').slick({
 });
 // End
 
+// Myfilter
+
+$('.filter_brn').on('click', function(){
+    $('.filterform').slideToggle('slow');
+  });
 
 
 function myFunction() {

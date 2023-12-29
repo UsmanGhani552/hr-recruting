@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     public function folders()
     {
@@ -18,5 +18,10 @@ class Client extends Model
     public function vendors()
     {
         return $this->belongsToMany(Vendor::class, 'client_vendors');
+    }
+    
+    public function teamMembers()
+    {
+        return $this->belongsToMany(User::class, 'vendor_tm_clients', 'client_id', 'team_member_id');
     }
 }

@@ -64,7 +64,7 @@ $pageclass = 'maincadidate';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         @can('Candidate create')
@@ -75,6 +75,85 @@ $pageclass = 'maincadidate';
                         @endcan
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('candidate') }}" method="get">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone No</label>
+                        <input id="phone" type="tel" class="form-control" name="phone" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" class="form-control" name="email" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input id="position" type="tel" class="form-control" name="position" placeholder="">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Vendor
+                            <select class="form-controll" name="vendor">
+                                <option disabled selected>Select Vendor</option>
+                                @foreach ($vendors as $vendor)
+                                    <option value="{{ $vendor->id }}">{{ $vendor->first_name }} {{ $vendor->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            City*
+                            <select class="form-controll" name="city">
+                                <option disabled selected>Select city</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            State*
+                            <select class="form-controll" name="state">
+                                <option disabled selected>Selct state</option>
+                                @foreach ($states as $state)
+                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Status
+                            <select class="form-controll" name="status">
+                                <option disabled selected>Selct state</option>
+                                <option value="1">Active</option>
+                                <option value="0">In-Active</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -97,7 +176,7 @@ $pageclass = 'maincadidate';
                             <th>Candidate Email</th>
                             <th>Phone Number</th>
                             @can('Candidate status')
-                            <th>Status</th>
+                                <th>Status</th>
                             @endcan
                             <th>
                                 <div class="mydropdown">
@@ -120,7 +199,7 @@ $pageclass = 'maincadidate';
                                     <td>
                                         <label for="">
                                             <input type="checkbox" name="" value="{{ $candidate->id }}"
-                                            class="candidate-checkbox">
+                                                class="candidate-checkbox">
                                             {{ $candidate->id }}
                                         </label>
                                     </td>
@@ -128,11 +207,11 @@ $pageclass = 'maincadidate';
                                     <td>{{ $candidate->email }}</td>
                                     <td>{{ $candidate->phone }}</td>
                                     @can('Candidate status')
-                                    <td>
-                                        <input data-id="{{ $candidate->id }}" class="toggle-class" type="checkbox"
-                                            data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
-                                            data-off="InActive" {{ $candidate->status ? 'checked' : '' }}>
-                                    </td>
+                                        <td>
+                                            <input data-id="{{ $candidate->id }}" class="toggle-class" type="checkbox"
+                                                data-onstyle="success" data-offstyle="danger" data-toggle="toggle"
+                                                data-on="Active" data-off="InActive" {{ $candidate->status ? 'checked' : '' }}>
+                                        </td>
                                     @endcan
                                     <td>
                                         <div class="dropdown">
@@ -142,7 +221,8 @@ $pageclass = 'maincadidate';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="{{route('candidate.assignment',$candidate->id)}}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
+                                                <a href="{{ route('candidate.assignment', $candidate->id) }}"><img
+                                                        src="{{ asset('assets/images/eye.png') }}">View</a>
                                                 @can('Candidate edit')
                                                     <a href="{{ route('candidate.edit', $candidate->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
@@ -223,7 +303,7 @@ $pageclass = 'maincadidate';
                     console.log(candidates);
                     $.ajax({
                         method: 'POST',
-                        url: '/candidate/active-status',
+                        url: "{{ url('/candidate/active-status') }}",
                         data: {
                             candidates: candidates,
                             _token: "{{ csrf_token() }}"
@@ -247,7 +327,7 @@ $pageclass = 'maincadidate';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/candidate/inactive-status',
+                        url: "{{ url('/candidate/inactive-status') }}",
                         data: {
                             candidates: candidates,
                             _token: "{{ csrf_token() }}"
@@ -271,7 +351,7 @@ $pageclass = 'maincadidate';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/candidate/bulk-delete',
+                        url: "{{ url('/candidate/bulk-delete') }}",
                         data: {
                             candidates: candidates,
                             _token: "{{ csrf_token() }}"
@@ -295,7 +375,7 @@ $pageclass = 'maincadidate';
                     $('#sucess-asigment-msg').addClass('alert');
                     $('#sucess-asigment-msg').addClass('alert-success');
                     $('#sucess-asigment-msg').text(
-                    successMessage); // Use successMessage instead of response.message
+                        successMessage); // Use successMessage instead of response.message
                 }, 500);
 
                 // Clear the message after displaying

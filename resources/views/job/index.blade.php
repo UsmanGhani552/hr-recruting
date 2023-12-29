@@ -32,41 +32,42 @@ $pageclass = 'clientdash';
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    @if(Auth::user()->id == 1)
-                    <div class="sik-dropdown" id="sik-select">
-                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            ...
+                    @if (Auth::user()->id == 1)
+                        <div class="sik-dropdown" id="sik-select">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ...
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li>
+                                    <span class="dropdown-item" data-value="active">
+                                        <img class="" src="{{ asset('assets/images/bulk1.png') }}" alt="btc" />
+                                        Active
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item" data-value="inactive">
+                                        <img class="" src="{{ asset('assets/images/bulk1.png') }}" alt="btc" />
+                                        Inactive
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item" data-value="client">
+                                        <img class="" src="{{ asset('assets/images/bulk4.png') }}" alt="btc" />
+                                        Assign Vendors
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item" data-value="job">
+                                        <img class="" src="{{ asset('assets/images/delete.png') }}" alt="btc" />
+                                        Delete
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="submit" class="cbtn" id="assign-btn">
+                            Apply
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li>
-                                <span class="dropdown-item" data-value="active">
-                                    <img class="" src="{{ asset('assets/images/bulk1.png') }}" alt="btc" />
-                                    Active
-                                </span>
-                            </li>
-                            <li>
-                                <span class="dropdown-item" data-value="inactive">
-                                    <img class="" src="{{ asset('assets/images/bulk1.png') }}" alt="btc" />
-                                    Inactive
-                                </span>
-                            </li>
-                            <li>
-                                <span class="dropdown-item" data-value="client">
-                                    <img class="" src="{{ asset('assets/images/bulk4.png') }}" alt="btc" />
-                                    Assign Vendors
-                                </span>
-                            </li>
-                            <li>
-                                <span class="dropdown-item" data-value="job">
-                                    <img class="" src="{{ asset('assets/images/delete.png') }}" alt="btc" />
-                                    Delete
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button type="submit" class="cbtn" id="assign-btn">
-                        Apply
-                    </button>
                     @endif
 
                     {{-- vendor popup --}}
@@ -99,7 +100,7 @@ $pageclass = 'clientdash';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         <li>
@@ -114,6 +115,98 @@ $pageclass = 'clientdash';
                         @endcan
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('job') }}" method="get">
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" class="form-control" name="title" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Client Name
+                            <select class="form-controll" name="client">
+                                <option disabled selected>Select Client</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{$client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Department
+                            <select class="form-controll" name="department">
+                                <option disabled selected>Select</option>
+                                <option>Software</option>
+                                <option>Design</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Employment type
+                            <select class="form-controll" name="employment_type">
+                                <option disabled selected>Select</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Permanent">Permanent</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            Job Type
+                            <select class="form-controll" name="job_type">
+                                <option disabled selected>Select</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Permanent">Permanent</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            City*
+                            <select class="form-controll" name="city">
+                                <option disabled selected>Select city</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            State*
+                            <select class="form-controll" name="state">
+                                <option disabled selected>Selct state</option>
+                                @foreach ($states as $state)
+                                <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            Status
+                            <select class="form-controll" name="status">
+                                <option disabled selected>Selct state</option>
+                                <option value="1">Active</option>
+                                <option value="0">In-Active</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -137,7 +230,7 @@ $pageclass = 'clientdash';
                             <th>Department</th>
                             <th>Salary Range</th>
                             @can('Job status')
-                            <th>Status</th>
+                                <th>Status</th>
                             @endcan
                             <th>
                                 <div class="mydropdown">
@@ -157,7 +250,8 @@ $pageclass = 'clientdash';
                                 <tr>
                                     <td>
                                         <label for="">
-                                            <input type="checkbox" name="" class="job-checkbox" value="{{ $job->id }}">
+                                            <input type="checkbox" name="" class="job-checkbox"
+                                                value="{{ $job->id }}">
                                             {{ $job->id }}
                                         </label>
                                     </td>
@@ -166,11 +260,11 @@ $pageclass = 'clientdash';
                                     <td>{{ $job->department }}</td>
                                     <td>{{ $job->salary_range }}</td>
                                     @can('Job status')
-                                    <td>
-                                        <input data-id="{{ $job->id }}" class="toggle-class" type="checkbox"
-                                            data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active"
-                                            data-off="InActive" {{ $job->status ? 'checked' : '' }}>
-                                    </td>
+                                        <td>
+                                            <input data-id="{{ $job->id }}" class="toggle-class" type="checkbox"
+                                                data-onstyle="success" data-offstyle="danger" data-toggle="toggle"
+                                                data-on="Active" data-off="InActive" {{ $job->status ? 'checked' : '' }}>
+                                        </td>
                                     @endcan
                                     <td>
                                         <div class="dropdown">
@@ -180,14 +274,15 @@ $pageclass = 'clientdash';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="{{ route('job.show', $job->id) }}"><img src="{{ asset('assets/images/eye.png') }}">View</a>
+                                                <a href="{{ route('job.show', $job->id) }}"><img
+                                                        src="{{ asset('assets/images/eye.png') }}">View</a>
                                                 @can('Job edit')
                                                     <a href="{{ route('job.edit', $job->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
                                                 @endcan
-                                                @if($job->deleted_at == null)
-                                                <a href="{{ route('job.submission', $job->id) }}"><img
-                                                    src="{{ asset('assets/images/eye.png') }}">Submission</a>
+                                                @if ($job->deleted_at == null)
+                                                    <a href="{{ route('job.submission', $job->id) }}"><img
+                                                            src="{{ asset('assets/images/eye.png') }}">Submission</a>
                                                 @endif
                                                 @can('Job delete')
                                                     <a href="{{ route('job.delete', $job->id) }}"><img
@@ -269,7 +364,7 @@ $pageclass = 'clientdash';
                     console.log(jobs);
                     $.ajax({
                         method: 'POST',
-                        url: '/job/active-status',
+                        url: "{{ url('/job/active-status') }}",
                         data: {
                             jobs: jobs,
                             _token: "{{ csrf_token() }}"
@@ -293,7 +388,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/job/inactive-status',
+                        url: "{{ url('/job/inactive-status') }}",
                         data: {
                             jobs: jobs,
                             _token: "{{ csrf_token() }}"
@@ -304,7 +399,7 @@ $pageclass = 'clientdash';
                         }
                     });
 
-                }else if (selectedValue == 'job') {
+                } else if (selectedValue == 'job') {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('input[name="_token"]').val()
@@ -317,7 +412,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/job/bulk-delete',
+                        url: "{{ url('/job/bulk-delete') }}",
                         data: {
                             jobs: jobs,
                             _token: "{{ csrf_token() }}"
@@ -332,7 +427,7 @@ $pageclass = 'clientdash';
             });
 
             function fetchData(query = '') {
-                const url = '/job/search-vendor';
+                const url = "{{ url('/job/search-vendor') }}";
                 const resultsContainer = '#search-vendor-results';
                 console.log(resultsContainer)
                 $.ajax({
@@ -382,7 +477,7 @@ $pageclass = 'clientdash';
 
                 $.ajax({
                     method: 'POST',
-                    url: '/job/assign-vendor',
+                    url: "{{ url('/job/assign-vendor') }}",
                     data: {
                         vendors: vendors,
                         jobs: jobs,
@@ -405,7 +500,7 @@ $pageclass = 'clientdash';
                     $('#sucess-asigment-msg').addClass('alert');
                     $('#sucess-asigment-msg').addClass('alert-success');
                     $('#sucess-asigment-msg').text(
-                    successMessage); // Use successMessage instead of response.message
+                        successMessage); // Use successMessage instead of response.message
                 }, 500);
 
                 // Clear the message after displaying

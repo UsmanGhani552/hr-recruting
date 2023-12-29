@@ -120,7 +120,7 @@ $pageclass = 'mainteam';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         <li>
@@ -129,6 +129,37 @@ $pageclass = 'mainteam';
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('team') }}" method="get">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" class="form-control" name="email" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Status
+                            <select class="form-controll" name="status">
+                                <option disabled selected>Selct state</option>
+                                <option value="1">Active</option>
+                                <option value="0">In-Active</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -277,7 +308,7 @@ $pageclass = 'mainteam';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/team/active-status',
+                        url: "{{url('/team/active-status')}}",
                         data: {
                             teams: teams,
                             _token: "{{ csrf_token() }}"
@@ -301,7 +332,7 @@ $pageclass = 'mainteam';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/team/inactive-status',
+                        url: "{{url('/team/inactive-status')}}",
                         data: {
                             teams: teams,
                             _token: "{{ csrf_token() }}"
@@ -316,7 +347,7 @@ $pageclass = 'mainteam';
             });
 
             function fetchData(query = '', isJob = false) {
-                const url = isJob ? '/vendor/search-job' : '/vendor/search-client';
+                const url = isJob ? "{{url('/vendor/search-job')}}" : "{{url('/vendor/search-client')}}";
                 const resultsContainer = isJob ? '#search-job-results' : '#search-client-results';
                 console.log(resultsContainer)
                 $.ajax({
@@ -369,7 +400,7 @@ $pageclass = 'mainteam';
 
                 $.ajax({
                     method: 'POST',
-                    url: '/team/assign-client',
+                    url: "{{url('/team/assign-client')}}",
                     data: {
                         teams: teams,
                         clients: clients,
@@ -403,7 +434,7 @@ $pageclass = 'mainteam';
 
                 $.ajax({
                     method: 'POST',
-                    url: '/team/assign-job',
+                    url: "{{url('/team/assign-job')}}",
                     data: {
                         teams: teams,
                         jobs: jobs,

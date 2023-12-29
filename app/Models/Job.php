@@ -23,4 +23,8 @@ class Job extends Model
     public function clients(){
         return $this->belongsTo(Client::class, 'client_id','id');
     }
+    public function teamMembers()
+    {
+        return $this->belongsToMany(User::class, 'vendor_tm_jobs', 'job_id', 'team_member_id');
+    }
 }

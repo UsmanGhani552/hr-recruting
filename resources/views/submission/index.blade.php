@@ -64,11 +64,90 @@ $pageclass = 'maincadidate';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('submissions') }}" method="get">
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Status
+                            <select class="form-controll" name="status">
+                                <option disabled selected>Selct state</option>
+                                <option value="1">Approved</option>
+                                <option value="2">Pending</option>
+                                <option value="3">Rejected</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            Vendor
+                            <select class="form-controll" name="vendor">
+                                <option disabled selected>Select Vendor</option>
+                                @foreach ($vendors as $vendor)
+                                    <option value="{{ $vendor->id }}">{{ $vendor->first_name }} {{ $vendor->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            job
+                            <select class="form-controll" name="job">
+                                <option disabled selected>Select job</option>
+                                @foreach ($jobs as $job)
+                                    <option value="{{ $job->id }}">{{ $job->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            client
+                            <select class="form-controll" name="client">
+                                <option disabled selected>Select client</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">{{ $client->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group">
+                            candidate
+                            <select class="form-controll" name="candidate">
+                                <option disabled selected>Select candidate</option>
+                                @foreach ($candidates as $candidate)
+                                    <option value="{{ $candidate->id }}">{{ $candidate->first_name }} {{ $candidate->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="created_at_to">To</label>
+                        <input id="created_at_to" type="date" class="form-control" name="created_at_to" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created_at_from">From</label>
+                        <input id="created_at_from" type="date" class="form-control" name="created_at_from" placeholder="" >
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))

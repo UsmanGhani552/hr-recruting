@@ -31,7 +31,11 @@ if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
 |
 */
 
-require __DIR__.'/../vendor/autoload.php';
+// Change this line:
+// require __DIR__.'/../vendor/autoload.php';
+
+// To this:
+require __DIR__.'/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +48,11 @@ require __DIR__.'/../vendor/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+// Change this line:
+// $app = require_once __DIR__.'/../bootstrap/app.php';
+
+// To this:
+$app = require_once __DIR__.'/bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 

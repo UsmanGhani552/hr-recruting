@@ -1604,7 +1604,14 @@ td.pending {
     box-shadow: none !important;
 }
 
-
+.filterform { padding: 20px;background: #F1F1F1;border-radius: 20px;margin: 20px 0 0; display: none; }
+.filterform form {display: flex;flex-wrap: wrap;align-items: flex-end;justify-content: flex-start;column-gap: 25px;row-gap: 20px;}
+.filterform .form-group {flex: 0 0 23.2%;margin: 0;}
+.filterform .form-group label {font-size: 14px;margin: 0 0 10px;line-height: initial;}
+.filterform .form-group .form-control {background: transparent;height: 45px;border: 2px solid #ccc;outline: none;border-radius: 10px;margin: 0;box-shadow: none;}
+.filterform .form_bottons {  }
+.filterform .form_bottons button {  }
+.filterform .form_bottons button:last-child {background: transparent;color: #254499;}
 
 @media (max-width: 1600px) {
     .header ul {

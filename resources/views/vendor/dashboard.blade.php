@@ -153,7 +153,7 @@ $pageclass = 'vdashbord';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         @can('Vendor create')
@@ -164,6 +164,81 @@ $pageclass = 'vdashbord';
                         @endcan
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('vendor') }}" method="get">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone No</label>
+                        <input id="phone" type="tel" class="form-control" name="phone" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" class="form-control" name="email" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company_name">Company name</label>
+                        <input id="company_name" type="text" class="form-control" name="company_name" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            City*
+                            <select class="form-controll" name="city">
+                                <option disabled selected>Select city</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            State*
+                            <select class="form-controll" name="state">
+                                <option disabled selected>Selct state</option>
+                                @foreach ($states as $state)
+                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-group">
+                            Status
+                            <select class="form-controll" name="status">
+                                <option disabled selected>Selct state</option>
+                                <option value="1">Active</option>
+                                <option value="0">In-Active</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created_at_to">To</label>
+                        <input id="created_at_to" type="date" class="form-control" name="created_at_to" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created_at_from">From</label>
+                        <input id="created_at_from" type="date" class="form-control" name="created_at_from" placeholder="" >
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -321,7 +396,7 @@ $pageclass = 'vdashbord';
                     console.log(vendors);
                     $.ajax({
                         method: 'POST',
-                        url: '/vendor/active-status',
+                        url: "{{ url('/vendor/active-status') }}",
                         data: {
                             vendors: vendors,
                             _token: "{{ csrf_token() }}"
@@ -345,7 +420,7 @@ $pageclass = 'vdashbord';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/vendor/inactive-status',
+                        url: "{{ url('/vendor/inactive-status') }}",
                         data: {
                             vendors: vendors,
                             _token: "{{ csrf_token() }}"

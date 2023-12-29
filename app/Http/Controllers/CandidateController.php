@@ -14,47 +14,111 @@ use Illuminate\Support\Facades\Hash;
 
 class CandidateController extends Controller
 {
-    public function index(){
-        if(Auth::user()->user_type == 'admin'){
-            $candidates = Candidate::paginate(6);
-        }
-        else if(Auth::user()->user_type == 'vendor'){
-            $vendor_id = Auth::user()->load('vendor')->vendor_id;
-            // dd($vendor_id);
-            $candidates = Candidate::where('vendor_id',$vendor_id)->paginate(6);
+    // public function index(){
 
-        }else if(Auth::user()->user_type == 'vendor team member'){
+    //     $vendors = Vendor::all();
+    //     $states =  DB::table('states')->get();
+    //     $cities =  DB::table('cities')->get();
 
-            $vendor = Auth::user()->vendor_id;
-            $vendor_id = User::where('id',$vendor)->first();
-            // dd($vendor_id->vendor_id);
-            $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->paginate(6);
+    //     if(Auth::user()->user_type == 'admin'){
+    //         $candidates = Candidate::paginate(6);
+    //     }
+    //     else if(Auth::user()->user_type == 'vendor'){
+    //         $vendor_id = Auth::user()->load('vendor')->vendor_id;
+    //         // dd($vendor_id);
+    //         $candidates = Candidate::where('vendor_id',$vendor_id)->paginate(6);
+
+    //     }else if(Auth::user()->user_type == 'vendor team member'){
+
+    //         $vendor = Auth::user()->vendor_id;
+    //         $vendor_id = User::where('id',$vendor)->first();
+    //         // dd($vendor_id->vendor_id);
+    //         $candidates = Candidate::where('vendor_id',$vendor_id->vendor_id)->paginate(6);
+    //     }
+    //     return view('candidate.index' , compact('candidates','vendors','states','cities'));
+    // }
+
+    public function index(Request $request)
+    {
+        $vendors = Vendor::all();
+        $states = DB::table('states')->get();
+        $cities = DB::table('cities')->get();
+
+        $user = Auth::user();
+        $query = Candidate::withTrashed();
+
+        if ($user->user_type == 'vendor') {
+            $vendor_id = $user->load('vendor')->vendor_id;
+            $query->where('vendor_id', $vendor_id);
+        } elseif ($user->user_type == 'vendor team member') {
+            $vendor = $user->vendor_id;
+            $vendor_id = User::where('id', $vendor)->first();
+            $query->where('vendor_id', $vendor_id->vendor_id);
         }
-        return view('candidate.index' , compact('candidates'));
+
+        if ($request->filled('state')) {
+            $query->where('state_id', $request->input('state'));
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city_id', $request->input('city'));
+        }
+
+        if ($request->filled('name')) {
+            $query->where('first_name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->input('phone') . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        if ($request->filled('position')) {
+            $query->where('position', 'like', '%' . $request->input('position') . '%');
+        }
+
+        if ($request->filled('vendor')) {
+            $query->where('vendor_id', $request->input('vendor'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Apply additional filters in a similar manner
+
+        $candidates = $query->paginate(6);
+
+        return view('candidate.index', compact('candidates', 'vendors', 'states', 'cities'));
     }
 
-    public function create(){
+    public function create()
+    {
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
-        if(Auth::user()->user_type == 'vendor'){
+        if (Auth::user()->user_type == 'vendor') {
             $vendor = Auth::user()->vendor;
-        }else if(Auth::user()->user_type == 'vendor team member'){
+        } else if (Auth::user()->user_type == 'vendor team member') {
             $authenticated_user_id = Auth::user()->vendor_id;
-            $vendor_id = User::where('id',$authenticated_user_id)->first();
+            $vendor_id = User::where('id', $authenticated_user_id)->first();
             $vendor = $vendor_id->vendor;
         }
         // dd($vendor);
-        return view('candidate.create',compact('states','cities','vendor'));
+        return view('candidate.create', compact('states', 'cities', 'vendor'));
     }
 
     public function show(Candidate $candidate)
     {
-        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('candidate_id',$candidate->id)->paginate(6);
+        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('candidate_id', $candidate->id)->paginate(6);
         // dd($vendors);
-        return view('candidate.assignment', compact('candidate','submissions'));
+        return view('candidate.assignment', compact('candidate', 'submissions'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -82,9 +146,9 @@ class CandidateController extends Controller
         if ($request->hasFile('resume')) {
             $file = $request->file('resume');
             $name = $file->getClientOriginalName();
-            $filename = time().'.' . $name;
+            $filename = time() . '.' . $name;
             $file->move(public_path('candidates/'), $filename);
-            $candidate->resume = 'candidates/'.$filename;
+            $candidate->resume = 'candidates/' . $filename;
         }
 
 
@@ -112,14 +176,16 @@ class CandidateController extends Controller
         return redirect()->route('candidate')->withSuccess('Candidate Created Successfully');
     }
 
-    public function edit(Candidate $candidate){
+    public function edit(Candidate $candidate)
+    {
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
         $vendors = Vendor::all();
-        return view('candidate.edit',compact('candidate','states','cities','vendors'));
+        return view('candidate.edit', compact('candidate', 'states', 'cities', 'vendors'));
     }
 
-    public function update(Request $request , Candidate $candidate){
+    public function update(Request $request, Candidate $candidate)
+    {
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -151,9 +217,9 @@ class CandidateController extends Controller
 
             $file = $request->file('resume');
             $name = $file->getClientOriginalName();
-            $filename = time().'.' . $name;
+            $filename = time() . '.' . $name;
             $file->move(public_path('candidates/'), $filename);
-            $candidate->resume = 'candidates/'.$filename;
+            $candidate->resume = 'candidates/' . $filename;
         }
 
         $candidate->first_name = $request->first_name;
@@ -178,12 +244,13 @@ class CandidateController extends Controller
         $candidate->save();
         return redirect()->route('candidate')->withSuccess('Candidate Updated Successfully');
     }
-    public function delete(Candidate $candidate){
+    public function delete(Candidate $candidate)
+    {
         $candidate->delete();
         return redirect()->route('candidate')->withSuccess('Candidate Deleted Successfully');
     }
 
-    public function changeCandidateStatus(Request $request , Candidate $candidate)
+    public function changeCandidateStatus(Request $request, Candidate $candidate)
     {
         $candidate->status = $request->status;
         $candidate->save();
@@ -192,9 +259,10 @@ class CandidateController extends Controller
         ]);
     }
 
-    public function activeStatus(Request $request){
-        foreach($request->candidates as $candidate_id){
-            $candidate = Candidate::where('id',$candidate_id)->first();
+    public function activeStatus(Request $request)
+    {
+        foreach ($request->candidates as $candidate_id) {
+            $candidate = Candidate::where('id', $candidate_id)->first();
             $candidate->status = 1;
             $candidate->save();
         }
@@ -204,9 +272,10 @@ class CandidateController extends Controller
         ]);
     }
 
-    public function inactiveStatus(Request $request){
-        foreach($request->candidates as $candidate_id){
-            $candidate = Candidate::where('id',$candidate_id)->first();
+    public function inactiveStatus(Request $request)
+    {
+        foreach ($request->candidates as $candidate_id) {
+            $candidate = Candidate::where('id', $candidate_id)->first();
             $candidate->status = 0;
             $candidate->save();
         }
@@ -216,9 +285,10 @@ class CandidateController extends Controller
         ]);
     }
 
-    public function bulkDelete(Request $request){
-        foreach($request->candidates as $candidate_id){
-            $candidate = Candidate::where('id',$candidate_id)->first();
+    public function bulkDelete(Request $request)
+    {
+        foreach ($request->candidates as $candidate_id) {
+            $candidate = Candidate::where('id', $candidate_id)->first();
             $candidate->delete();
         }
 
@@ -226,6 +296,4 @@ class CandidateController extends Controller
             'message' => 'Candidate Deleted Successfully'
         ]);
     }
-
-
 }

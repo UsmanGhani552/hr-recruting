@@ -56,6 +56,10 @@ class SubmissionController extends Controller
     // }
     public function index()
     {
+        $vendors = Vendor::select('id','first_name','last_name')->get();
+        $clients = Client::select('id','name')->get();
+        $jobs = Job::select('id','title')->get();
+        $candidates = Candidate::select('id','first_name','last_name')->get();
         $submissions = Submission::with([
             'vendor' => function ($query) {
                 $query->withTrashed();
@@ -76,9 +80,9 @@ class SubmissionController extends Controller
                 $query->withTrashed();
             }
         ])
-        ->when(Auth::user()->user_type == 'vendor', function ($query) {
-            $vendor_id = Auth::user()->vendor_id;
-            $query->where('vendor_id', $vendor_id);
+            ->when(Auth::user()->user_type == 'vendor', function ($query) {
+                $vendor_id = Auth::user()->vendor_id;
+                $query->where('vendor_id', $vendor_id);
             })
             ->when(Auth::user()->user_type == 'vendor team member', function ($query) {
                 $user_id = Auth::user()->vendor_id;
@@ -86,10 +90,38 @@ class SubmissionController extends Controller
                 $vendor_id = $vendor->vendor_id;
                 $query->where('vendor_id', $vendor_id);
             })
+            ->when(request()->filled('vendor'), function ($query) {
+                $vendor_id = request()->input('vendor');
+                $query->where('vendor_id', $vendor_id);
+            })
+            ->when(request()->filled('job'), function ($query) {
+                $job_id = request()->input('job');
+                $query->where('job_id', $job_id);
+            })
+            ->when(request()->filled('client'), function ($query) {
+                $client_id = request()->input('client');
+                $query->where('client_id', $client_id);
+            })
+            ->when(request()->filled('candidate'), function ($query) {
+                $candidate_id = request()->input('candidate');
+                $query->where('candidate_id', $candidate_id);
+            })
+            ->when(request()->filled('status'), function ($query) {
+                $status = request()->input('status');
+                $query->where('status', $status);
+            })
+            ->when(request()->filled('created_at_from'), function ($query) {
+                $fromDate = request()->input('created_at_from');
+                $query->whereDate('created_at', '>=', $fromDate);
+            })
+            ->when(request()->filled('created_at_to'), function ($query) {
+                $toDate = request()->input('created_at_to');
+                $query->whereDate('created_at', '<=', $toDate);
+            })
             ->withTrashed()
             ->paginate(6);
-            // dd($submissions);
-        return view('submission.index', compact('submissions'));
+        // dd($submissions);
+        return view('submission.index', compact('submissions','vendors','clients', 'jobs', 'candidates'));
     }
 
     public function show(Submission $submission)
@@ -130,10 +162,10 @@ class SubmissionController extends Controller
             //  job table update
             $job = Job::where('id', $submission->job_id)->first();
             $job->actual_salary = $request->actual_salary;
-            if($job->percentage == 'Percentage'){
+            if ($job->percentage == 'Percentage') {
                 $job->vendor_amount = $request->actual_salary * ($job->vendor_percentage / 100);
                 $job->admin_amount = $request->actual_salary * ($job->admin_percentage / 100);
-            }else{
+            } else {
                 $job->vendor_amount = $job->vendor_percentage;
                 $job->admin_amount = $job->admin_percentage;
             }

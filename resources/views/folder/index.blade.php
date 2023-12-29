@@ -93,7 +93,7 @@ $pageclass = 'clientdash';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         <li>
@@ -105,6 +105,22 @@ $pageclass = 'clientdash';
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('folder') }}" method="get">
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" class="form-control" name="title" placeholder="" >
+                    </div>
+
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -256,7 +272,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/folder/active-status',
+                        url: "{{url('/folder/active-status')}}",
                         data: {
                             folders: folders,
                             _token: "{{ csrf_token() }}"
@@ -285,7 +301,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/folder/inactive-status',
+                        url: "{{url('/folder/inactive-status')}}",
                         data: {
                             folders: folders,
                             _token: "{{ csrf_token() }}"
@@ -315,7 +331,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/folder/bulk-delete',
+                        url: "{{url('/folder/bulk-delete')}}",
                         data: {
                             folders: folders,
                             _token: "{{ csrf_token() }}"
@@ -330,7 +346,7 @@ $pageclass = 'clientdash';
             });
 
             function fetchData(query = '') {
-                const url = '/job/search-vendor';
+                const url = "{{url('/job/search-vendor')}}";
                 const resultsContainer = '#search-vendor-results';
                 console.log(resultsContainer)
                 $.ajax({
@@ -397,7 +413,7 @@ $pageclass = 'clientdash';
 
                 $.ajax({
                     method: 'POST',
-                    url: '/folder/assign-vendor',
+                    url: "{{url('/folder/assign-vendor')}}",
                     data: {
                         vendors: vendors,
                         jobs: jobs,

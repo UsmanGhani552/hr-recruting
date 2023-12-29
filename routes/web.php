@@ -17,6 +17,8 @@ use App\Http\Controllers\ViewDetailsController;
 use App\Models\Candidate;
 use App\Models\Client;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Js;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,8 +33,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
+    // return view('welcome');
 });
 
+Auth::routes();
+// Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 
 //auth
 // Route::view('/login','login');
@@ -75,6 +80,7 @@ Route::middleware('auth')->group(function () {
 
     // ---------------------------------------------------- vendor ----------------------------------------------------
 
+    Route::get('/vendor', [VendorController::class, 'index'])->name('vendor');
     Route::get('/vendor/dashboard', [VendorController::class, 'index'])->name('vendor-dashboard');
     Route::get('/vendor/edit/{vendor}', [VendorController::class, 'edit'])->name('vendor-edit');
     Route::post('/vendor/update/{vendor}', [VendorController::class, 'update'])->name('vendor-update');
@@ -116,6 +122,7 @@ Route::middleware('auth')->group(function () {
 
     // ------------------------------------------------------candidate ----------------------------------------------
 
+    // Route::get('/candidate', [CandidateController::class, 'index'])->name('candidate');
     Route::get('/candidate/', [CandidateController::class, 'index'])->name('candidate');
     Route::get('/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
     Route::post('/candidate/store', [CandidateController::class, 'store'])->name('candidate.store');
@@ -162,6 +169,7 @@ Route::middleware('auth')->group(function () {
 
     // ---------------------------------------------------jobs ----------------------------------------------
 
+    Route::get('/job', [JobController::class, 'index'])->name('job');
     Route::get('/jobs/assignment/{job}', [JobController::class, 'show'])->name('job.show');
     Route::get('/job', [JobController::class, 'index'])->name('job');
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
@@ -244,6 +252,7 @@ Route::middleware('auth')->group(function () {
 
      // ------------------------------------------------------ Submission ----------------------------------------------------
 
+    //  Route::get('/submission', [SubmissionController::class, 'index'])->name('submission');
      Route::get('/submissions/', [SubmissionController::class, 'index'])->name('submissions');
      Route::get('/submission/delete/{submission}', [SubmissionController::class, 'delete'])->name('submission.delete');
      Route::get('/submission/show/{submission}', [SubmissionController::class, 'show'])->name('submission.show');
@@ -252,6 +261,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Auth::routes();
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

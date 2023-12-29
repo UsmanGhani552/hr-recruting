@@ -95,7 +95,7 @@ $pageclass = 'clientdash';
                 <div class="col-md-6 text-end">
                     <ul class="vendordash_invite">
                         <li>
-                            <a class="cbtn" href="javascript:;"><img
+                            <a class="cbtn filter_brn" href="javascript:;"><img
                                     src="{{ asset('assets/images/filter.png') }}">Filters</a>
                         </li>
                         <li>
@@ -110,6 +110,41 @@ $pageclass = 'clientdash';
                         @endcan
                     </ul>
                 </div>
+            </div>
+            <div class="filterform">
+                <form action="{{ route('client') }}" method="get">
+
+                     <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phonenumber">Phone No</label>
+                        <input id="phonenumber" type="tel" class="form-control" name="phone" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="homephone"></label>
+                        <input id="homephone" type="tel" class="form-control" name="home" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailaddres">Email</label>
+                        <input id="emailaddres" type="email" class="form-control" name="email" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="industry">Inustry</label>
+                        <input id="industry" type="text" class="form-control" name="industry" placeholder="" >
+                    </div>
+
+                    <div class="form_bottons">
+                        <button class="cbtn" type="submit">Apply</button>
+                        <button class="cbtn btnreset" type="reset">Reset</button>
+                    </div>
+
+                </form>
             </div>
             <br>
             @if (Session::has('success'))
@@ -263,7 +298,7 @@ $pageclass = 'clientdash';
                     console.log(clients);
                     $.ajax({
                         method: 'POST',
-                        url: '/client/active-status',
+                        url: "{{url('/client/active-status')}}",
                         data: {
                             clients: clients,
                             _token: "{{ csrf_token() }}"
@@ -287,7 +322,7 @@ $pageclass = 'clientdash';
 
                     $.ajax({
                         method: 'POST',
-                        url: '/client/inactive-status',
+                        url: "{{url('/client/inactive-status')}}",
                         data: {
                             clients: clients,
                             _token: "{{ csrf_token() }}"
@@ -302,7 +337,7 @@ $pageclass = 'clientdash';
             });
 
             function fetchData(query = '') {
-                const url = '/client/search-vendor';
+                const url = "{{url('/client/search-vendor')}}";
                 const resultsContainer = '#search-vendor-results';
                 console.log(resultsContainer)
                 $.ajax({
@@ -352,7 +387,7 @@ $pageclass = 'clientdash';
 
                 $.ajax({
                     method: 'POST',
-                    url: '/client/assign-vendor',
+                    url: "{{url('/client/assign-vendor')}}",
                     data: {
                         vendors: vendors,
                         clients: clients,
