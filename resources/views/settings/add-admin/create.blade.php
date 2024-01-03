@@ -81,14 +81,9 @@ $pageclass = "adnewcand";
                                             name="password_confirmation" required autocomplete="new-password">
                                 </label>
                             </div>
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
 								<label class="form-group">
 									Roles
-									{{-- <select class="form-controll" name="company_name">
-                                        @foreach ($permissions as $permission)
-										<option name="permissions[]" value="{{$permission->id}}">{{ $permission->name }}</option>
-                                        @endforeach
-									</select> --}}
                                     @foreach ($roles as $role)
                                         <div class="mb-10 fv-row">
                                             <div class="form-check form-check-custom form-check-solid">
@@ -104,7 +99,7 @@ $pageclass = "adnewcand";
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
 								</label>
-							</div>
+							</div> --}}
 
 						<div class="form-group">
 							<input type="submit" value="Submit">

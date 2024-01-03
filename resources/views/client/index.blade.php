@@ -139,9 +139,20 @@ $pageclass = 'clientdash';
                         <input id="industry" type="text" class="form-control" name="industry" placeholder="" >
                     </div>
 
+                    <div class="form-group">
+                        <label for="created_at_to">To</label>
+                        <input id="created_at_to" type="date" class="form-control" name="created_at_to" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created_at_from">From</label>
+                        <input id="created_at_from" type="date" class="form-control" name="created_at_from" placeholder="" >
+                    </div>
+
+
                     <div class="form_bottons">
                         <button class="cbtn" type="submit">Apply</button>
-                        <button class="cbtn btnreset" type="reset">Reset</button>
+                        <button class="cbtn btnreset" id="reset-btn" type="reset">Reset</button>
                     </div>
 
                 </form>
@@ -399,6 +410,11 @@ $pageclass = 'clientdash';
                     }
                 });
             });
+
+            $('#reset-btn').on('click',function(){
+                console.log('asd');
+                $('.form-control').val('');
+            })
 
         });
 

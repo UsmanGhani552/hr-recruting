@@ -57,17 +57,17 @@ class AddAdminController extends Controller
 
             $addAdmin->name = $request->name;
             $addAdmin->email = $request->email;
-            $addAdmin->user_type = 'admin_team_member';
+            $addAdmin->user_type = 'admin team member';
             $addAdmin->password = bcrypt($request->password);
             $addAdmin->email_verified_at = now();
             $addAdmin->save();
-
-            $addAdmin->syncRoles($request->roles);
+            $addAdmin->assignRole('admin team member');
+            // $addAdmin->syncRoles($request->roles);
             return redirect()->route('add-admin.index')->withSuccess('Admin created !!!');
         }
 
         /**
-         * Show the form for editing the specified resource.
+          * Show the form for editing the specified resource.
          *
          * @param  int  $id
          * @return \Illuminate\Http\Response

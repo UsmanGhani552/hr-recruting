@@ -112,7 +112,26 @@ class CandidateController extends Controller
 
     public function show(Candidate $candidate)
     {
-        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('candidate_id', $candidate->id)->paginate(6);
+        $submissions = Submission::with([
+            'vendor' => function ($query) {
+                $query->withTrashed();
+            },
+            'client' => function ($query) {
+                $query->withTrashed();
+            },
+            'job' => function ($query) {
+                $query->withTrashed();
+            },
+            'candidate' => function ($query) {
+                $query->withTrashed();
+            },
+            'user' => function ($query) {
+                $query->withTrashed();
+            },
+            'teamMember' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->where('candidate_id', $candidate->id)->paginate(6);
         // dd($vendors);
         return view('candidate.assignment', compact('candidate', 'submissions'));
     }

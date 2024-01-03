@@ -294,7 +294,7 @@ $pageclass = 'addclient';
                 let client_id = $('#client_id').val();
                 $.ajax({
                     method: 'GET',
-                    url: '/client/selected-vendors/'+client_id,
+                    url: "{{url('client/selected-vendors')}}" +"/"+ client_id,
                     data: {
                         query: query
                     },

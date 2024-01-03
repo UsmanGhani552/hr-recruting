@@ -24,6 +24,14 @@ class FolderController extends Controller
             $query->where('title', 'like', '%' . $request->input('title') . '%');
         }
 
+        if ($request->filled('created_at_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_at_from'));
+        }
+
+        if ($request->filled('created_at_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_at_to'));
+        }
+
         $folders = $query->paginate(6);
         return view('folder.index', compact('folders'));
     }

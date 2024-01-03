@@ -201,9 +201,20 @@ $pageclass = 'clientdash';
                         </label>
                     </div>
 
+                    <div class="form-group">
+                        <label for="created_at_to">To</label>
+                        <input id="created_at_to" type="date" class="form-control" name="created_at_to" placeholder="" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created_at_from">From</label>
+                        <input id="created_at_from" type="date" class="form-control" name="created_at_from" placeholder="" >
+                    </div>
+
+
                     <div class="form_bottons">
                         <button class="cbtn" type="submit">Apply</button>
-                        <button class="cbtn btnreset" type="reset">Reset</button>
+                        <button class="cbtn btnreset" id="reset-btn" type="reset">Reset</button>
                     </div>
 
                 </form>
@@ -273,6 +284,7 @@ $pageclass = 'clientdash';
                                                 <li></li>
                                                 <li></li>
                                             </ul>
+                                            @if ($job->deleted_at == null)
                                             <div id="myDropdown" class="dropdown-content">
                                                 <a href="{{ route('job.show', $job->id) }}"><img
                                                         src="{{ asset('assets/images/eye.png') }}">View</a>
@@ -280,15 +292,14 @@ $pageclass = 'clientdash';
                                                     <a href="{{ route('job.edit', $job->id) }}"><img
                                                             src="{{ asset('assets/images/edit.png') }}">Edit</a>
                                                 @endcan
-                                                @if ($job->deleted_at == null)
                                                     <a href="{{ route('job.submission', $job->id) }}"><img
                                                             src="{{ asset('assets/images/eye.png') }}">Submission</a>
-                                                @endif
                                                 @can('Job delete')
                                                     <a href="{{ route('job.delete', $job->id) }}"><img
                                                             src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                                 @endcan
                                             </div>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -489,6 +500,11 @@ $pageclass = 'clientdash';
                     }
                 });
             });
+
+            $('#reset-btn').on('click',function(){
+                console.log('asd');
+                $('.form-control').val('');
+            })
 
             // Check if there's a success message in sessionStorage
             const successMessage = sessionStorage.getItem('success_message');

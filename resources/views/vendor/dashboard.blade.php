@@ -235,7 +235,7 @@ $pageclass = 'vdashbord';
 
                     <div class="form_bottons">
                         <button class="cbtn" type="submit">Apply</button>
-                        <button class="cbtn btnreset" type="reset">Reset</button>
+                        <button class="cbtn btnreset" id="reset-btn" type="reset">Reset</button>
                     </div>
 
                 </form>
@@ -636,6 +636,11 @@ $pageclass = 'vdashbord';
                     }
                 });
             });
+
+            $('#reset-btn').on('click',function(){
+                console.log('asd');
+                $('.form-control').val('');
+            })
 
 
             // Check if there's a success message in sessionStorage

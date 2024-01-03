@@ -83,6 +83,14 @@ class JobController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        if ($request->filled('created_at_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_at_from'));
+        }
+
+        if ($request->filled('created_at_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_at_to'));
+        }
+
         $jobs = $query->paginate(6);
 
         return view('job.index', compact('states', 'cities', 'jobs','clients'));

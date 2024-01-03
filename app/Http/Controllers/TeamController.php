@@ -17,7 +17,7 @@ class TeamController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('vendor_id' , Auth::user()->id);
+        $query = User::where('vendor_id' , Auth::user()->id)->where('user_type','vendor team member');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->input('name') . '%');
@@ -29,6 +29,14 @@ class TeamController extends Controller
 
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('created_at_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_at_from'));
+        }
+
+        if ($request->filled('created_at_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_at_to'));
         }
 
         $teams = $query->paginate(6);
@@ -146,7 +154,7 @@ class TeamController extends Controller
     {
         // dd($request->folders);
         foreach ($request->teams as $team_id) {
-            $team = Team::where('id', $team_id)->first();
+            $team = User::where('id', $team_id)->first();
             $team->status = 1;
             $team->save();
         }
@@ -158,7 +166,7 @@ class TeamController extends Controller
     public function inactiveStatus(Request $request)
     {
         foreach ($request->teams as $team_id) {
-            $team = Team::where('id', $team_id)->first();
+            $team = User::where('id', $team_id)->first();
             $team->status = 0;
             $team->save();
         }

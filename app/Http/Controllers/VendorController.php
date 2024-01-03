@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
 
 class VendorController extends Controller
 {
@@ -80,7 +81,27 @@ class VendorController extends Controller
         $candidates = Candidate::where('vendor_id', $vendor->id)->paginate(6);
         $user = User::where('vendor_id', $vendor->id)->first();
         $teams = User::where('vendor_id',$user->id)->paginate(6);
-        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('vendor_id',$vendor->id)->paginate(6);
+        $submissions = Submission::with([
+            'vendor' => function ($query) {
+                $query->withTrashed();
+            },
+            'client' => function ($query) {
+                $query->withTrashed();
+            },
+            'job' => function ($query) {
+                $query->withTrashed();
+            },
+            'candidate' => function ($query) {
+                $query->withTrashed();
+            },
+            'user' => function ($query) {
+                $query->withTrashed();
+            },
+            'teamMember' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->where('vendor_id',$vendor->id)->withTrashed()->paginate(6);
+        // dd($submissions[0]);
         // dd($submissions);
         return view('vendor.assignment', compact('vendor', 'jobs', 'clients', 'candidates', 'teams','submissions'));
     }
@@ -176,6 +197,7 @@ class VendorController extends Controller
             $vendor_login->email = $request->email;
             $vendor_login->password =  Hash::make($request->password);
             if ($vendor_login->save()) {
+                $vendor_login->assignRole('vendor');
                 $vendorInvitation = VendorInvitation::where('email', $vendor_login->email)->first();
                 $vendorInvitation->status = 1;
                 $vendorInvitation->save();

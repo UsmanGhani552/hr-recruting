@@ -114,9 +114,9 @@ $pageclass = 'vinvitepg';
                                                 <li></li>
                                             </ul>
                                             <div id="myDropdown" class="dropdown-content">
-                                                <a href="javascript:;"><img
+                                                <a href="{{route('vendor-resend-email',$vendorInvitation->id)}}"><img
                                                         src="{{ asset('assets/images/eye.png') }}">Resend</a>
-                                                <a href="javascript:;"><img
+                                                <a href="{{route('vendor-delete-invite',$vendorInvitation->id)}}"><img
                                                         src="{{ asset('assets/images/delete.png') }}">Delete</a>
                                             </div>
                                         </div>

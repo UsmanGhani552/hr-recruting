@@ -144,7 +144,7 @@ $pageclass = 'maincadidate';
 
                     <div class="form_bottons">
                         <button class="cbtn" type="submit">Apply</button>
-                        <button class="cbtn btnreset" type="reset">Reset</button>
+                        <button class="cbtn btnreset" id="reset-btn" type="reset">Reset</button>
                     </div>
 
                 </form>
@@ -275,130 +275,133 @@ $pageclass = 'maincadidate';
     @include('layout.footer')
 @endsection
 
-{{-- @push('scripts')
+@push('scripts')
     <script>
-        $(function() {
-            $('.toggle-class').change(function() {
-                var status = $(this).prop('checked') == true ? 1 : 0;
-                var candidate_id = $(this).data('id');
+        // $(function() {
+        //     $('.toggle-class').change(function() {
+        //         var status = $(this).prop('checked') == true ? 1 : 0;
+        //         var candidate_id = $(this).data('id');
 
-                $.ajax({
-                    type: "GET",
-                    dataType: "json",
-                    url: 'candidate/change-status/' + candidate_id,
-                    data: {
-                        'status': status,
-                        'candidate_id': candidate_id
-                    },
-                    success: function(response) {
-                        console.log(response)
-                    }
-                });
-            });
-        });
+        //         $.ajax({
+        //             type: "GET",
+        //             dataType: "json",
+        //             url: 'candidate/change-status/' + candidate_id,
+        //             data: {
+        //                 'status': status,
+        //                 'candidate_id': candidate_id
+        //             },
+        //             success: function(response) {
+        //                 console.log(response)
+        //             }
+        //         });
+        //     });
+        // });
 
         $(document).ready(function() {
+            $('#reset-btn').on('click',function(){
+                console.log('asd');
+                $('.form-control').val('');
+            })
+            // $('#assign-btn').on('click', function() {
+            //     // Get the value of the hidden input field
+            //     var selectedValue = $('#assignment_id').val();
+            //     console.log(selectedValue);
+            //     if (selectedValue == 'active') {
+            //         $.ajaxSetup({
+            //             headers: {
+            //                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            //             }
+            //         });
+            //         let candidates = [];
+            //         $('.candidate-checkbox:checked').each(function() {
+            //             candidates.push($(this).val());
+            //         });
+            //         console.log(candidates);
+            //         $.ajax({
+            //             method: 'POST',
+            //             url: '/candidate/active-status',
+            //             data: {
+            //                 candidates: candidates,
+            //                 _token: "{{ csrf_token() }}"
+            //             },
+            //             success: function(response) {
+            //                 sessionStorage.setItem('success_message', response.message);
+            //                 location.reload();
+            //             }
+            //         });
 
-            $('#assign-btn').on('click', function() {
-                // Get the value of the hidden input field
-                var selectedValue = $('#assignment_id').val();
-                console.log(selectedValue);
-                if (selectedValue == 'active') {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                        }
-                    });
-                    let candidates = [];
-                    $('.candidate-checkbox:checked').each(function() {
-                        candidates.push($(this).val());
-                    });
-                    console.log(candidates);
-                    $.ajax({
-                        method: 'POST',
-                        url: '/candidate/active-status',
-                        data: {
-                            candidates: candidates,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response) {
-                            sessionStorage.setItem('success_message', response.message);
-                            location.reload();
-                        }
-                    });
+            //     } else if (selectedValue == 'inactive') {
+            //         $.ajaxSetup({
+            //             headers: {
+            //                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            //             }
+            //         });
+            //         let candidates = [];
+            //         $('.candidate-checkbox:checked').each(function() {
+            //             candidates.push($(this).val());
+            //         });
 
-                } else if (selectedValue == 'inactive') {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                        }
-                    });
-                    let candidates = [];
-                    $('.candidate-checkbox:checked').each(function() {
-                        candidates.push($(this).val());
-                    });
+            //         $.ajax({
+            //             method: 'POST',
+            //             url: '/candidate/inactive-status',
+            //             data: {
+            //                 candidates: candidates,
+            //                 _token: "{{ csrf_token() }}"
+            //             },
+            //             success: function(response) {
+            //                 sessionStorage.setItem('success_message', response.message);
+            //                 location.reload();
+            //             }
+            //         });
 
-                    $.ajax({
-                        method: 'POST',
-                        url: '/candidate/inactive-status',
-                        data: {
-                            candidates: candidates,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response) {
-                            sessionStorage.setItem('success_message', response.message);
-                            location.reload();
-                        }
-                    });
+            //     } else if (selectedValue == 'job') {
+            //         $.ajaxSetup({
+            //             headers: {
+            //                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            //             }
+            //         });
+            //         let candidates = [];
+            //         $('.candidate-checkbox:checked').each(function() {
+            //             candidates.push($(this).val());
+            //         });
 
-                } else if (selectedValue == 'job') {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                        }
-                    });
-                    let candidates = [];
-                    $('.candidate-checkbox:checked').each(function() {
-                        candidates.push($(this).val());
-                    });
+            //         $.ajax({
+            //             method: 'POST',
+            //             url: '/candidate/bulk-delete',
+            //             data: {
+            //                 candidates: candidates,
+            //                 _token: "{{ csrf_token() }}"
+            //             },
+            //             success: function(response) {
+            //                 sessionStorage.setItem('success_message', response.message);
+            //                 location.reload();
+            //             }
+            //         });
 
-                    $.ajax({
-                        method: 'POST',
-                        url: '/candidate/bulk-delete',
-                        data: {
-                            candidates: candidates,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response) {
-                            sessionStorage.setItem('success_message', response.message);
-                            location.reload();
-                        }
-                    });
+            //     }
+            // });
 
-                }
-            });
+            // // Check if there's a success message in sessionStorage
+            // const successMessage = sessionStorage.getItem('success_message');
 
-            // Check if there's a success message in sessionStorage
-            const successMessage = sessionStorage.getItem('success_message');
+            // // Display the success message if it exists
+            // if (successMessage) {
+            //     // Set a delay of 500 milliseconds (adjust as needed)
+            //     setTimeout(function() {
+            //         $('#sucess-asigment-msg').addClass('alert');
+            //         $('#sucess-asigment-msg').addClass('alert-success');
+            //         $('#sucess-asigment-msg').text(
+            //         successMessage); // Use successMessage instead of response.message
+            //     }, 500);
 
-            // Display the success message if it exists
-            if (successMessage) {
-                // Set a delay of 500 milliseconds (adjust as needed)
-                setTimeout(function() {
-                    $('#sucess-asigment-msg').addClass('alert');
-                    $('#sucess-asigment-msg').addClass('alert-success');
-                    $('#sucess-asigment-msg').text(
-                    successMessage); // Use successMessage instead of response.message
-                }, 500);
-
-                // Clear the message after displaying
-                setTimeout(function() {
-                    $('#sucess-asigment-msg').removeClass('alert');
-                    $('#sucess-asigment-msg').removeClass('alert-success');
-                    $('#sucess-asigment-msg').text('');
-                    sessionStorage.removeItem('success_message');
-                }, 5000); // Adjust the delay (in milliseconds) as needed
-            }
+            //     // Clear the message after displaying
+            //     setTimeout(function() {
+            //         $('#sucess-asigment-msg').removeClass('alert');
+            //         $('#sucess-asigment-msg').removeClass('alert-success');
+            //         $('#sucess-asigment-msg').text('');
+            //         sessionStorage.removeItem('success_message');
+            //     }, 5000); // Adjust the delay (in milliseconds) as needed
+            // }
         });
     </script>
-@endpush --}}
+@endpush

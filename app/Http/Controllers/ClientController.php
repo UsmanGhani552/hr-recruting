@@ -48,6 +48,14 @@ class ClientController extends Controller
             $query->where('industry', 'like', '%' . $request->input('industry') . '%');
         }
 
+        if ($request->filled('created_at_from')) {
+            $query->whereDate('created_at', '>=', $request->input('created_at_from'));
+        }
+
+        if ($request->filled('created_at_to')) {
+            $query->whereDate('created_at', '<=', $request->input('created_at_to'));
+        }
+
         if ($user->user_type == 'admin') {
             // $clients = Client::paginate(6);
             $clients = $query->paginate(6);
@@ -192,7 +200,26 @@ class ClientController extends Controller
     {
         $jobs = Job::where('client_id', $client->id)->paginate(6);
         $vendors = $client->vendors()->paginate(6);
-        $submissions = Submission::with('vendor', 'client', 'job', 'candidate')->where('client_id', $client->id)->paginate(6);
+        $submissions = Submission::with([
+            'vendor' => function ($query) {
+                $query->withTrashed();
+            },
+            'client' => function ($query) {
+                $query->withTrashed();
+            },
+            'job' => function ($query) {
+                $query->withTrashed();
+            },
+            'candidate' => function ($query) {
+                $query->withTrashed();
+            },
+            'user' => function ($query) {
+                $query->withTrashed();
+            },
+            'teamMember' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->where('client_id', $client->id)->paginate(6);
         // dd($vendors);
         return view('client.assignment', compact('client', 'jobs', 'vendors', 'submissions'));
     }

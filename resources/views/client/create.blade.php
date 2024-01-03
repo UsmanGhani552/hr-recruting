@@ -290,7 +290,7 @@ $pageclass = 'addclient';
                 function fetchData(query = '') {
                     $.ajax({
                         method: 'GET',
-                        url: '/client/search-vendors',
+                        url: "{{url('/client/search-vendors')}}",
                         data: {
                             query: query
                         },

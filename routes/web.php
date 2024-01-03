@@ -98,6 +98,8 @@ Route::middleware('auth')->group(function () {
     //vendor invitation
     Route::get('/vendor/invite', [VendorInvitationController::class, 'index'])->name('vendor-invite');
     Route::post('/vendor/invite/send-email', [VendorInvitationController::class, 'sendEmail'])->name('vendor-send-email');
+    Route::get('/vendor/invite/resend-email/{vendorInvitation}', [VendorInvitationController::class, 'reSendEmail'])->name('vendor-resend-email');
+    Route::get('/vendor/invite/delete/{vendorInvitation}', [VendorInvitationController::class, 'delete'])->name('vendor-delete-invite');
     // Route::get('/vendor/change-status/{vendor}', [VendorController::class, 'changeVendorStatus'])->name('vendor.change-status');
 
     //bulk actions
