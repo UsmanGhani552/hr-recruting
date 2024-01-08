@@ -90,7 +90,7 @@ class CandidateController extends Controller
 
         // Apply additional filters in a similar manner
 
-        $candidates = $query->paginate(6);
+        $candidates = $query->orderBy('id', 'DESC')->paginate(6);
 
         return view('candidate.index', compact('candidates', 'vendors', 'states', 'cities'));
     }

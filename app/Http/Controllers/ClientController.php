@@ -58,7 +58,7 @@ class ClientController extends Controller
 
         if ($user->user_type == 'admin') {
             // $clients = Client::paginate(6);
-            $clients = $query->paginate(6);
+            $clients = $query->orderBy('id', 'DESC')->paginate(6);
         } else
             // if (Auth::user()->user_type == 'vendor') {
             //     $vendor = $user->vendor;
@@ -78,7 +78,7 @@ class ClientController extends Controller
                     $q->where('team_member_id', $user->id);
                 });
             }
-        $clients = $query->paginate(6);
+        $clients = $query->orderBy('id', 'DESC')->paginate(6);
         return view('client.index', compact('clients'));
     }
     public function search(Request $request)

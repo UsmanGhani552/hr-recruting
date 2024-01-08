@@ -1,5 +1,5 @@
 <?php
-$title = 'Create Job';
+$title = 'Create Folder';
 $keywords = '';
 $desc = '';
 $pageclass = 'addclient';

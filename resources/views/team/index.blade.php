@@ -1,5 +1,5 @@
 <?php
-$title = 'Team Dashboard';
+$title = 'Team';
 $keywords = '';
 $desc = '';
 $pageclass = 'mainteam';

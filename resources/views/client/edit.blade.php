@@ -1,5 +1,5 @@
 <?php
-$title = 'Add Client';
+$title = 'Edit Client';
 $keywords = '';
 $desc = '';
 $pageclass = 'addclient';

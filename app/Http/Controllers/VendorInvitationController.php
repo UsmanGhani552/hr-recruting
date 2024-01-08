@@ -10,7 +10,7 @@ class VendorInvitationController extends Controller
 {
     public function index()
     {
-        $vendorInvitations = VendorInvitation::all();
+        $vendorInvitations = VendorInvitation::orderBy('id', 'DESC')->paginate(6);
         return view('vendor.invite', compact('vendorInvitations'));
     }
 

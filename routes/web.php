@@ -18,6 +18,7 @@ use App\Models\Candidate;
 use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Js;
 
 /*
@@ -37,6 +38,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::post('api/fetch-cities', [DashboardController::class, 'fetchCity']);
 // Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 
 //auth
@@ -45,10 +47,12 @@ Route::view('/registerr', 'register');
 Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-create');
 Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
 
+
 Route::middleware('auth')->group(function () {
     //dashboard
     // Route::view('/dashboard', 'dashboard.index')->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/acceptance-rate', [DashboardController::class, 'getAcceptanceRate'])->name('dashboard');
 
 
     Route::controller(PermissionController::class)->prefix('/permission')->name('permission.')->group(function () {

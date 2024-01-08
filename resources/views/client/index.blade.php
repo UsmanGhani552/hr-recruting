@@ -1,5 +1,5 @@
 <?php
-$title = 'Client Dashboard';
+$title = 'Client';
 $keywords = '';
 $desc = '';
 $pageclass = 'clientdash';

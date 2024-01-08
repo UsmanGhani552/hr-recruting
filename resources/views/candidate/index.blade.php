@@ -1,5 +1,5 @@
 <?php
-$title = 'Candidate Main';
+$title = 'Candidate';
 $keywords = '';
 $desc = '';
 $pageclass = 'maincadidate';

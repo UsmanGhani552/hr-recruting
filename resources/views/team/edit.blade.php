@@ -1,5 +1,5 @@
 <?php
-$title = 'Add New Candidate';
+$title = 'Edit Team';
 $keywords = '';
 $desc = '';
 $pageclass = 'adnewcand';

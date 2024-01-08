@@ -344,7 +344,7 @@ form .form-group .form-controll {
     border-radius: 10px;
     overflow: hidden;
     background: #EEEEEE;
-    color: #9FA6B2;
+    /* color: #9FA6B2; */
     padding: 0 20px;
     margin: 5px 0 0;
 }

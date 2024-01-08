@@ -119,6 +119,7 @@ class SubmissionController extends Controller
                 $query->whereDate('created_at', '<=', $toDate);
             })
             ->withTrashed()
+            ->orderBy('id', 'DESC')
             ->paginate(6);
         // dd($submissions);
         return view('submission.index', compact('submissions','vendors','clients', 'jobs', 'candidates'));

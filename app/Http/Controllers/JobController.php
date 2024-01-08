@@ -91,7 +91,7 @@ class JobController extends Controller
             $query->whereDate('created_at', '<=', $request->input('created_at_to'));
         }
 
-        $jobs = $query->paginate(6);
+        $jobs = $query->orderBy('id', 'DESC')->paginate(6);
 
         return view('job.index', compact('states', 'cities', 'jobs','clients'));
     }

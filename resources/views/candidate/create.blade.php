@@ -1,5 +1,5 @@
 <?php
-$title = 'Add Client';
+$title = 'Add Candidate';
 $keywords = '';
 $desc = '';
 $pageclass = 'addclient';
@@ -228,7 +228,7 @@ $pageclass = 'addclient';
                                         @enderror
                                     </label>
                                 </div>
-                               
+
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Vendor

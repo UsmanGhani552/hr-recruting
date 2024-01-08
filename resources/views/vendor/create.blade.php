@@ -1,5 +1,5 @@
 <?php
-$title = 'Register';
+$title = 'Vendor Register';
 $keywords = '';
 $desc = '';
 $pageclass = 'register-page';
@@ -108,16 +108,10 @@ $pageclass = 'register-page';
                                         @enderror
                                     </label>
                                 </div>
-                                {{-- <div class="col-md-6">
-                                <label class="form-group">
-                                      State
-                                      <input type="text" name="" class="form-controll" placeholder="enter state">
-                                </label>
-                                </div> --}}
                                 <div class="col-md-6">
                                     <label class="form-group">
                                         State
-                                        <select class="form-controll select2" name="state">
+                                        <select id="state-dropdown" class="form-controll select2" name="state">
                                             <option></option>
                                             @foreach ($states as $state)
                                                 <option value={{ $state->id }}>{{ $state->name }}</option>
@@ -131,11 +125,11 @@ $pageclass = 'register-page';
                                 <div class="col-md-6">
                                     <label class="form-group">
                                         City
-                                        <select class="form-controll select2" name="city">
-                                            <option></option>
+                                        <select id="city-dropdown" class="form-controll select2" name="city">
+                                            {{-- <option></option>
                                             @foreach ($cities as $city)
                                                 <option value={{ $city->id }}>{{ $city->name }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                         @error('city')
                                             <small class="text-danger">{{ $message }}</small>
@@ -208,3 +202,36 @@ $pageclass = 'register-page';
         margin-top: 3px;
     }
 </style>
+
+@push('scripts')
+    <script>
+        $('#state-dropdown').on('change', function () {
+                var idState = this.value;
+                console.log(idState);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                    }
+                });
+                
+                $("#city-dropdown").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        $('#city-dropdown').html('<option value="">-- Select City --</option>');
+                        $.each(res.cities, function (key, value) {
+                            $("#city-dropdown").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });
+    </script>
+@endpush

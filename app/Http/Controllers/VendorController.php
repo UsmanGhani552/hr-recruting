@@ -64,7 +64,7 @@ class VendorController extends Controller
             $query->whereDate('created_at', '<=', $request->input('created_at_to'));
         }
 
-        $vendors = $query->paginate(6);
+        $vendors = $query->orderBy('id', 'DESC')->paginate(6);
         return view('vendor.dashboard', compact('vendors','states', 'cities'));
     }
     public function create()

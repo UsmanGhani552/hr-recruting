@@ -185,7 +185,8 @@ $pageclass = 'vdashbord';
 
                     <div class="form-group">
                         <label for="company_name">Company name</label>
-                        <input id="company_name" type="text" class="form-control" name="company_name" placeholder="" >
+                        <input id="company_name" type="text" class="form-control" name="company_name"
+                            placeholder="">
                     </div>
 
                     <div class="form-group">
@@ -225,12 +226,14 @@ $pageclass = 'vdashbord';
 
                     <div class="form-group">
                         <label for="created_at_to">To</label>
-                        <input id="created_at_to" type="date" class="form-control" name="created_at_to" placeholder="" >
+                        <input id="created_at_to" type="date" class="form-control" name="created_at_to"
+                            placeholder="">
                     </div>
 
                     <div class="form-group">
                         <label for="created_at_from">From</label>
-                        <input id="created_at_from" type="date" class="form-control" name="created_at_from" placeholder="" >
+                        <input id="created_at_from" type="date" class="form-control" name="created_at_from"
+                            placeholder="">
                     </div>
 
                     <div class="form_bottons">
@@ -262,7 +265,7 @@ $pageclass = 'vdashbord';
                             <th>Phone Number</th>
                             <th>Team Members</th>
                             @can('Vendor status')
-                            <th>Status</th>
+                                <th>Status</th>
                             @endcan
                             <th>Created at</th>
                             <th>
@@ -293,11 +296,11 @@ $pageclass = 'vdashbord';
                                     <td>{{ $vendor->phone }}</td>
                                     <td>12</td>
                                     @can('Vendor status')
-                                    <td>
-                                        <input data-id="{{ $vendor->id }}" class="toggle-class" type="checkbox"
-                                            data-onstyle="success" data-offstyle="danger" data-toggle="toggle"
-                                            data-on="Active" data-off="InActive" {{ $vendor->status ? 'checked' : '' }}>
-                                    </td>
+                                        <td>
+                                            <input data-id="{{ $vendor->id }}" class="toggle-class" type="checkbox"
+                                                data-onstyle="success" data-offstyle="danger" data-toggle="toggle"
+                                                data-on="Active" data-off="InActive" {{ $vendor->status ? 'checked' : '' }}>
+                                        </td>
                                     @endcan
                                     <td>{{ $vendor->created_at }}</td>
                                     <td>
@@ -545,6 +548,9 @@ $pageclass = 'vdashbord';
                         sessionStorage.setItem('success_message', response.message);
                         location.reload();
                     }
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', status, error);
+                    }
                 });
             });
 
@@ -637,7 +643,7 @@ $pageclass = 'vdashbord';
                 });
             });
 
-            $('#reset-btn').on('click',function(){
+            $('#reset-btn').on('click', function() {
                 console.log('asd');
                 $('.form-control').val('');
             })

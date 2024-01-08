@@ -1,5 +1,5 @@
 <?php
-$title = 'Create Job';
+$title = 'Edit Job';
 $keywords = '';
 $desc = '';
 $pageclass = 'addclient';

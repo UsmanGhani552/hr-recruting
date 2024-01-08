@@ -39,7 +39,7 @@ class TeamController extends Controller
             $query->whereDate('created_at', '<=', $request->input('created_at_to'));
         }
 
-        $teams = $query->paginate(6);
+        $teams = $query->orderBy('id', 'DESC')->paginate(6);
         return view('team.index', compact('teams'));
     }
     public function create()

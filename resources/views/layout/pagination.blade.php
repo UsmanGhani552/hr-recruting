@@ -16,6 +16,6 @@
             <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">&raquo;</a></li>
         @else
             <li class="d-none"><span>&raquo;</span></li>
-        @endif
+        @endif  
     </ul>
 </div>

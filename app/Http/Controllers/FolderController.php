@@ -32,7 +32,7 @@ class FolderController extends Controller
             $query->whereDate('created_at', '<=', $request->input('created_at_to'));
         }
 
-        $folders = $query->paginate(6);
+        $folders = $query->orderBy('id', 'DESC')->paginate(6);
         return view('folder.index', compact('folders'));
     }
 

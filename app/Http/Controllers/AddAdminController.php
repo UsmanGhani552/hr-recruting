@@ -23,7 +23,7 @@ class AddAdminController extends Controller
          */
         public function index()
         {
-            $admins = User::where('user_type','=','admin team member')->paginate(6);
+            $admins = User::where('user_type','=','admin team member')->orderBy('id', 'DESC')->paginate(6);
             // $admins = User::paginate(6);
             return view('settings.add-admin.index',compact('admins'));
         }
