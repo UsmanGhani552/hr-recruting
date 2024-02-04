@@ -422,7 +422,7 @@ use Illuminate\Support\Carbon;
             .attr("class", "ratingtext")
             .attr("font-size", "0.6em")
             .attr("tex-anchor", "middle")
-            .attr("x", 10)
+            .attr("x", 12)
             .attr("y", 8)
             .text("%")
             .transition()

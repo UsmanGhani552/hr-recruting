@@ -43,7 +43,7 @@
 
             <div class="col-md-3">
                 <ul class="userdata">
-                    <li><a href="{{ route('dashboard') }}"><img src="{{ asset('assets/images/comment.png') }}"></a>
+                    <li><a href="{{ route('contact') }}"><img src="{{ asset('assets/images/comment.png') }}"></a>
                     </li>
 
                     <li><a href="{{ route('dashboard') }}"><img

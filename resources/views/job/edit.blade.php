@@ -248,7 +248,7 @@ $pageclass = 'addclient';
                     <div class="col-md-8">
                         <h6>Description</h6>
                         <div class="outbox">
-                            <div id="summernote" name="description"></div>
+                            <textarea id="summernote" name="description">{{ $job->description }}</textarea>
                             @error('description')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror

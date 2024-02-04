@@ -99,7 +99,10 @@ class CandidateController extends Controller
     {
         $states =  DB::table('states')->get();
         $cities =  DB::table('cities')->get();
-        if (Auth::user()->user_type == 'vendor') {
+        if(Auth::user()->user_type == 'admin'){
+            $vendor = Auth::user();
+        }
+        else if (Auth::user()->user_type == 'vendor') {
             $vendor = Auth::user()->vendor;
         } else if (Auth::user()->user_type == 'vendor team member') {
             $authenticated_user_id = Auth::user()->vendor_id;
@@ -147,7 +150,7 @@ class CandidateController extends Controller
             'city' => 'required',
             'country' => 'required',
             'vendor' => 'required',
-            'method_of_communication' => 'required',
+            // 'method_of_communication' => 'required',
             'highest_education' => 'required',
             'years_of_experience' => 'required',
             'position' => 'required',
@@ -176,10 +179,10 @@ class CandidateController extends Controller
         $candidate->email = $request->email;
         $candidate->phone = $request->phone;
         $candidate->state_id = $request->state;
-        $candidate->city_id = $request->city;
+        $candidate->city = $request->city;
         $candidate->country = $request->country;
         $candidate->vendor_id = $request->vendor;
-        $candidate->method_of_communication = $request->method_of_communication;
+        // $candidate->method_of_communication = $request->method_of_communication;
         $candidate->highest_education = $request->highest_education;
         $candidate->years_of_experience = $request->years_of_experience;
         $candidate->position = $request->position;
@@ -214,7 +217,7 @@ class CandidateController extends Controller
             'city' => 'required',
             'country' => 'required',
             'vendor' => 'required',
-            'method_of_communication' => 'required',
+            // 'method_of_communication' => 'required',
             'highest_education' => 'required',
             'years_of_experience' => 'required',
             'position' => 'required',
@@ -246,10 +249,10 @@ class CandidateController extends Controller
         $candidate->email = $request->email;
         $candidate->phone = $request->phone;
         $candidate->state_id = $request->state;
-        $candidate->city_id = $request->city;
+        $candidate->city = $request->city;
         $candidate->country = $request->country;
         $candidate->vendor_id = $request->vendor;
-        $candidate->method_of_communication = $request->method_of_communication;
+        // $candidate->method_of_communication = $request->method_of_communication;
         $candidate->highest_education = $request->highest_education;
         $candidate->years_of_experience = $request->years_of_experience;
         $candidate->position = $request->position;
@@ -263,6 +266,7 @@ class CandidateController extends Controller
         $candidate->save();
         return redirect()->route('candidate')->withSuccess('Candidate Updated Successfully');
     }
+    
     public function delete(Candidate $candidate)
     {
         $candidate->delete();

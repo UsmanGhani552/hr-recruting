@@ -118,6 +118,7 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->description);
         $request->validate([
             'title' => 'required',
             'client' => 'required',
@@ -133,8 +134,9 @@ class JobController extends Controller
             'duration' => 'required',
             'job_type' => 'required',
             'postal_code' => 'required',
-            // 'description' => 'required',
+            'description' => 'required',
             'notes' => 'required',
+            'admin_notes' => 'required',
             'images' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'percentage' => 'required',
@@ -168,8 +170,9 @@ class JobController extends Controller
         $job->duration = $request->duration;
         $job->job_type = $request->job_type;
         $job->postal_code = $request->postal_code;
-        $job->description = 'lorem xyz';
+        $job->description = $request->description;
         $job->notes = $request->notes;
+        $job->admin_notes = $request->admin_notes;
         $job->images = implode('|', $images);
         $job->percentage = $request->percentage;
         // $job->actual_salary = $request->actual_salary;

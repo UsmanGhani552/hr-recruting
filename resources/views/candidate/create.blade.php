@@ -29,7 +29,7 @@ $pageclass = 'addclient';
 
     <section class="vendor_invite addclient">
         <div class="container">
-            <form method="POST" action="{{route('candidate.store')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('candidate.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12">
@@ -79,7 +79,7 @@ $pageclass = 'addclient';
                                         @enderror
                                     </label>
                                 </div>
-                                <div class="col-lg-2 col-md-4">
+                                {{-- <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Method of Communication
                                         <select class="form-controll" name="method_of_communication">
@@ -90,7 +90,7 @@ $pageclass = 'addclient';
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </label>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Highest Education
@@ -110,8 +110,8 @@ $pageclass = 'addclient';
                                             placeholder="Years of experience">
                                     </label>
                                     @error('years_of_experience')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -119,8 +119,8 @@ $pageclass = 'addclient';
                                         <input type="text" name="position" class="form-controll" placeholder="Position">
                                     </label>
                                     @error('position')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -129,8 +129,8 @@ $pageclass = 'addclient';
                                             placeholder="Work Authorization">
                                     </label>
                                     @error('work_authorization')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -139,8 +139,8 @@ $pageclass = 'addclient';
                                             placeholder="Expected Pay Rate">
                                     </label>
                                     @error('expected_pay_rate')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -192,7 +192,7 @@ $pageclass = 'addclient';
                                     </label>
                                 </div>
                                 <div class="col-lg-2 col-md-4">
-                                    <label class="form-group">
+                                    {{-- <label class="form-group">
                                         City
                                         <select class="form-controll select2" name="city">
                                             <option></option>
@@ -200,10 +200,15 @@ $pageclass = 'addclient';
                                                 <option value={{ $city->id }}>{{ $city->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('city')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                    </label> --}}
+                                    <label class="form-group">
+                                        City
+                                        <input type="text" name="city" class="form-controll"
+                                            placeholder="city">
                                     </label>
+                                    @error('city')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -212,8 +217,8 @@ $pageclass = 'addclient';
                                             placeholder="Postal Code">
                                     </label>
                                     @error('postal_code')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
                                 <div class="col-lg-2 col-md-4">
@@ -229,12 +234,17 @@ $pageclass = 'addclient';
                                     </label>
                                 </div>
 
-                                <div class="col-lg-2 col-md-4">
+                                <div class="col-lg-4 col-md-4">
                                     <label class="form-group">
                                         Vendor
                                         <select class="form-controll" name="vendor">
                                             {{-- @foreach ($vendors as $vendor) --}}
-                                            <option value="{{$vendor->id}}" >{{$vendor->first_name}} {{$vendor->last_name}}</option>
+                                            @if (Auth::user()->id == 1)
+                                                <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                                            @else
+                                                <option value="{{ $vendor->id }}">{{ $vendor->first_name }}
+                                                    {{ $vendor->last_name }}</option>
+                                            @endif
                                             {{-- @endforeach --}}
                                         </select>
                                     </label>
@@ -264,7 +274,7 @@ $pageclass = 'addclient';
                                         <textarea class="form-controll" placeholder="Message" name="notes"></textarea>
                                     </label>
                                     @error('notes')
-                                            <small class="text-danger">{{ $message }}</small>
+                                        <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 col-md-4">

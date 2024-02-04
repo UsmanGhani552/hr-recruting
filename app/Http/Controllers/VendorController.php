@@ -188,7 +188,7 @@ class VendorController extends Controller
         $vendor->phone = $request->phone;
         $vendor->home = $request->home;
         $vendor->state_id = $request->state;
-        $vendor->city_id = $request->city;
+        $vendor->city = $request->city;
 
         if ($vendor->save()) {
             $vendor_login = new User();

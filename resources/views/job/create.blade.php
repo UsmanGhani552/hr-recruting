@@ -220,7 +220,7 @@ $pageclass = 'addclient';
                                             </div>
                                         </label> --}}
                                         <label class="form-group">
-                                            Images
+                                            Upload Resume
                                             <div class="uploadoc">
                                                 <input type="file" name="images[]" multiple>
                                             </div>
@@ -239,7 +239,7 @@ $pageclass = 'addclient';
 
                                 <div class="col-md-6">
                                     <label class="form-group">
-                                        Peercentage or Amount
+                                        Percentage or Amount
                                         <select class="form-controll" name="percentage">
                                             <option disabled selected>Select</option>
                                             <option value="Percentage">Percentage</option>
@@ -294,7 +294,7 @@ $pageclass = 'addclient';
                     <div class="col-md-8">
                         <h6>Description</h6>
                         <div class="outbox">
-                            <div id="summernote" name="description"></div>
+                            <textarea id="summernote" name="description"></textarea>
                             @error('description')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -304,6 +304,14 @@ $pageclass = 'addclient';
                         <div class="outbox">
                             <textarea class="form-controll" name="notes"></textarea>
                             @error('notes')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <br>
+                        <h6>Admin Seen Area</h6>
+                        <div class="outbox">
+                            <textarea class="form-controll" name="admin_notes"></textarea>
+                            @error('admin_notes')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>

@@ -79,7 +79,7 @@ $pageclass = 'addclient';
                                         @enderror
                                     </label>
                                 </div>
-                                <div class="col-lg-2 col-md-4">
+                                {{-- <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Method of Communication
                                         <select class="form-controll" name="method_of_communication">
@@ -90,7 +90,7 @@ $pageclass = 'addclient';
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </label>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         Highest Education
@@ -180,7 +180,7 @@ $pageclass = 'addclient';
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
                                         State
-                                        <select class="form-controll select2" name="state">
+                                        <select class="form-controll" name="state">
                                             <option></option>
                                             @foreach ($states as $state)
                                                 <option value={{ $state->id }} {{$candidate->state_id == $state->id ? 'selected' : '' }} >{{ $state->name }}</option>
@@ -192,18 +192,23 @@ $pageclass = 'addclient';
                                     </label>
                                 </div>
                                 <div class="col-lg-2 col-md-4">
-                                    <label class="form-group">
+                                    {{-- <label class="form-group">
                                         City
                                         <select class="form-controll select2" name="city">
                                             <option></option>
                                             @foreach ($cities as $city)
-                                                <option value={{ $city->id }} {{$candidate->availability_to_interview == 'January' ? 'selected' : '' }} value="January">{{ $city->name }}</option>
+                                                <option value={{ $city->id }}>{{ $city->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('city')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                    </label> --}}
+                                    <label class="form-group">
+                                        City
+                                        <input type="text" name="city" value="{{$candidate->city}}" class="form-controll"
+                                            placeholder="city">
                                     </label>
+                                    @error('city')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-2 col-md-4">
                                     <label class="form-group">
@@ -229,7 +234,7 @@ $pageclass = 'addclient';
                                     </label>
                                 </div>
 
-                                <div class="col-lg-2 col-md-4">
+                                <div class="col-lg-4 col-md-4">
                                     <label class="form-group">
                                         Vendor
                                         <select class="form-controll" name="vendor">

@@ -123,18 +123,23 @@ $pageclass = 'register-page';
                                     </label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-group">
+                                    {{-- <label class="form-group">
                                         City
-                                        <select id="city-dropdown" class="form-controll select2" name="city">
-                                            {{-- <option></option>
+                                        <select class="form-controll select2" name="city">
+                                            <option></option>
                                             @foreach ($cities as $city)
                                                 <option value={{ $city->id }}>{{ $city->name }}</option>
-                                            @endforeach --}}
+                                            @endforeach
                                         </select>
-                                        @error('city')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                    </label> --}}
+                                    <label class="form-group">
+                                        City
+                                        <input type="text" name="city" class="form-controll"
+                                            placeholder="city">
                                     </label>
+                                    @error('city')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 {{-- <div class="col-md-6">
                                 <label class="form-group">
@@ -214,7 +219,7 @@ $pageclass = 'register-page';
                         'X-CSRF-TOKEN': $('input[name="_token"]').val()
                     }
                 });
-                
+
                 $("#city-dropdown").html('');
                 $.ajax({
                     url: "{{url('api/fetch-cities')}}",

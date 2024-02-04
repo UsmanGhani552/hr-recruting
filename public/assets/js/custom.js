@@ -482,7 +482,7 @@ $(document).on("click", ".delete", function () {
 // Rich Text Editor
 
 $("#summernote").summernote({
-  placeholder: "Hello stand alone ui",
+//   placeholder: "Hello stand alone ui",
   tabsize: 2,
   height: 100,
   toolbar: [
@@ -497,9 +497,5 @@ $("#summernote").summernote({
 });
 
 // Rich Text Editor End
-
-
-
-
 
 });

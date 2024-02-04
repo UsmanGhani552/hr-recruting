@@ -18,6 +18,7 @@ use App\Models\Candidate;
 use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Js;
 
@@ -42,7 +43,6 @@ Route::post('api/fetch-cities', [DashboardController::class, 'fetchCity']);
 // Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 
 //auth
-// Route::view('/login','login');
 Route::view('/registerr', 'register');
 Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor-create');
 Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-store');
@@ -50,9 +50,10 @@ Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor-s
 
 Route::middleware('auth')->group(function () {
     //dashboard
-    // Route::view('/dashboard', 'dashboard.index')->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/acceptance-rate', [DashboardController::class, 'getAcceptanceRate'])->name('dashboard');
+
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+    Route::post('/contact/store', [ContactController::class, 'store'])->name('contact.store');
 
 
     Route::controller(PermissionController::class)->prefix('/permission')->name('permission.')->group(function () {
